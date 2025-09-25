@@ -1,6 +1,6 @@
 # LearnGit.online Playbook
 
-This repository contains the lessons for LearnGit.online, a platform teaching Git beyond the basics. Each lesson is stored in a **YAML format**, which makes it easy to read, edit, and contribute to. Lessons are structured as step-by-step scenarios with explanations, hints, and exercises, ready to be used at [leangit.online](https://learngit.online).
+This repository contains the lessons for LearnGit.online, a platform teaching Git beyond the basics. Each lesson is stored in a **YAML format**, which makes it easy to read, edit, and contribute to. Lessons are structured as step-by-step scenarios with explanations, hints, and exercises, ready to be used at [leangit.online](http://learngit.online).
 
 ⚠️ **Work in Progress**  
 This repository is still in early development. The lesson format, structure, and content may change at any time.
