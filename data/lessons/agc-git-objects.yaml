@@ -1,0 +1,236 @@
+title: "Git Objects"
+description: "Git stores everything in git objects. Lear about the different kind of objects and their responsibilities."
+category: "advanced"
+level: "advanced"
+time: "15 minutes"
+order: 2
+next: "agc-git-head"
+previous: "agc-setup"
+steps:
+  - id: 1
+    title: "Create a new file"
+    description: "We need something to store in the repository"
+    allowedCommands:
+      - cmd: "echo demo > demo.md"
+        valid: "^echo\\s+demo\\s*>\\s*demo.md$"
+        output:
+          - hint: "This created a simple file with 'demo' as its content."
+  
+  - id: 2
+    title: "Stage the file"
+    description: "Add the new file to the staging area"
+    allowedCommands:
+      - cmd: "git add demo.md"
+        valid: "^git\\s+add\\s+demo.md$"
+        output: []
+  
+  - id: 3
+    title: "List Git objects"
+    description: "Show all git object"
+    allowedCommands:
+      - cmd: "ls .git/objects/*"
+        valid: "^ls\\s+\\.git/objects/\\*$"
+        output:
+          - text: |
+              .git/objects/15:
+               49b67ca5936e6893c89221d508697e7e97d42b
+              
+              .git/objects/info:
+              
+            hint: "Git uses a <i>hash</i> as a unique identifier for all objects, similar to a primary key in a database. To store objects on disk, Git uses the first two characters of the <i>hash</i> for the directory and the rest of the <i>hash</i> is used for the filename."
+          - text: |
+              .git/objects/info:
+              
+              .git/objects/pack
+            hint: "We can ignore the two directories <i>info</i> and <i>pack</i> for now."
+        hint: "List all files in the <i>objects</i> directory."
+  
+  - id: 4
+    title: "Check object type"
+    description: "Inspect the newly created Git object"
+    allowedCommands:
+      - cmd: "git cat-file -t 1549b67ca5936e6893c89221d508697e7e97d42b"
+        valid: "^git\\s+cat-file\\s+-t\\s+1549b67ca5936e6893c89221d508697e7e97d42b$"
+        output:
+          - text: "blob"
+            hint: "This object is a <i>blob</i>. Blobs are used to store the actual data of your files. When you used <i>add</i>, Git created a snapshot of your file and copied its contents into the <i>blob</b> object."
+        hint: "It is important to use the directory name <b>15</b> and the filename <b>1549b67ca5936e6893c89221d508697e7e97d42b</b>."
+  
+  - id: 5
+    title: "Check object content"
+    description: "Inspect the newly created Git objects"
+    allowedCommands:
+      - cmd: "git cat-file -p 1549b67ca5936e6893c89221d508697e7e97d42b"
+        valid: "^git\\s+cat-file\\s+-p\\s+1549b67ca5936e6893c89221d508697e7e97d42b$"
+        output:
+          - text: "demo"
+        hint: "While <code>-t</code> gives you the type of an object <code>-p</code> prints its content."
+      - cmd: "^-t^-p"
+        valid: "^\\^-t\\^-p$"
+        output:
+          - text: "demo"
+        hint: "Execute the previous command just replace <code>-t</code> with <code>-p</code>."
+  
+  - id: 5
+    title: "Perform first commit"
+    description: "Commit the staged file to the repository"
+    allowedCommands:
+      - cmd: "git commit -m 'First Commit'"
+        valid: "^git\\s+commit\\s+-m\\s*'First Commit'$"
+        output:
+          - text: |
+              [main (root-commit) 5b5dcc4] First Commit
+               1 file changed, 1 insertion(+)
+               create mode 100644 demo.md
+  
+  - id: 6
+    title: "List Git objects"
+    description: "Show the newly created git objects"
+    allowedCommands:
+      - cmd: "ls .git/objects/*"
+        valid: "^ls\\s+\\.git/objects/\\*$"
+        output:
+          - text: |
+              .git/objects/15:
+               49b67ca5936e6893c89221d508697e7e97d42b
+              
+              .git/objects/5b:
+               5dcc4dae8ef228b2a6141bf9d89953447cb97e
+              
+              .git/objects/bb:
+               64e88bad7d8cdc57a0deb5e1325484fd5fb41f
+              
+              .git/objects/info:
+              
+              .git/objects/pack:
+            hint: "As you can see, Git created <b>two</b> new <i>objects</i>. Lets check them out!"
+  
+  - id: 7
+    title: "Inspect Commit object"
+    description: "Inspect the newly created Git commit object"
+    allowedCommands:
+      - cmd: "git cat-file -t 5b5dcc4dae8ef228b2a6141bf9d89953447cb97e"
+        valid: "^git\\s+cat-file\\s+-t\\s+5b5dcc4dae8ef228b2a6141bf9d89953447cb97e$"
+        output:
+          - text: "commit"
+            hint: "This object is a <i>commit</i>. Commit objects store the <i>commit</i> meta data like author, date, message and signature. They also act as linker, linking multiple objects together. More about that in a second. First lets look at the content of the <i>commit</i> object."
+        hint: "It is important to use the directory name <b>5b</b> and the filename <b>5dcc4dae8ef228b2a6141bf9d89953447cb97e</b>."
+  
+  - id: 8
+    title: "Inspect Commit object"
+    description: "Inspect the newly created Git commit object"
+    allowedCommands:
+      - cmd: "git cat-file -p 5b5dcc4dae8ef228b2a6141bf9d89953447cb97e"
+        valid: "^git\\s+cat-file\\s+-p\\s+5b5dcc4dae8ef228b2a6141bf9d89953447cb97e$"
+        output:
+          - text: |
+              tree bb64e88bad7d8cdc57a0deb5e1325484fd5fb41f
+              author Sebastian Feldmann <sebastianfeldmann@users.noreply.github.com> 1757503219 +0200
+              committer Sebastian Feldmann <sebastianfeldmann@users.noreply.github.com> 1757503219 +0200
+              First Commit
+            hint: "Besides the meta data mentioned in the step before the <i>commit</i> also links to a <i>tree</i> object."
+        hint: "It is important to use the directory name <b>5b</b> and the filename <b>5dcc4dae8ef228b2a6141bf9d89953447cb97e</b>."
+  
+  - id: 9
+    title: "Inspect Tree object"
+    description: "Inspect the newly created Git tree object"
+    allowedCommands:
+      - cmd: "git cat-file -t bb64e88bad7d8cdc57a0deb5e1325484fd5fb41f"
+        valid: "^git\\s+cat-file\\s+-t\\s+bb64e88bad7d8cdc57a0deb5e1325484fd5fb41f$"
+        output:
+          - text: "tree"
+            hint: "This object is a <i>tree</i>. No surprise there. Let's check its contents."
+        hint: "Use the tree <i>hash</i> linked in the <i>commit</i> object data."
+  
+  - id: 10
+    title: "Inspect Tree object"
+    description: "Inspect the newly created Git tree object"
+    allowedCommands:
+      - cmd: "git cat-file -p bb64e88bad7d8cdc57a0deb5e1325484fd5fb41f"
+        valid: "^git\\s+cat-file\\s+-p\\s+bb64e88bad7d8cdc57a0deb5e1325484fd5fb41f$"
+        output:
+          - text: "100644 blob 1549b67ca5936e6893c89221d508697e7e97d42b	demo.md"
+            hint: "In Git, <i>tree</i> objects are used to link <i>blob</i> objects. This is done be linking a single, or multiple <i>blob</i> objects, or by linking other <i>tree</i> objects (sub-trees)."
+        hint: "Use the tree <i>hash</i> linked in the <i>commit</i> object data."
+  
+  - id: 11
+    title: "Create a new file"
+    description: "Create a second file to store in the repository"
+    allowedCommands:
+      - cmd: "echo info > info.md"
+        valid: "^echo\\s+info\\s*>\\s*info.md$"
+        output: []
+  
+  - id: 12
+    title: "Stage the file"
+    description: "Add the new file to the staging area"
+    allowedCommands:
+      - cmd: "git add info.md"
+        valid: "^git\\s+add\\s+info.md$"
+        output: []
+  
+  - id: 13
+    title: "List Git objects"
+    description: "Show all git objects"
+    allowedCommands:
+      - cmd: "ls .git/objects/*"
+        valid: "^ls\\s+\\.git/objects/\\*$"
+        output:
+          - text: |
+              .git/objects/15:
+               49b67ca5936e6893c89221d508697e7e97d42b
+              
+              .git/objects/55:
+               02124538724e58ea0b3bdff3460501f9a8379d
+              
+              .git/objects/5b:
+               5dcc4dae8ef228b2a6141bf9d89953447cb97e
+              
+              .git/objects/bb:
+               64e88bad7d8cdc57a0deb5e1325484fd5fb41f
+              
+              .git/objects/info:
+              
+              .git/objects/pack:
+            hint: "You should see the new <i>blob</i> object listed. Feel free to inspect it with <code>git cat-file</code>. But will continue with commiting our changes."
+        hint: "List all files in the <i>objects</i> directory."
+  
+  - id: 14
+    title: "Perform second commit"
+    description: "Commit the staged file to the repository"
+    allowedCommands:
+      - cmd: "git commit -m \"Second Commit\""
+        valid: "^git\\s+commit\\s+-m\\s*\"Second Commit\"$"
+        output:
+          - text: |
+              [main ad3c7ad] Second commit
+               1 file changed, 1 insertion(+)
+               create mode 100644 info.md
+            hint: "We created our second <i>commit</i>. You can use the <i>short hash</i> to inspect its Git <i>object</i>."
+  
+  - id: 15
+    title: "Inspect Commit object"
+    description: "Inspect the newly created Git commit object"
+    allowedCommands:
+      - cmd: "git cat-file -p ad3c7ad"
+        valid: "^git\\s+cat-file\\s+-p\\s+ad3c7ad$"
+        output:
+          - text: |
+              tree e514a7a11d63bcfd423e7de41e07041dd4170dd8
+              parent 5b5dcc4dae8ef228b2a6141bf9d89953447cb97e
+              author Sebastian Feldmann <sebastianfeldmann@users.noreply.github.com> 1757505667 +0200
+              committer Sebastian Feldmann <sebastianfeldmann@users.noreply.github.com> 1757505667 +0200
+              
+              Second commit
+            hint: "Compared to the previous <i>commit</i> object this one also has a property <i>parent</i> which references the previous commit.<br><br>The only <i>object</i> missing is the <i>tag</i> object.<br>Let's create on!"
+        hint: "It is important to use the directory name <b>5b</b> and the filename <b>5dcc4dae8ef228b2a6141bf9d89953447cb97e</b>."
+  
+  - id: 16
+    title: "Create tag"
+    description: "Create an annotated tag"
+    allowedCommands:
+      - cmd: "git tag -a -m\"Version 1.0\" v1.0"
+        valid: "^git\\s+tag\\s+-a\\s+-m\\s*\"Version 1\\.0\"\\s+v1\\.0$"
+        output:
+          - hint: "If you create <i>tags</i> without the <code>-a</code> flag you will create a <b>lightweight tag</b>. Lightweight tags are no git objects and are not part of the <i>hash</i> on top of <i>hash</i> chain. They can be changed without noticing!"
+        hint: "It is important to use <code>-a</code> otherwise no git object is created."

@@ -1,0 +1,161 @@
+title: "Feature Branch Merging"
+description: "Learn how to create feature branches, make changes, and merge them into main using both fast-forward and no-fast-forward strategies."
+category: "branching"
+level: "intermediate"
+time: "15 minutes"
+order: 4
+next: "agc-rebase-basics"
+previous: "agc-git-head"
+steps:
+  - id: 1
+    title: "Create a new feature branch"
+    description: "Create and switch to a new branch called `feature1` from main."
+    allowedCommands:
+      - cmd: "git switch -c feature1"
+        valid: "^git\\s+switch\\s+-c\\s+feature1$"
+        output:
+          - text: "Switched to a new branch 'feature1'"
+      - cmd: "git checkout -b feature1"
+        valid: "^git\\s+checkout\\s+-b\\s+feature1$"
+        output:
+          - text: "Switched to a new branch 'feature1'"
+  
+  - id: 2
+    title: "Create a new file for feature1"
+    description: "Add a new file with changes for the feature1 branch."
+    allowedCommands:
+      - cmd: "echo \"Feature1 work\" > feature1.md"
+        valid: "^echo\\s+\"|'Feature1 work\"|'\\s*>\\s*feature1.md$"
+        output:
+          - text: ""
+  
+  - id: 3
+    title: "Stage the file"
+    description: "Add the new file to the staging area."
+    allowedCommands:
+      - cmd: "git add feature1.md"
+        valid: "^git\\s+add\\s+feature1.md$"
+        output:
+          - text: ""
+  
+  - id: 4
+    title: "Commit the change on feature1"
+    description: "Commit the staged file to the feature1 branch."
+    allowedCommands:
+      - cmd: "git commit -m \"Add feature1\""
+        valid: "^git\\s+commit\\s+-m\\s*'|\".*'|\"$"
+        output:
+          - text: "[feature1 1435002] Add feature1\n 1 file changed, 1 insertion(+)\n create mode 100644 feature1.md"
+  
+  - id: 5
+    title: "Switch back to main"
+    description: "Return to the main branch to prepare for merging."
+    allowedCommands:
+      - cmd: "git switch main"
+        valid: "^git\\s+switch\\s+main$"
+        output:
+          - text: "Switched to branch 'main'"
+      - cmd: "git checkout main"
+        valid: "^git\\s+checkout\\s+main$"
+        output:
+          - text: "Switched to branch 'main'"
+  
+  - id: 6
+    title: "Do a fast-forward merge"
+    description: "Merge feature1 into main. Since no new commits were made on main, Git performs a fast-forward merge."
+    allowedCommands:
+      - cmd: "git merge feature1"
+        valid: "^git\\s+merge\\s+feature1$"
+        output:
+          - text: "Updating ad3c7ad..1435002\nFast-forward\n feature1.md | 1 +\n 1 file changed, 1 insertion(+)\n create mode 100644 feature1.md"
+            hint: "Git simply moved the main branch pointer forward (fast-forward).<br>A fast-forward <i>merge</i> is possible if Git can <b>reach</b> the source <i>commits</i> without going back (to the left)."
+  
+  - id: 7
+    title: "Create a new feature2 branch"
+    description: "Now, create a second branch called `feature2`."
+    allowedCommands:
+      - cmd: "git switch -c feature2"
+        valid: "^git\\s+switch\\s+-c\\s+feature2$"
+        output:
+          - text: "Switched to a new branch 'feature2'"
+      - cmd: "git checkout -b feature2"
+        valid: "^git\\s+checkout\\s+-b\\s+feature2$"
+        output:
+          - text: "Switched to a new branch 'feature2'"
+  
+  - id: 8
+    title: "Create a new file for feature2"
+    description: "Add a new file with changes for the feature2 branch."
+    allowedCommands:
+      - cmd: "echo \"Feature2 work\" > feature2.md"
+        valid: "^echo\\s+'|\"Feature2 work'|\"\\s*>\\s*feature2.md$"
+        output:
+          - text: ""
+  
+  - id: 9
+    title: "Stage the feature2 file"
+    description: "Add the new file to the staging area."
+    allowedCommands:
+      - cmd: "git add feature2.md"
+        valid: "^git\\s+add\\s+feature2.md$"
+        output:
+          - text: ""
+  
+  - id: 10
+    title: "Commit the change on feature2"
+    description: "Commit the staged file to the feature2 branch."
+    allowedCommands:
+      - cmd: "git commit -m \"Add feature2\""
+        valid: "^git\\s+commit\\s+-m\\s*'|\".*'|\"$"
+        output:
+          - text: "[feature2 5d5eac6] Add feature2\n 1 file changed, 1 insertion(+)\n create mode 100644 feature2.md"
+  
+  - id: 11
+    title: "Switch back to main"
+    description: "Return to the main branch before making a diverging change."
+    allowedCommands:
+      - cmd: "git switch main"
+        valid: "^git\\s+switch\\s+main$"
+        output:
+          - text: "Switched to branch 'main'"
+      - cmd: "git checkout main"
+        valid: "^git\\s+checkout\\s+main$"
+        output:
+          - text: "Switched to branch 'main'"
+  
+  - id: 12
+    title: "Make a change on main"
+    description: "Add a change directly on the main branch, creating a divergent history."
+    allowedCommands:
+      - cmd: "echo \"Main branch update\" > main.md"
+        valid: "^echo\\s+'|\"Main branch update'|\"\\s*>\\s*main.md"
+        output:
+          - text: ""
+  
+  - id: 13
+    title: "Stage the main branch file"
+    description: "Add the new main branch file to the staging area."
+    allowedCommands:
+      - cmd: "git add main.md"
+        valid: "^git\\s+add\\s+main.md$"
+        output:
+          - text: ""
+  
+  - id: 14
+    title: "Commit the change on main"
+    description: "Commit the staged file to the main branch."
+    allowedCommands:
+      - cmd: "git commit -m \"Main branch update\""
+        valid: "^git\\s+commit\\s+-m\\s*'|\".*'|\"$"
+        output:
+          - text: "[main a9078bc] Main branch update\n 1 file changed, 1 insertion(+)\n create mode 100644 main.md"
+  
+  - id: 15
+    title: "Merge feature2 into main (no fast-forward)"
+    description: "Merge feature2 into main using the --no-ff option to preserve branch history."
+    allowedCommands:
+      - cmd: "git merge --no-ff feature2 -m 'Merge feature2 branch'"
+        valid: "^git\\s+merge\\s+--no-ff\\s+feature2\\s+-m\\s+'.*'$"
+        output:
+          - text: "Merge made by the 'recursive' strategy.\n feature2.md | 1 +\n 1 file changed, 1 insertion(+)\n create mode 100644 feature2.md"
+            hint: "Git created a merge commit because the histories diverged and we forced --no-ff."

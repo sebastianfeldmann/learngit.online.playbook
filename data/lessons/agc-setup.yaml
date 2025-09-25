@@ -1,0 +1,39 @@
+title: "Git Internals"
+description: "If you understand the basics and feel comfortable using Git for version control it is time to look into the core concepts and some advanced features. Use this guided course and follow along."
+category: "courses"
+level: "advanced"
+time: "2 minutes"
+order: 1
+next: "agc-git-objects"
+steps:
+  - id: 1
+    title: "Create a new Directory"
+    description: "To start our journey we need a fresh start"
+    allowedCommands:
+      - cmd: "mkdir git-advanced"
+        valid: "^mkdir\\s+git-advanced$"
+        output: []
+        hint: "Make sure not to create this directory within another <i>repository</i>"
+      - cmd: "mkdir git-advanced && cd git-advanced"
+        valid: "^mkdir\\s+git-advanced\\s*&&\\s*cd\\s+git-advanced$"
+        next: 3
+        output: []
+        hint: "Create the directory and change into it"
+  
+  - id: 2
+    title: "Open new directory"
+    description: "Change your CWD to the newly created directory"
+    allowedCommands:
+      - cmd: "cd git-advanced"
+        valid: "^cd\\s+git-advanced$"
+        output: []
+  
+  - id: 3
+    title: "Initialize git"
+    description: "Setup a new git repository"
+    allowedCommands:
+      - cmd: "git init"
+        valid: "^git\\s+init$"
+        output:
+          - text: "Initialized empty Git repository in /Users/sf/git-advanced/.git/"
+            hint: "The path to your repository on your computer will naturally differ from the one displayed here."

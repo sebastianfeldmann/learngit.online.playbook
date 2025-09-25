@@ -1,0 +1,29 @@
+basics:
+  displayName: "Git Basics"
+  description: "Essential Git commands every developer needs to know"
+  icon: "📚"
+  order: 1
+
+branching:
+  displayName: "Branching & Merging"
+  description: "Master Git's branching workflow and collaboration features"
+  icon: "🌳"
+  order: 2
+
+remote:
+  displayName: "Remote Repositories"
+  description: "Working with GitHub, pushing, pulling, and remote collaboration"
+  icon: "🌐"
+  order: 3
+
+advanced:
+  displayName: "Advanced Git"
+  description: "Complex Git operations, rebasing, and workflow optimization"
+  icon: "⚡"
+  order: 4
+
+courses:
+  displayName: "Courses"
+  description: "Step-by-step guides to learn Git"
+  icon: "🎓"
+  order: 5

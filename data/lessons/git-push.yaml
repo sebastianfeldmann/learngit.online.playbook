@@ -1,0 +1,92 @@
+title: "Git Push Workflow"
+description: "Learn how to push your local commits to a remote repository. This lesson covers adding a remote origin and pushing your changes to GitHub."
+category: "remote"
+level: "beginner"
+time: "8 minutes"
+order: 1
+previous: "git-commit"
+next: "git-branch"
+steps:
+  - id: 1
+    title: "Check current remotes"
+    description: "First, check if you have any remote repositories configured"
+    allowedCommands:
+      - cmd: "git remote"
+        valid: "^git\\s+remote$"
+        output: []
+      - cmd: "git remote -v"
+        valid: "^git\\s+remote\\s+-v$"
+        output: []
+  
+  - id: 2
+    title: "Add remote origin"
+    description: "Add your GitHub repository as the remote origin"
+    allowedCommands:
+      - cmd: "git remote add origin https://github.com/username/my-repo.git"
+        valid: "^git\\s+remote\\s+add\\s+origin\\s+https://github\\.com/[^/]+/[^/]+\\.git$"
+        output: []
+        hint: "Adds a remote repository called 'origin' that points to your GitHub repository URL"
+  
+  - id: 3
+    title: "Verify remote was added"
+    description: "Check that the remote was added correctly"
+    allowedCommands:
+      - cmd: "git remote -v"
+        valid: "^git\\s+remote\\s+-v$"
+        output:
+          - text: "origin	https://github.com/username/my-repo.git (fetch)\norigin	https://github.com/username/my-repo.git (push)"
+  
+  - id: 4
+    title: "Check branch status"
+    description: "Check which branch you're on before pushing"
+    allowedCommands:
+      - cmd: "git branch"
+        valid: "^git\\s+branch$"
+        output:
+          - text: "* main"
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output:
+          - text: "On branch main\nnothing to commit, working tree clean"
+  
+  - id: 5
+    title: "Push to remote repository"
+    description: "Push your main branch to the remote origin for the first time"
+    allowedCommands:
+      - cmd: "git push -u origin main"
+        valid: "^git\\s+push\\s+-u\\s+origin\\s+main$"
+        output:
+          - text: |
+              Enumerating objects: 4, done.
+              Counting objects: 100% (4/4), done.
+              Delta compression using up to 8 threads
+              Compressing objects: 100% (3/3), done.
+              Writing objects: 100% (4/4), 1.12 KiB | 1.12 MiB/s, done.
+              Total 4 (delta 0), reused 0 (delta 0), pack-reused 0
+              To https://github.com/username/my-repo.git
+               * [new branch]      main -> main
+              Branch 'main' set up to track remote branch 'main' from 'origin'.
+            hint: "Shows the push progress, creates the main branch on GitHub, and establishes tracking between local and remote main branches"
+        hint: "Pushes your main branch to the remote origin and sets up tracking (-u flag)"
+      - cmd: "git push --set-upstream origin main"
+        valid: "^git\\s+push\\s+--set-upstream\\s+origin\\s+main$"
+        output:
+          - text: |
+              Enumerating objects: 4, done.
+              Counting objects: 100% (4/4), done.
+              Delta compression using up to 8 threads
+              Compressing objects: 100% (3/3), done.
+              Writing objects: 100% (4/4), 1.12 KiB | 1.12 MiB/s, done.
+              Total 4 (delta 0), reused 0 (delta 0), pack-reused 0
+              To https://github.com/username/my-repo.git
+               * [new branch]      main -> main
+              Branch 'main' set up to track remote branch 'main' from 'origin'.
+  
+  - id: 6
+    title: "Verify push success"
+    description: "Check the status to confirm everything is up to date"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output:
+          - text: "On branch main\nYour branch is up to date with 'origin/main'.\n\nnothing to commit, working tree clean"

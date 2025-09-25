@@ -1,0 +1,64 @@
+title: "Git Internals"
+description: "Learn how Git works internally and handles different types of objects."
+category: "basics"
+level: "advanced"
+time: "15 minutes"
+order: 5
+steps:
+  - id: 1
+    title: "Create a new repository"
+    description: "Start by creating a new repository"
+    allowedCommands:
+      - cmd: "git init"
+        valid: "^git\\s+init$"
+        output:
+          - text: "Initialized empty Git repository in /path/to/repo/.git/"
+            hint: "This output shows we've created a new repository in the current directory."
+        hint: "Initializes a new Git repository in the current directory"
+  
+  - id: 2
+    title: "Create a new file"
+    description: "Create a new file in the repository"
+    allowedCommands:
+      - cmd: "touch README.md"
+        valid: "^git\\s+touch\\s+README\\.md$"
+        output: []
+        hint: "Creates a new file called README.md"
+  
+  - id: 3
+    title: "Check status"
+    description: "Check the status again to see the staged files"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output:
+          - text: |
+              On branch main
+
+              No commits yet
+
+              Untracked files:
+                (use "git add <file>..." to include in what will be committed)
+
+              	README.md
+
+              nothing added to commit but untracked files present (use "git add" to track)
+            hint: "This output shows we're on the <strong>main branch</strong> with <i>no commits yet</i>, and have <strong>1 untracked file</strong> that needs to be added to version control."
+  
+  - id: 4
+    title: "Stage the file"
+    description: "Add the file to the staging area using git add"
+    allowedCommands:
+      - cmd: "git add README.md"
+        valid: "^git\\s+add\\s+README\\.md$"
+        output: []
+        hint: "<b>Add</b> the README.md file to the staging area"
+  
+  - id: 5
+    title: "Check the created objects"
+    description: "Check the .git directory to see the created objects"
+    allowedCommands:
+      - cmd: "ls -la .git/objects/*"
+        valid: "^ls\\s+-la\\s+\\.git/objects/\\*$"
+        output:
+          - text: "..."

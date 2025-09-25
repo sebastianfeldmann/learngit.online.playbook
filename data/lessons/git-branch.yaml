@@ -1,0 +1,124 @@
+title: "Git Branching"
+description: "Learn the basics of branching in Git. This lesson will guide you through creating a new branch, checking out a branch, and merging a branch."
+category: "basics"
+level: "beginner"
+time: "10 minutes"
+order: 2
+steps:
+  - id: 1
+    title: "Check current branch"
+    description: "Start by checking the current branch of your repository"
+    allowedCommands:
+      - cmd: "git branch"
+        valid: "^git\\s+branch$"
+        output:
+          - text: "* main"
+            hint: "<i>main</i> or <i>master</i> are just default names for the <i>default branch</i>. You can change the default brach name by running <code>git config --global init.defaultBranch <i>branch-name</i></code>."
+        hint: "Shows all local <i>branches</i> - the current branch is marked with an <i>*</i>"
+  
+  - id: 2
+    title: "Create a new branch"
+    description: "A branch represents an independent line of development"
+    allowedCommands:
+      - cmd: "git branch demo-branch"
+        valid: "^git\\s+branch\\s+[a-z -_/]+$"
+        output: []
+        hint: "You can use branch names like <i>feature/demo-branch</i> or <i>bugfix/issue-123</i> do keep your branches organized."
+      - cmd: "git switch -c demo-branch"
+        valid: "^git\\s+switch\\s+-c\\s+[a-z -_/]+$"
+        next: 4
+        output:
+          - text: "Switched to a new branch 'demo-branch'"
+        hint: "Modern way to create a new branch called <i>demo-branch</i> and immediately check it out"
+      - cmd: "git checkout -b demo-branch"
+        valid: "^git\\s+checkout\\s+-b\\s+[a-z -_/]+$"
+        next: 4
+        output:
+          - text: "Switched to a new branch 'demo-branch'"
+        hint: "Legacy way to create a new branch called <i>demo-branch</i> and immediately check it out"
+  
+  - id: 3
+    title: "Switch to the new branch"
+    description: "After creating a new branch, you can check it out"
+    allowedCommands:
+      - cmd: "git switch demo-branch"
+        valid: "^git\\s+switch\\s+[a-z -_/]+$"
+        output:
+          - text: "Switched to branch 'demo-branch'"
+        hint: "The modern way to switch to the new branch called <i>demo-branch</i>"
+      - cmd: "git checkout demo-branch"
+        valid: "^git\\s+checkout\\s+[a-z -_/]+$"
+        output:
+          - text: "Switched to branch 'demo-branch'"
+        hint: "The legacy way to switch to the new branch called <i>demo-branch</i>"
+  
+  - id: 4
+    title: "Make some changes"
+    description: "Create a new file called <i>demo.md</i> and add some content to it"
+    allowedCommands:
+      - cmd: "echo \"Demo Branch File\" > demo.md"
+        valid: "^echo\\s*['\"]Demo Branch File['\"]\\s*>\\s*demo\\.md$"
+        output: []
+        hint: "Creates a new file called <i>demo.md</i> and adds some content to it"
+  
+  - id: 5
+    title: "Stage your changes"
+    description: "Store your changes in the staging area"
+    allowedCommands:
+      - cmd: "git add demo.md"
+        valid: "^git\\s+add\\s+demo\\.md$"
+        output: []
+      - cmd: "git commit -a -m \"My demo change\""
+        valid: "^git\\s+commit\\s+-a\\s+-m\\s*['\"]My demo change['\"]$"
+        next: 7
+        output:
+          - text: "[demo-branch2 610af4c] My Demo Changes\n 1 file changed, 1 insertion(+)\n create mode 100644 demo.md"
+            hint: "Shows the <i>commit hash</i> (610af4c), files changed, and that this is the second commit (<i>demo-branch2</i>) on the <i>demo-branch</i> branch<br><img src=\"/assets/gfx/lessons/git-branch-1.svg\">"
+        hint: "Add everything to the <i>staging area</i> and create a <i>commit</i> with the specified <i>commit message</i>"
+  
+  - id: 6
+    title: "Commit your changes"
+    description: "Commit the changes to the new branch"
+    allowedCommands:
+      - cmd: "git commit -m \"My demo change\""
+        valid: "^git\\s+commit\\s+-m\\s*['\"]My demo change['\"]$"
+        output:
+          - text: "[demo-branch2 610af4c] My Demo Changes\n 1 file changed, 1 insertion(+)\n create mode 100644 demo.md "
+            hint: "Shows the <i>commit hash</i> (610af4c), files changed, and that this is the second commit (<i>demo-branch2</i>) on the <i>demo-branch</i> branch<br><img src=\"/assets/gfx/lessons/git-branch-1.svg\">"
+  
+  - id: 7
+    title: "Check the log"
+    description: "Check the log to see your commit"
+    allowedCommands:
+      - cmd: "git log"
+        valid: "^git\\s+log$"
+        output: []
+  
+  - id: 8
+    title: "Switch to the main branch"
+    description: "Switch to the main branch"
+    allowedCommands:
+      - cmd: "git switch main"
+        valid: "^git\\s+switch\\s+main$"
+        output:
+          - text: "Switched to branch 'main'"
+        hint: "Switch to the <i>main</i> branch"
+  
+  - id: 9
+    title: "Merge the new branch into the main branch"
+    description: "Merge the new branch into the main branch"
+    allowedCommands:
+      - cmd: "git merge demo-branch"
+        valid: "^git\\s+merge\\s+demo-branch$"
+        output:
+          - text: "Merge made by the 'recursive' strategy."
+        hint: "Merge the <i>demo-branch</i> into the <i>main</i> branch"
+  
+  - id: 9
+    title: "Check the status"
+    description: "Check the status of the repository"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output:
+          - text: "On branch main\nYour branch is up to date with 'origin/main'.\n\nnothing to commit, working tree clean"
