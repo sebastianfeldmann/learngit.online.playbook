@@ -5,9 +5,19 @@ level: "beginner"
 time: "10 minutes"
 order: 1
 previous: null
-next: "git-push"
+next: "git-remote"
 steps:
   - id: 1
+    title: "Create project files"
+    description: "Let's create some files to work with"
+    allowedCommands:
+      - cmd: "touch README.md .gitignore"
+        valid: "^touch\\s+README\\.md\\s+\\.gitignore$"
+        output: []
+        hint: "The <code>touch</code> command creates empty files. We're creating a <code>README.md</code> for project documentation and a <code>.gitignore</code> to specify which files Git should ignore."
+        next: 2
+  
+  - id: 2
     title: "Check repository status"
     description: "Start by checking the current status of your repository"
     allowedCommands:
@@ -26,10 +36,10 @@ steps:
               	.gitignore
 
               nothing added to commit but untracked files present (use "git add" to track)
-            hint: "This output shows we're on the <b>main</b> <i>branch</i> with no <i>commits</i> yet, and have <b>2 untracked files</b> that need to be added to version control."
+            hint: "Git <em>status</em> shows we're on the <b>main</b> <i>branch</i> with no <i>commits</i> yet, and have <b>2 untracked files</b> that need to be added to version control."
         hint: "Shows the <strong>working tree status</strong> - which files are <i>tracked</i>, <i>untracked</i>, or <i>staged</i> for commit"
   
-  - id: 2
+  - id: 3
     title: "Add files to staging area"
     description: "Add the files to the staging area using git add"
     allowedCommands:
@@ -47,13 +57,13 @@ steps:
         hint: "<b>Adds</b> all changes in the entire <i>working directory</i> to the <i>staging area</i>.<br><b>Note:</b> <u>Includes deleted files.</u>"
       - cmd: "git commit -A -m \"Initial commit\""
         valid: "^git\\s+commit\\s+-A\\s+-m\\s*['\"][a-z -_]+['\"]$"
-        next: 5
+        next: 6
         output:
           - text: "[main (root-commit) a1b2c3d] First commit\n 2 files changed, 25 insertions(+)\n create mode 100644 README.md\n create mode 100644 .gitignore"
             hint: "Shows the <i>commit hash</i> (a1b2c3d), files changed, and that this is the first commit (<i>root-commit</i>) on the <i>main branch</i>"
         hint: "<b>Adds</b> all changes to the <i>staging area</i> <u>including</u> deleted files and creates a <i>commit</i> with the specified <i>commit message</i>"
   
-  - id: 3
+  - id: 4
     title: "Check status after adding"
     description: "Check the status again to see the staged files"
     allowedCommands:
@@ -70,8 +80,10 @@ steps:
 
               	new file:   README.md
               	new file:   .gitignore
+            hint: |
+              Now <em>git status</em> shows the list of<i>staged files</i> that will be committed.
   
-  - id: 4
+  - id: 5
     title: "Make your first commit"
     description: "Commit the staged changes with a meaningful message"
     allowedCommands:
@@ -79,7 +91,9 @@ steps:
         valid: "^git\\s+commit\\s+-m\\s*['\"][a-z -_]+['\"]$"
         output:
           - text: "[main (root-commit) a1b2c3d] Initial commit\n 2 files changed, 25 insertions(+)\n create mode 100644 README.md\n create mode 100644 .gitignore"
-            hint: "Shows the <i>commit hash</i> (a1b2c3d), files changed, and that this is the first commit (<i>root-commit</i>) on the <i>main branch</i>"
+            hint: |
+              Shows the <i>commit hash</i> (a1b2c3d), files changed,
+              and that this is the first commit (<i>root-commit</i>) on the <i>main branch</i>
         hint: "Creates a commit with the staged changes and the specified commit message"
       - cmd: "git commit -m \"Setup project\""
         valid: "^git\\s+commit\\s+-m\\s*['\"][a-z -_]+['\"]$"
@@ -90,7 +104,7 @@ steps:
         output:
           - text: "[main (root-commit) a1b2c3d] First commit\n 2 files changed, 25 insertions(+)\n create mode 100644 README.md\n create mode 100644 .gitignore"
   
-  - id: 5
+  - id: 6
     title: "Verify the commit"
     description: "Check the log to see your commit"
     allowedCommands:
@@ -107,3 +121,4 @@ steps:
         valid: "^git\\s+log\\s+--oneline$"
         output:
           - text: "a1b2c3d (HEAD -> main) Initial commit"
+          - hint: "As soon as you have committed your changes, you can recover them at any time."

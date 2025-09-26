@@ -1,0 +1,79 @@
+title: "Git Basics"
+description: "If you understand the basics and feel comfortable using Git for version control it is time to look into the core concepts and some advanced features. Use this guided course and follow along."
+category: "courses"
+level: "beginner"
+time: "2 minutes"
+order: 1
+next: "git-commit"
+steps:
+  - id: 1
+    title: "Create a new Directory"
+    description: "To start our journey we need a fresh start"
+    allowedCommands:
+      - cmd: "mkdir git-basics"
+        valid: "^mkdir\\s+git-basics$"
+        output: []
+        hint: "Make sure not to create this directory within another <i>repository</i>"
+      - cmd: "mkdir git-basics && cd git-basics"
+        valid: "^mkdir\\s+git-basics\\s*&&\\s*cd\\s+git-basics$"
+        next: 3
+        output: []
+        hint: "Create the directory and change into it"
+  
+  - id: 2
+    title: "Open new directory"
+    description: "Change your CWD to the newly created directory"
+    allowedCommands:
+      - cmd: "cd git-basics"
+        valid: "^cd\\s+git-basics$"
+        output: []
+  
+  - id: 3
+    title: "Initialize git"
+    description: "Setup a new git repository"
+    allowedCommands:
+      - cmd: "git init"
+        valid: "^git\\s+init$"
+        hint: "Create a new Git repository in the current directory"
+        output:
+          - text: "Initialized empty Git repository in /Users/sf/git-basics/.git/"
+            hint: "The path to your repository on your computer will naturally differ from the one displayed here."
+        next: 4
+  
+  - id: 4
+    title: "Explore the .git directory"
+    description: "Let's see what Git created for us"
+    allowedCommands:
+      - cmd: "ls -la .git"
+        valid: "^ls\\s+-la\\s+\\.git$"
+        output:
+          - text: |
+              total 0
+              drwxr-xr-x  3 sf  staff   96 Sep 25 15:30 .
+              drwxr-xr-x  3 sf  staff   96 Sep 25 15:30 ..
+              drwxr-xr-x  2 sf  staff   64 Sep 25 15:30 branches
+              drwxr-xr-x  2 sf  staff   64 Sep 25 15:30 hooks
+              drwxr-xr-x  2 sf  staff   64 Sep 25 15:30 info
+              drwxr-xr-x  4 sf  staff  128 Sep 25 15:30 objects
+              drwxr-xr-x  4 sf  staff  128 Sep 25 15:30 refs
+              -rw-r--r--  1 sf  staff   23 Sep 25 15:30 config
+              -rw-r--r--  1 sf  staff   73 Sep 25 15:30 description
+              -rw-r--r--  1 sf  staff   21 Sep 25 15:30 HEAD
+            hint: "This shows the internal structure of a Git repository. This is were all the version control data is stored. You can move your <em>git-basics</em> directory around as long as you keep the .git directory in place everything will still work."
+        next: 5
+  
+  - id: 5
+    title: "Check repository status"
+    description: "Let's see the current state of our repository"
+    allowedCommands:
+      - cmd: "git status"
+        hint: "Git <em>status</em> is your built-in cheat sheet. Besides the current state it also shows you your possible next steps."
+        valid: "^git\\s+status$"
+        output:
+          - text: |
+              On branch main
+              
+              No commits yet
+              
+              nothing to commit (create/copy files and "git add" them to track)
+            hint: "Git status shows you the current state of your repository. Since we just initialized it, there are no commits yet and no files to track."

@@ -4,7 +4,7 @@ category: "remote"
 level: "beginner"
 time: "8 minutes"
 order: 1
-previous: "git-commit"
+previous: "git-remote"
 next: "git-branch"
 steps:
   - id: 1

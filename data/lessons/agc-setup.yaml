@@ -3,7 +3,7 @@ description: "If you understand the basics and feel comfortable using Git for ve
 category: "courses"
 level: "advanced"
 time: "2 minutes"
-order: 1
+order: 2
 next: "agc-git-objects"
 steps:
   - id: 1

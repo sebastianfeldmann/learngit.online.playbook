@@ -1,0 +1,94 @@
+title: "Git Remotes"
+description: "Learn how to connect your local repository to a remote repository and configure branch tracking. This lesson covers adding remotes, viewing configuration, and setting up branch tracking."
+category: "remote"
+level: "beginner"
+time: "8 minutes"
+order: 1
+previous: "git-commit"
+next: "git-push"
+steps:
+  - id: 1
+    title: "Add a remote repository"
+    description: "Connect your local repository to a remote repository"
+    allowedCommands:
+      - cmd: "git remote add origin git@github.com:username/repository.git"
+        valid: "^git\\s+remote\\s+add\\s+origin\\s+git\\@github\\.com:[a-zA-Z0-9_-]+/[a-zA-Z0-9_.-]+\\.git$"
+        output: []
+        hint: "The <code>git remote add</code> command connects your local repository to a remote repository. <em>origin</em> is the conventional name for the default remote repository."
+        next: 2
+  
+  - id: 2
+    title: "View remote configuration"
+    description: "Check how the remote is configured in your repository"
+    allowedCommands:
+      - cmd: "cat .git/config"
+        valid: "^cat\\s+\\.git/config$"
+        output:
+          - text: |
+              [core]
+                  repositoryformatversion = 0
+                  filemode = true
+                  bare = false
+                  logallrefupdates = true
+                  ignorecase = true
+                  precomposeunicode = true
+            hint: "The <em>.git/config</em> file holds all settings for this repository."
+          - text: |  
+              [remote "origin"]
+                  url = git@github.com:username/repository.git
+                  fetch = +refs/heads/*:refs/remotes/origin/*
+            hint: "It contains configurations for all connected remotes in this case the just connected <em>origin</em> remote. You can also list all connected remotes using <code>git remote -v</code>."      
+        next: 3
+  
+  - id: 3
+    title: "List remote repositories"
+    description: "Use git remote -v to see all configured remotes"
+    allowedCommands:
+      - cmd: "git remote -v"
+        valid: "^git\\s+remote\\s+-v$"
+        output:
+          - text: |
+              origin	git@github.com:username/repository.git (fetch)
+              origin	git@github.com:username/repository.git (push)
+            hint: "The <code>git remote -v</code> command shows all configured remote repositories with their URLs for both <em>fetch</em> and <em>push</em> operations."
+        next: 4
+  
+  - id: 4
+    title: "Set up branch tracking"
+    description: "Configure the main branch to track the remote main branch"
+    allowedCommands:
+      - cmd: "git branch --set-upstream-to=origin/main main"
+        valid: "^git\\s+branch\\s+--set-upstream-to=origin/main\\s+main$"
+        output: []
+        hint: "This command tells Git that your local <em>main</em> branch should track the <em>main</em> branch on the <em>origin</em> remote."
+        next: 5
+  
+  - id: 5
+    title: "Verify branch tracking configuration"
+    description: "Check the updated configuration to see the tracking setup"
+    allowedCommands:
+      - cmd: "cat .git/config"
+        valid: "^cat\\s+\\.git/config$"
+        output:
+          - text: |
+              [core]
+                  repositoryformatversion = 0
+                  filemode = true
+                  bare = false
+                  logallrefupdates = true
+                  ignorecase = true
+                  precomposeunicode = true
+              [remote "origin"]
+                  url = https://github.com/username/repository.git
+                  fetch = +refs/heads/*:refs/remotes/origin/*
+          - text: |
+              [branch "main"]
+                  remote = origin
+                  merge = refs/heads/main
+            hint: |
+              Notice how the <code>[branch \"main\"]</code> section now shows the remote
+              and merge configuration, indicating that your local <em>main</em> branch is
+              properly tracking the remote <em>main</em> branch.<br>
+              Meaning that every time you push or pull changes, Git will automatically try
+              to <em>merge</em> your local <em>main</em> branch with the remote <em>main</em> branch.
+
