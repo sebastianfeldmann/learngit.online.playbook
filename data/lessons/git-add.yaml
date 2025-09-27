@@ -1,0 +1,118 @@
+title: "Git Add"
+description: "Learn how to stage changes for commit using git add. This lesson covers adding individual files, multiple files, and using wildcards to stage changes efficiently."
+category: "changes"
+level: "beginner"
+time: "8 minutes"
+order: 1
+previous: null
+next: "git-commit"
+steps:
+  - id: 1
+    title: "Check repository status"
+    description: "See what files have been modified or are untracked"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output: |
+          On branch main
+          Your branch is up to date with 'origin/main'.
+
+          Changes not staged for commit:
+            (use "git add <file>..." to update what will be committed)
+            (use "git restore <file>..." to discard changes in working directory)
+
+          	modified:   README.md
+          	modified:   src/app.code
+
+          Untracked files:
+            (use "git add <file>..." to include in what will be committed)
+
+          	newfile.txt
+
+          no changes added to commit (use "git add" and/or "git commit -a")
+        hint: "Git status shows you three types of files: <em>modified</em> (changed files), <em>untracked</em> (new files), and <em>staged</em> (ready to commit)."
+        next: 2
+  
+  - id: 2
+    title: "Add a single file"
+    description: "Stage one specific file for commit"
+    allowedCommands:
+      - cmd: "git add README.md"
+        valid: "^git\\s+add\\s+README\\.md$"
+        output: []
+        hint: "The <code>git add</code> command moves files from the <em>working directory</em> to the <em>staging area</em>, preparing them for commit."
+        next: 3
+  
+  - id: 3
+    title: "Check status after adding"
+    description: "See how the file is now staged"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output: |
+          On branch main
+          Your branch is up to date with 'origin/main'.
+
+          Changes to be committed:
+            (use "git rm --cached <file>..." to unstage)
+
+          	modified:   README.md
+
+          Changes not staged for commit:
+            (use "git add <file>..." to update what will be committed)
+            (use "git restore <file>..." to discard changes in working directory)
+
+          	modified:   src/app.js
+
+          Untracked files:
+            (use "git add <file>..." to include in what will be committed)
+
+          	newfile.txt
+
+          no changes added to commit (use "git add" and/or "git commit -a")
+        hint: "Notice that <code>README.md</code> is now in the <em>Changes to be committed</em> section, meaning it's staged and ready for commit."
+        next: 4
+  
+  - id: 4
+    title: "Add multiple files"
+    description: "Stage several files at once"
+    allowedCommands:
+      - cmd: "git add src/app.js newfile.txt"
+        valid: "^git\\s+add\\s+src/app\\.js\\s+newfile\\.txt$"
+        output: []
+        hint: "You can add multiple files by separating them with spaces. This is useful when you want to commit related changes together."
+        next: 5
+  
+  - id: 5
+    title: "Add all changes"
+    description: "Stage all modified and new files at once"
+    allowedCommands:
+      - cmd: "git add ."
+        valid: "^git\\s+add\\s+\\.$"
+        output: []
+        hint: "The <code>git add .</code> command stages all changes in the current directory and subdirectories. Use with caution to avoid committing unwanted files."
+      - cmd: "git add -A"
+        valid: "^git\\s+add\\s+-A$"
+        output: []
+        hint: "The <code>git add -A</code> command stages all changes in the entire repository, including deleted files."
+        next: 6
+  
+  - id: 6
+    title: "Verify all files are staged"
+    description: "Check that all changes are ready for commit"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output: |
+          On branch main
+          Your branch is up to date with 'origin/main'.
+
+          Changes to be committed:
+            (use "git rm --cached <file>..." to unstage)
+
+          	modified:   README.md
+          	modified:   src/app.js
+          	new file:   newfile.txt
+
+          no changes added to commit (use "git add" and/or "git commit -a")
+        hint: "Perfect! All your changes are now staged and ready for commit. The staging area acts as a checkpoint where you can review changes before committing them."

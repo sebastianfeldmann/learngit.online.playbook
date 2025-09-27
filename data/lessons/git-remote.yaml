@@ -3,8 +3,8 @@ description: "Learn how to connect your local repository to a remote repository 
 category: "remote"
 level: "beginner"
 time: "8 minutes"
-order: 1
-previous: "git-commit"
+order: 3
+previous: "git-pull"
 next: "git-push"
 steps:
   - id: 1

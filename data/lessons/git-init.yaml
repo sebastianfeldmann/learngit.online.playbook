@@ -2,7 +2,7 @@ title: "Git Basics"
 description: "If you understand the basics and feel comfortable using Git for version control it is time to look into the core concepts and some advanced features. Use this guided course and follow along."
 category: "courses"
 level: "beginner"
-time: "2 minutes"
+time: "45 minutes"
 order: 1
 next: "git-commit"
 steps:

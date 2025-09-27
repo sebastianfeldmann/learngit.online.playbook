@@ -1,10 +1,10 @@
 title: "Git HEAD"
 description: "Learn how Git uses the HEAD pointer and head refs to track the current state of the repository."
-category: "advanced"
+category: "internals"
 level: "advanced"
 time: "10 minutes"
 order: 3
-next: "agc-merge-strategies"
+next: "git-merge-strategies"
 previous: "agc-git-objects"
 steps:
   - id: 1

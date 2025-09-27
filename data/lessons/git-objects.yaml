@@ -1,11 +1,11 @@
 title: "Git Objects"
 description: "Git stores everything in git objects. Lear about the different kind of objects and their responsibilities."
-category: "advanced"
+category: "internals"
 level: "advanced"
 time: "15 minutes"
 order: 2
-next: "agc-git-head"
-previous: "agc-setup"
+next: "git-head"
+previous: "git-internals"
 steps:
   - id: 1
     title: "Create a new file"

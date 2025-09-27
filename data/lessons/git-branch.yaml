@@ -1,6 +1,6 @@
-title: "Git Branching"
+title: "Git Branch"
 description: "Learn the basics of branching in Git. This lesson will guide you through creating a new branch, checking out a branch, and merging a branch."
-category: "basics"
+category: "branching"
 level: "beginner"
 time: "10 minutes"
 order: 2

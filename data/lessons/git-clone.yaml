@@ -1,0 +1,75 @@
+title: "Git Clone"
+description: "Learn how to clone an existing repository from a remote source. This lesson covers cloning repositories, understanding the clone process, and exploring the cloned repository structure."
+category: "remote"
+level: "beginner"
+time: "6 minutes"
+order: 1
+previous: null
+next: "git-pull"
+steps:
+  - id: 1
+    title: "Clone a repository"
+    description: "Create a local copy of a remote repository"
+    allowedCommands:
+      - cmd: "git clone https://github.com/username/repository.git"
+        valid: "^git\\s+clone\\s+https://github\\.com/[a-zA-Z0-9_-]+/[a-zA-Z0-9_.-]+\\.git$"
+        output: |
+          Cloning into 'repository'...
+          remote: Enumerating objects: 4, done.
+          remote: Counting objects: 100% (4/4), done.
+          remote: Compressing objects: 100% (3/3), done.
+          remote: Total 4 (delta 0), reused 4 (delta 0), pack-reused 0
+          Receiving objects: 100% (4/4), done.
+        hint: "The <code>git clone</code> command creates a complete local copy of a remote repository, including all history and branches."
+        next: 2
+  
+  - id: 2
+    title: "Navigate to cloned repository"
+    description: "Change into the cloned repository directory"
+    allowedCommands:
+      - cmd: "cd repository"
+        valid: "^cd\\s+repository$"
+        output: []
+        hint: "The clone command creates a new directory with the same name as the repository."
+        next: 3
+  
+  - id: 3
+    title: "Check repository status"
+    description: "Verify the cloned repository is properly set up"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output: |
+          On branch main
+          Your branch is up to date with 'origin/main'.
+
+          nothing to commit, working tree clean
+        hint: "The cloned repository is already connected to the remote origin and your local main branch is tracking the remote main branch."
+        next: 4
+  
+  - id: 4
+    title: "View remote configuration"
+    description: "Check how the remote is configured in the cloned repository"
+    allowedCommands:
+      - cmd: "git remote -v"
+        valid: "^git\\s+remote\\s+-v$"
+        output: |
+          origin	https://github.com/username/repository.git (fetch)
+          origin	https://github.com/username/repository.git (push)
+        hint: "The cloned repository automatically has the <em>origin</em> remote configured to point to the source repository."
+        next: 5
+  
+  - id: 5
+    title: "Explore repository structure"
+    description: "See what files were cloned from the remote repository"
+    allowedCommands:
+      - cmd: "ls -la"
+        valid: "^ls\\s+-la$"
+        output: |
+          total 8
+          drwxr-xr-x  4 user  staff  128 Oct 23 10:30 .
+          drwxr-xr-x  4 user  staff  128 Oct 23 10:30 ..
+          drwxr-xr-x  8 user  staff  256 Oct 23 10:30 .git
+          -rw-r--r--  1 user  staff   23 Oct 23 10:30 README.md
+          -rw-r--r--  1 user  staff  156 Oct 23 10:30 .gitignore
+        hint: "The cloned repository contains all the files from the remote repository, plus the <code>.git</code> directory with the complete version history."

@@ -1,0 +1,37 @@
+title: "Git Tips & Tricks"
+description: "Discover useful Git tips and tricks to improve your workflow and productivity. Learn practical techniques that will make you more efficient with Git."
+category: "courses"
+level: "intermediate"
+time: "40 minutes"
+order: 3
+previous: ""
+next: null
+steps:
+  - id: 1
+    title: "Navigate to a Git repository"
+    description: "Change into a directory that contains a Git repository"
+    allowedCommands:
+      - cmd: "cd my-project"
+        valid: "^cd\\s+my-project$"
+        output: []
+        hint: "Navigate to a directory that contains a Git repository. You can use any project directory that has been initialized with <code>git init</code>."
+        next: 2
+  
+  - id: 2
+    title: "Check repository status"
+    description: "Use git status to see the current state of your repository"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output: |
+          On branch main
+          Your branch is up to date with 'origin/main'.
+
+          Changes not staged for commit:
+            (use "git add <file>..." to update what will be committed)
+            (use "git restore <file>..." to discard changes in working directory)
+
+          	modified:   README.md
+
+          no changes added to commit (use "git add" and/or "git commit -a")
+        hint: "The <code>git status</code> command is your best friend! It shows you exactly what's happening in your repository - which files are modified, staged, or untracked."

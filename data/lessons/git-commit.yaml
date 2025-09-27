@@ -1,11 +1,11 @@
-title: "Git Commit Workflow"
+title: "Git Commit"
 description: "Learn the basics of staging and committing changes in Git. This lesson will guide you through checking status, adding files, and making your first commit."
-category: "basics"
+category: "changes"
 level: "beginner"
 time: "10 minutes"
-order: 1
-previous: null
-next: "git-remote"
+order: 2
+previous: "git-add"
+next: "git-clone"
 steps:
   - id: 1
     title: "Create project files"

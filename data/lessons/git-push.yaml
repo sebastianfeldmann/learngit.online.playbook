@@ -1,33 +1,13 @@
-title: "Git Push Workflow"
+title: "Git Push"
 description: "Learn how to push your local commits to a remote repository. This lesson covers adding a remote origin and pushing your changes to GitHub."
 category: "remote"
 level: "beginner"
 time: "8 minutes"
-order: 1
+order: 4
 previous: "git-remote"
 next: "git-branch"
-steps:
+steps:  
   - id: 1
-    title: "Check current remotes"
-    description: "First, check if you have any remote repositories configured"
-    allowedCommands:
-      - cmd: "git remote"
-        valid: "^git\\s+remote$"
-        output: []
-      - cmd: "git remote -v"
-        valid: "^git\\s+remote\\s+-v$"
-        output: []
-  
-  - id: 2
-    title: "Add remote origin"
-    description: "Add your GitHub repository as the remote origin"
-    allowedCommands:
-      - cmd: "git remote add origin https://github.com/username/my-repo.git"
-        valid: "^git\\s+remote\\s+add\\s+origin\\s+https://github\\.com/[^/]+/[^/]+\\.git$"
-        output: []
-        hint: "Adds a remote repository called 'origin' that points to your GitHub repository URL"
-  
-  - id: 3
     title: "Verify remote was added"
     description: "Check that the remote was added correctly"
     allowedCommands:
@@ -36,7 +16,7 @@ steps:
         output:
           - text: "origin	https://github.com/username/my-repo.git (fetch)\norigin	https://github.com/username/my-repo.git (push)"
   
-  - id: 4
+  - id: 2
     title: "Check branch status"
     description: "Check which branch you're on before pushing"
     allowedCommands:
@@ -49,7 +29,7 @@ steps:
         output:
           - text: "On branch main\nnothing to commit, working tree clean"
   
-  - id: 5
+  - id: 3
     title: "Push to remote repository"
     description: "Push your main branch to the remote origin for the first time"
     allowedCommands:
@@ -82,7 +62,7 @@ steps:
                * [new branch]      main -> main
               Branch 'main' set up to track remote branch 'main' from 'origin'.
   
-  - id: 6
+  - id: 4
     title: "Verify push success"
     description: "Check the status to confirm everything is up to date"
     allowedCommands:

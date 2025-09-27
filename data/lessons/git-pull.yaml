@@ -1,0 +1,90 @@
+title: "Git Pull"
+description: "Learn how to fetch and merge changes from a remote repository. This lesson covers pulling updates, understanding the pull process, and handling conflicts."
+category: "remote"
+level: "beginner"
+time: "7 minutes"
+order: 2
+previous: "git-clone"
+next: "git-push"
+steps:
+  - id: 1
+    title: "Check current status"
+    description: "See the current state of your repository before pulling"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output: |
+          On branch main
+          Your branch is up to date with 'origin/main'.
+
+          nothing to commit, working tree clean
+        hint: "Always check your repository status before pulling to ensure you have a clean working directory."
+        next: 2
+  
+  - id: 2
+    title: "Fetch remote changes"
+    description: "Download the latest changes from the remote repository"
+    allowedCommands:
+      - cmd: "git fetch origin"
+        valid: "^git\\s+fetch\\s+origin$"
+        output: |
+          remote: Enumerating objects: 5, done.
+          remote: Counting objects: 100% (5/5), done.
+          remote: Compressing objects: 100% (3/3), done.
+          remote: Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
+          From https://github.com/username/repository
+             a1b2c3d..e4f5g6h  main       -> origin/main
+        hint: "The <code>git fetch</code> command downloads the latest changes from the remote repository without merging them into your local branch."
+        next: 3
+  
+  - id: 3
+    title: "Check what changes are available"
+    description: "See what changes are available to pull"
+    allowedCommands:
+      - cmd: "git log --oneline origin/main..HEAD"
+        valid: "^git\\s+log\\s+--oneline\\s+origin/main\\.\\.HEAD$"
+        output: []
+        hint: "This shows commits that are in your local branch but not in the remote branch."
+      - cmd: "git log --oneline HEAD..origin/main"
+        valid: "^git\\s+log\\s+--oneline\\s+HEAD\\.\\.origin/main$"
+        output: |
+          e4f5g6h Add new feature
+          f7g8h9i Update documentation
+        hint: "This shows commits that are in the remote branch but not in your local branch - these are the changes you can pull."
+        next: 4
+  
+  - id: 4
+    title: "Pull the changes"
+    description: "Fetch and merge the remote changes into your local branch"
+    allowedCommands:
+      - cmd: "git pull origin main"
+        valid: "^git\\s+pull\\s+origin\\s+main$"
+        output: |
+          From https://github.com/username/repository
+             a1b2c3d..e4f5g6h  main       -> origin/main
+          Updating a1b2c3d..e4f5g6h
+          Fast-forward
+           README.md | 2 ++
+           1 file changed, 2 insertions(+)
+        hint: "The <code>git pull</code> command is equivalent to <code>git fetch</code> followed by <code>git merge</code>. It downloads and merges changes in one step."
+        next: 5
+  
+  - id: 5
+    title: "Verify the pull was successful"
+    description: "Check that the changes were successfully merged"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output: |
+          On branch main
+          Your branch is up to date with 'origin/main'.
+
+          nothing to commit, working tree clean
+        hint: "After a successful pull, your local branch should be up to date with the remote branch."
+      - cmd: "git log --oneline -3"
+        valid: "^git\\s+log\\s+--oneline\\s+-3$"
+        output: |
+          e4f5g6h Add new feature
+          f7g8h9i Update documentation
+          a1b2c3d Initial commit
+        hint: "The commit history now includes the changes that were pulled from the remote repository."

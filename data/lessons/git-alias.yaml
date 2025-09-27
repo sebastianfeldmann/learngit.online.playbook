@@ -1,0 +1,83 @@
+title: "Git Aliases"
+description: "Learn how to create custom Git aliases to speed up your workflow. This lesson covers setting up aliases for common commands and best practices for alias management."
+category: "config"
+level: "intermediate"
+time: "10 minutes"
+order: 1
+previous: null
+next: null
+steps:
+  - id: 1
+    title: "Check current aliases"
+    description: "See what aliases are already configured"
+    allowedCommands:
+      - cmd: "git config --list | grep alias"
+        valid: "^git\\s+config\\s+--list\\s+\\|\\s+grep\\s+alias$"
+        output: |
+          alias.st = status
+          alias.co = checkout
+          alias.br = branch
+          alias.ci = commit
+        hint: "Git aliases are stored in your Git configuration. You can view all aliases using <code>git config --list | grep alias</code>."
+        next: 2
+  
+  - id: 2
+    title: "Create a simple alias"
+    description: "Set up an alias for a commonly used command"
+    allowedCommands:
+      - cmd: "git config --global alias.st status"
+        valid: "^git\\s+config\\s+--global\\s+alias\\.st\\s+status$"
+        output: []
+        hint: "The <code>--global</code> flag sets the alias for all repositories on your system. You can now use <code>git st</code> instead of <code>git status</code>."
+        next: 3
+  
+  - id: 3
+    title: "Test the new alias"
+    description: "Use your new alias to see it in action"
+    allowedCommands:
+      - cmd: "git st"
+        valid: "^git\\s+st$"
+        output: |
+          On branch main
+          Your branch is up to date with 'origin/main'.
+
+          nothing to commit, working tree clean
+        hint: "Your alias works! <code>git st</code> now runs <code>git status</code>. This saves you typing and makes commands more memorable."
+        next: 4
+  
+  - id: 4
+    title: "Create a complex alias"
+    description: "Set up an alias with multiple commands"
+    allowedCommands:
+      - cmd: "git config --global alias.lg \"log --oneline --graph --decorate --all\""
+        valid: "^git\\s+config\\s+--global\\s+alias\\.lg\\s+\"log\\s+--oneline\\s+--graph\\s+--decorate\\s+--all\"$"
+        output: []
+        hint: "Complex aliases can include multiple Git options. This creates a beautiful log view with <code>git lg</code>."
+        next: 5
+  
+  - id: 5
+    title: "Test the complex alias"
+    description: "See your new log alias in action"
+    allowedCommands:
+      - cmd: "git lg"
+        valid: "^git\\s+lg$"
+        output: |
+          * a1b2c3d (HEAD -> main) Latest commit
+          * e4f5g6h Previous commit
+          * f7g8h9i Initial commit
+        hint: "The <code>git lg</code> alias shows a compact, visual representation of your commit history with branches and tags."
+        next: 6
+  
+  - id: 6
+    title: "View all aliases"
+    description: "See all your configured aliases"
+    allowedCommands:
+      - cmd: "git config --list | grep alias"
+        valid: "^git\\s+config\\s+--list\\s+\\|\\s+grep\\s+alias$"
+        output: |
+          alias.st = status
+          alias.co = checkout
+          alias.br = branch
+          alias.ci = commit
+          alias.lg = log --oneline --graph --decorate --all
+        hint: "You can see all your aliases here. Aliases make Git more efficient by reducing typing and making commands more memorable."

@@ -4,8 +4,8 @@ courses:
   icon: "🎓"
   order: 1
 
-basics:
-  displayName: "Git Basics"
+changes:
+  displayName: "Track & Undo Changes"
   description: "Essential Git commands every developer needs to know"
   icon: "📚"
   order: 2
@@ -22,8 +22,14 @@ remote:
   icon: "🌐"
   order: 4
 
-advanced:
-  displayName: "Advanced Git"
+config:
+  displayName: "Git Config"
+  description: "Customize Git behavior and create shortcuts for better productivity"
+  icon: "⚙️"
+  order: 5
+
+internals:
+  displayName: "Git Internals"
   description: "Complex Git operations, rebasing, and workflow optimization"
   icon: "⚡"
-  order: 5
+  order: 6

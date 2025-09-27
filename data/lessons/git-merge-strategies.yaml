@@ -1,11 +1,11 @@
-title: "Feature Branch Merging"
-description: "Learn how to create feature branches, make changes, and merge them into main using both fast-forward and no-fast-forward strategies."
+title: "Merge Strategies"
+description: "Understand the different Git merge strategies and when to use each one. Learn about fast-forward merges, no-fast-forward merges, and how to control merge behavior to maintain clean project history."
 category: "branching"
 level: "intermediate"
 time: "15 minutes"
 order: 4
-next: "agc-rebase-basics"
-previous: "agc-git-head"
+next: ""
+previous: "git-head"
 steps:
   - id: 1
     title: "Create a new feature branch"
