@@ -1,0 +1,198 @@
+title: "Git Partial Add"
+description: "Learn how to interactively stage parts of a file. This lesson covers selectively staging parts of files, reviewing changes before staging, and managing complex commits with precision."
+category: "changes"
+level: "intermediate"
+time: "15 minutes"
+order: 1
+previous: null
+next: "git-commit"
+steps:
+  - id: 1
+    title: "Check repository status"
+    description: "See what files have been modified or are untracked"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output: 
+          - text: |
+              On branch main
+              Your branch is up to date with 'origin/main'.
+
+              Changes not staged for commit:
+                (use "git add <file>..." to update what will be committed)
+                (use "git restore <file>..." to discard changes in working directory)
+
+                modified:   README.md
+
+              no changes added to commit (use "git add" and/or "git commit -a")
+        hint: ""
+        next: 2
+
+  - id: 2
+    title: "Check the changes"
+    description: "See the changes that are not staged"
+    allowedCommands:
+      - cmd: "git diff"
+        valid: "^git\\s+diff$"
+        output:
+          - text: |
+              diff --git i/README.md w/README.md
+              index 6c9cf07..950b9b9 100644
+              --- i/README.md
+              +++ w/README.md
+              @@ -1 +1,5 @@
+            hint: |
+              We have two separate changes that are currently not staged.
+          - text: |            
+              +# New Heading I don't want to commit yet
+              +
+            hint: |
+              The first change we don't want to commit yet.
+          - text: " # Existing Content"
+            hint: "This is unchanged."
+          - text: |              
+              +
+              +# New Heading I want to commit
+            hint: "This is the change we actually want to commit."
+        hint: "The <code>git diff</code> command shows the changes that are not staged."
+        next: 3
+
+  - id: 3
+    title: "Interactive Staging"
+    description: "Do a partial add of the changes in the README.md file"
+    allowedCommands:
+      - cmd: "git add -p"
+        valid: "^git\\s+add\\s+-p$"
+        output: 
+          - text: |
+              diff --git a/README.md b/README.md
+              index 6c9cf07..950b9b9 100644
+              --- a/README.md
+              +++ b/README.md
+              @@ -1 +1,5 @@
+              +# New Heading I don't want to commit yet
+              +
+              # Existing Content
+              +
+              +# New Heading I want to commit
+            hint: "Git looks at the changes and asks you if you want to stage them."
+          - text: |
+              (1/1) Stage this hunk [y,n,q,a,d,s,e,p,?]?
+            hint: "Git shows you the amount of hunks and a list of options. If you want to know what they mean type <code>?</code>."
+        hint: "The <code>git add -p</code> command allows you to interactively stage parts of a file. You can choose to stage the entire file, part of the file, or skip it."
+        next: 4
+  
+  - id: 4
+    title: "Stage the changes"
+    description: "Stage the changes"
+    allowedCommands:
+      - cmd: "?"
+        valid: "^\\?$"
+        output:
+          - text: |
+              y - stage this hunk
+              n - do not stage this hunk
+              q - quit; do not stage this hunk or any of the remaining ones
+              a - stage this hunk and all later hunks in the file
+              d - do not stage this hunk or any of the later hunks in the file
+              s - split the current hunk into smaller hunks
+              e - manually edit the current hunk
+              p - print the current hunk, 'P' to use the pager
+              ? - print help
+              (1/1) Stage this hunk [y,n,q,a,d,s,e,p,?]?
+            hint: |
+              <em>Hunk</em> refers to all changes you see in the <em>diff</em> output.
+              The most important options are:
+              <ul>
+                <li><em>y</em> - stage the changes in this <em>hunk</em></li>
+                <li><em>n</em> - do not stage the changes in the <em>hunk</em></li>
+                <li><em>s</em> - ask Git to split the changes into smaller <em>hunks</em></li>
+              </ul>
+              Lets split the changes into smaller hunks.
+        hint: "The <code>?</code> command shows you the options."
+        next: 5
+
+  - id: 5
+    title: "Split the hunk"
+    description: "Let Git split the hunk into smaller hunks"
+    allowedCommands:
+      - cmd: "s"
+        valid: "^s$"
+        output: 
+          - text: |
+              Split into 2 hunks.
+              @@ -1 +1,3 @@
+              +# New Heading I don't want to commit yet
+              +
+              # Existing Content
+              (1/2) Stage this hunk [y,n,q,a,d,j,J,g,/,e,p,?]?
+            hint: "Git splits the <em>hunk</em> into two smaller <em>hunks</em> and asks you if you want to stage the first one. And you guessed it, no, we don't want to stage it. Please type <code>n</code>."
+        hint: ""
+        next: 6
+
+  - id: 6
+    title: "Skip the 1st hunk"
+    description: "Don't stage the first hunk"
+    allowedCommands:
+      - cmd: "n"
+        valid: "^n$"
+        output:
+          - text: |
+              @@ -1 +3,3 @@
+              # Existing Content
+              +
+              +# New Heading I want to commit
+              (2/2) Stage this hunk [y,n,q,a,d,K,g,/,e,p,?]?
+            hint: "Git now asks you if you want to stage the second one. Since this is what we want, we type <code>y</code>."
+        hint: ""
+        next: 7
+
+  - id: 7
+    title: "Stage the hunk"
+    description: "Add the second hunk to the staging area"
+    allowedCommands:
+       - cmd: "y"
+         valid: "^y$"
+         output: []
+         hint: "The <code>y</code> command stages the changes in the second hunk."
+         next: 8
+  
+  - id: 8
+    title: "Verify partial staging"
+    description: "Check that only the selected changes were staged"
+    allowedCommands:
+      - cmd: "git diff"
+        valid: "^git\\s+diff$"
+        output:
+          - text: |
+              diff --git a/README.md b/README.md
+              index 6c9cf07..950b9b9 100644
+              --- a/README.md
+              +++ b/README.md
+              @@ -1 +1,3 @@
+              +# New Heading I don't want to commit yet
+              +
+              # Existing Content
+            hint: |
+              The <code>git diff</code> command now shows only the changes that are
+              <em>not staged</em>. The second change (the one you staged) is no longer
+              visible here. Let's check the staged changes.
+        next: 9
+  
+  - id: 9
+    title: "Check staged changes"
+    description: "See what changes are staged for commit"
+    allowedCommands:
+      - cmd: "git diff --staged"
+        valid: "^git\\s+diff\\s+--staged$"
+        output:
+          - text: |
+              diff --git a/README.md b/README.md
+              index 6c9cf07..950b9b9 100644
+              --- a/README.md
+              +++ b/README.md
+              @@ -1 +3,3 @@
+              # Existing Content
+              +
+              +# New Heading I want to commit
+            hint: "The <code>git diff --staged</code> command shows only the changes that are <em>staged</em> for commit. This confirms that only the second change was staged."
