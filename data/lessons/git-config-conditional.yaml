@@ -1,0 +1,93 @@
+title: "Conditional Configs"
+description: "Learn how to use conditional Git configuration based on directory paths. This lesson covers includeIf directives, work vs personal configurations."
+category: "config"
+level: "intermediate"
+time: "15 minutes"
+order: 2
+previous: "git-config"
+next: "git-alias"
+steps:
+  - id: 1
+    title: "Check current configuration"
+    description: "See your current Git user configuration"
+    allowedCommands:
+      - cmd: "git config --list | grep user"
+        valid: "^git\\s+config\\s+--list\\s+\\|\\s+grep\\s+user$"
+        hint: "Currently, you have the same user configuration for all repositories."
+        output:
+          - text: |
+              user.name=Sebastian Feldmann
+              user.email=sf@sebastian-feldmann.info
+  
+  - id: 2
+    title: "Create GitHub directory"
+    description: "Set up a directory structure for GitHub projects"
+    allowedCommands:
+      - cmd: "mkdir -p ~/dev/github"
+        valid: "^mkdir\\s+-p\\s+~/dev/github$"
+        hint: "We'll use this directory to demonstrate conditional configuration based on path."
+        output: []
+  
+  - id: 3
+    title: "Create github-specific config"
+    description: "Create a separate configuration file for GitHub projects"
+    allowedCommands:
+      - cmd: "touch ~/.config/git/config-github"
+        valid: "^touch\\s+~/\\.config/git/config-github$"
+        hint: "This will be our GitHub-specific configuration file but is empty at the moment. Make sure to add the email address to the configuration file."
+        output: []
+      - cmd: "echo '[user]\\n    email = sf@users.noreply.github.com' > ~/.config/git/config-github"
+        valid: "^echo\\s+'\\[user\\]\\\\n\\s+email\\s+=\\s+.*'\\s*>\\s*~/\\.config/git/config-github$"
+        output: []
+        hint: "Create the configuration file containing the email address."
+  
+  - id: 4
+    title: "Check configuration file"
+    description: "Make sure to add the email address to the configuration file"
+    allowedCommands:
+      - cmd: "cat ~/.config/git/config-github"
+        valid: "^cat\\s+~/\\.config/git/config-github$"
+        output:
+          - text: |
+              [user]
+                  email = sf@users.noreply.github.com
+            hint: "Your conditional configuration file should contain content like this."
+
+  - id: 5
+    title: "Configure conditional include"
+    description: "Set up conditional configuration in your global config"
+    allowedCommands:
+      - cmd: "git config --global includeIf.gitdir:~/dev/github/**.path ~/.config/git/config-github"
+        valid: "^git\\s+config\\s+--global\\s+includeIf\\.gitdir:~/dev/github/\\*\\*\\.path\\s+~/\\.config/git/config-github$"
+        hint: "This tells Git to include the GitHub configuration file when you're in any repository under <code>~/dev/github/</code>."
+        output: []
+  
+  - id: 6
+    title: "Initialize GitHub repository"
+    description: "Create a Git repository in the ~/dev/github directory"
+    allowedCommands:
+      - cmd: "cd ~/dev/github && git init tmp-project"
+        valid: "^cd\\s+~/dev/github\\s+&&\\s+git\\s+init\\s+tmp-project$"
+        output:
+          - text: "Initialized empty Git repository in /Users/sf/dev/github/tmp-project/.git/"
+            hint: "Now we have a repository in the GitHub directory where the conditional config will apply."
+
+  - id: 7
+    title: "Open temp repository"
+    description: "Change into the newly created temp repository"
+    allowedCommands:
+      - cmd: "cd tmp-project"
+        valid: "^cd\\s+tmp-project$"
+        output: []
+
+  - id: 8
+    title: "Test conditional configuration"
+    description: "Verify that GitHub configuration is active"
+    allowedCommands:
+      - cmd: "git config --list | grep user"
+        valid: "^git\\s+config\\s+--list\\s+\\|\\s+grep\\s+user$"
+        output:
+          - text: |
+              user.name=Sebastian Feldmann
+              user.email=sebastianfeldmann@users.noreply.github.com
+            hint: "The conditional configuration is working! The GitHub-specific user settings are now active for all repositories in the <code>~/dev/github</code> directory."

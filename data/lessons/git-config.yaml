@@ -1,0 +1,122 @@
+title: "Local vs. Global Config"
+description: "Learn the difference between local and global Git configuration. This lesson covers ~/.gitconfig vs .git/config, when to use each, and how to manage different configuration levels."
+category: "config"
+level: "beginner"
+time: "12 minutes"
+order: 1
+previous: ""
+next: "git-config-conditional"
+steps:
+  - id: 1
+    title: "Check current configuration"
+    description: "See what configuration is currently active"
+    allowedCommands:
+      - cmd: "git config --list"
+        valid: "^git\\s+config\\s+--list$"
+        hint: "The <code>git config --list</code> command shows all configuration settings from all levels (system, global, and local)."
+        output:
+          - text: |
+              core.editor=vim
+              user.name=Sebastian Feldmann
+              user.email=sf@sebastian-feldmann.info
+          - text: |
+              ...
+              ...
+              ...
+            hint: "Depening on were you call this command the output will be different. It will output all settings that git would use if you execute a command at your current directory."
+          - text: |
+              alias.st=status
+              alias.co=checkout
+              core.repositoryformatversion=0
+              core.filemode=true
+              core.bare=false
+              core.logallrefupdates=true
+            hint: "If you run this inside a git repository it will include all local configuration settings as well"
+  
+  - id: 2
+    title: "View global configuration"
+    description: "Check your global Git configuration"
+    allowedCommands:
+      - cmd: "git config --global --list"
+        valid: "^git\\s+config\\s+--global\\s+--list$"
+        hint: "Global configuration is stored in <code>~/.gitconfig</code> and applies to all Git repositories on your system."
+        output:
+          - text: |
+              user.name=Sebastian Feldmann
+              user.email=sf@sebastian-feldmann.info
+              ...
+              ...
+              ...
+              alias.st=status
+              alias.co=checkout
+              core.editor=vim
+  
+  - id: 3
+    title: "View local configuration"
+    description: "Check repository-specific configuration"
+    allowedCommands:
+      - cmd: "git config --local --list"
+        valid: "^git\\s+config\\s+--local\\s+--list$"
+        hint: "Local configuration is stored in <code>.git/config</code> and only applies to the current repository. For this command to work you have to be in a Git repository."
+        output:
+          - text: |
+              core.repositoryformatversion=0
+              core.filemode=true
+              core.bare=false
+              core.logallrefupdates=true
+              core.ignorecase=true
+              core.precomposeunicode=true
+              remote.origin.url=git@github.com:sebastianfeldmann/learngit.online.git
+              remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+              branch.main.remote=origin
+              branch.main.merge=refs/heads/main
+  
+  - id: 4
+    title: "Set a global configuration"
+    description: "Configure Git globally for all repositories"
+    allowedCommands:
+      - cmd: "git config --global user.name \"Sebastian Feldmann\""
+        valid: "^git\\s+config\\s+--global\\s+user\\.name\\s+\".*\"$"
+        hint: "Global settings are stored in <code>~/.gitconfig</code> and will be used as defaults for all repositories."
+        output: []
+  
+  - id: 5
+    title: "Set a local configuration"
+    description: "Configure Git specifically for this repository"
+    allowedCommands:
+      - cmd: "git config --local user.email \"sebastianfeldmann@users.noreply.github.com\""
+        valid: "^git\\s+config\\s+--local\\s+user\\.email\\s+\".*\"$"
+        hint: "Local settings override global settings for this specific repository. This is useful for work vs personal projects."
+        output: []
+        
+  
+  - id: 6
+    title: "Verify configuration precedence"
+    description: "See how local settings override global ones"
+    allowedCommands:
+      - cmd: "git config --get user.email"
+        valid: "^git\\s+config\\s+--get\\s+user\\.email$"
+        output:
+          - text: "sebastianfeldmann@users.noreply.github.com"
+            hint: "The local email setting overrides the global one for this repository."
+  
+  - id: 7
+    title: "View global configuration"
+    description: "Examine the global configuration files"
+    allowedCommands:
+      - cmd: "cat ~/.gitconfig | grep email"
+        valid: "^cat\\s+~/\\.gitconfig\\s+\\|\\s+grep\\s+email$"
+        hint: "The global configuration file <code>~/.gitconfig</code> contains your personal Git settings."
+        output:
+          - text: "    email = sf@sebastian-feldmann.info"        
+
+  - id: 8
+    title: "View local configuration"
+    description: "Examine the local configuration file"
+    allowedCommands:
+      - cmd: "cat .git/config | grep email"
+        valid: "^cat\\s+\\.git/config\\s+\\|\\s+grep\\s+email$"
+        hint: "The local configuration file <code>.git/config</code> contains repository-specific settings and overrides global settings."
+        output:
+          - text: "    email = sebastianfeldmann@users.noreply.github.com"
+            hint: "You can overwrite every global setting within you local configuration file to tailor the setting to the specific requirements of the repository."
