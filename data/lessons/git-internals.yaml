@@ -4,7 +4,8 @@ category: "courses"
 level: "advanced"
 time: "1 hour"
 order: 2
-next: "agc-git-objects"
+next: null
+previous: null
 steps:
   - id: 1
     title: "Create a new Directory"

@@ -4,7 +4,8 @@ category: "courses"
 level: "beginner"
 time: "45 minutes"
 order: 1
-next: "git-commit"
+next: null
+previous: null
 steps:
   - id: 1
     title: "Create a new Directory"

@@ -4,8 +4,8 @@ category: "config"
 level: "intermediate"
 time: "15 minutes"
 order: 2
-previous: "git-config"
-next: "git-alias"
+previous: null
+next: null
 steps:
   - id: 1
     title: "Check current configuration"

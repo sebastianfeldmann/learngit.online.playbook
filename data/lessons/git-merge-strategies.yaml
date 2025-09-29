@@ -4,8 +4,8 @@ category: "branching"
 level: "intermediate"
 time: "15 minutes"
 order: 4
-next: ""
-previous: "git-head"
+next: null
+previous: null
 steps:
   - id: 1
     title: "Create a new feature branch"

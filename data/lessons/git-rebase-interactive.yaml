@@ -1,0 +1,259 @@
+title: "Git Interactive Rebase"
+description: "Learn how to use interactive rebase to maintain a clean history. This lesson covers interactively rebasing branches, how to not clutter the history with commits without any value by them selves."
+category: "branching"
+level: "intermediate"
+time: "20 minutes"
+order: 4
+previous: null
+next: null
+steps: 
+  - id: 1
+    title: "Create feature branch"
+    description: "Create a new feature branch called feature/x"
+    allowedCommands:
+      - cmd: "git switch -c feature/x"
+        valid: "^git\\s+switch\\s+-c\\s+feature/x$"
+        output:
+          - text: "Switched to branch 'feature/x'"
+            hint: "We successfully created and switched to the <em>feature/x</em> branch. Let's make some changes."
+      - cmd: "git checkout -b feature/x"
+        valid: "^git\\s+checkout\\s+-b\\s+feature/x$"
+        output:
+          - text: "Switched to branch 'feature/x'"
+            hint: "We successfully created and switched to the <em>feature/x</em> branch. Let's make some changes."
+
+  - id: 2
+    title: "Create 1st file for feature/x"
+    description: "Add a new file with changes for the feature/x branch."
+    allowedCommands:
+      - cmd: "echo \"Changes part one\" > part-one.code"
+        valid: "^echo\\s+'|\"Changes part one'|\"\\s*>\\s*part-one.code$"
+        output: []
+
+  - id: 3
+    title: "Commit the changes"
+    description: "Commit the changes for the feature/x branch."
+    allowedCommands:
+      - cmd: "git add -A && commit -m \"Changes part one\""
+        valid: "^git\\s+add\\s+-A\\s+&&\\s+commit\\s+-m\\s*['\"]Changes part one['\"]$"
+        output:
+          - text: |
+              [feature/x a505ad5] Changes part one
+              1 file changed, 1 insertion(+)
+              create mode 100644 part-one.code
+            hint: "We successfully committed our first changes for the <em>feature/x</em> branch."
+
+  - id: 4
+    title: "Create 2nd file for feature/x"
+    description: "Add a new file with second part of changes for the feature/x branch."
+    allowedCommands:
+      - cmd: "echo \"Changes part two\" > part-two.code"
+        valid: "^echo\\s+'|\"Changes part two'|\"\\s*>\\s*part-two.code$"
+        output: []
+
+  - id: 5
+    title: "Commit the changes"
+    description: "Commit the second part of changes for the feature/x branch."
+    allowedCommands:
+      - cmd: "git add -A && commit -m \"Changes part two\""
+        valid: "^git\\s+add\\s+-A\\s+&&\\s+commit\\s+-m\\s*['\"]Changes part two['\"]$"
+        output:
+          - text: |
+              [feature/x f19ce46] Changes part two
+              1 file changed, 1 insertion(+)
+              create mode 100644 part-two.code
+            hint: "We successfully committed our second part of changes for the <em>feature/x</em> branch."
+  
+  - id: 6
+    title: "Create bugfix"
+    description: "Create a bugfix for the first part of changes."
+    allowedCommands:
+      - cmd: "echo \"Bugfix for part one\" >> part-one.code"
+        valid: "^echo\\s+'|\"Bugfix for part one'|\"\\s*>>\\s*part-one.code$"
+        output: []
+  
+  - id: 7
+    title: "Commit the Bugfix"
+    description: "Commit the the changes made for the bugfix."
+    allowedCommands:
+      - cmd: "commit -am \"Bugfix part one\""
+        valid: "^commit\\s+-am\\s*['\"]Bugfix part one['\"]$"
+        output:
+          - text: |
+              [feature/x 0fbc5cc] Bugfix part one
+              1 file changed, 1 insertion(+)
+            hint: "We successfully committed the bugfix for the first part of changes."
+
+  - id: 8
+    title: "Show the log"
+    description: "Show the log for the feature/x branch."
+    allowedCommands:
+      - cmd: "git log --oneline --graph"
+        valid: "^git\\s+log\\s+--oneline\\s+--graph$"
+        output:
+          - text: |
+              * 0fbc5cc (HEAD -> feature/x) Bugfix part one
+            hint: "Wouldn't it be nice if nobody would see our mistake? Let's <em>rebase</em> the branch interactively to hide our mistake."
+          - text: |
+              * f19ce46 Changes part two
+              * a505ad5 Changes part one
+              ...
+  
+  - id: 9
+    title: "Rebase interactive"
+    description: "Rebase the feature/x branch interactively"
+    allowedCommands:
+      - cmd: "git rebase -i main"
+        valid: "^git\\s+rebase\\s+-i\\s+main$"
+        editor:
+          - text: |
+              pick a505ad5 # Changes part one
+              pick f19ce46 # Changes part two
+          - text: |
+              pick 0fbc5cc # Bugfix part one
+            hint: "This is the <em>commit</em> that is not useful to have in the <em>history</em>. We still need the changes but we don't want to have this commit anymore."
+          - text: ""
+            hint: ""
+          - text: |
+              # Rebase 27b7f2b..0fbc5cc onto 27b7f2b (3 commands)
+              #
+              # Commands:
+            hint: ""
+          - text: |
+              # p, pick <commit> = use commit
+              # r, reword <commit> = use commit, but edit the commit message
+              # e, edit <commit> = use commit, but stop for amending
+              # s, squash <commit> = use commit, but meld into previous commit
+              # f, fixup [-C | -c] <commit> = like "squash" but keep only the previous
+              #                    commit's log message, unless -C is used, in which case
+              #                    keep only this commit's message; -c is same as -C but
+              #                    opens the editor
+              # b, break = stop here (continue rebase later with 'git rebase --continue')
+              # d, drop <commit> = remove commit
+              # ...
+            hint: "This is the list of commands that you can use while rebasing interactively. The most comonly used commands are <code>pick</code>, <code>fixup</code>, and <code>squash</code>."
+
+  - id: 10
+    title: "Rebase interactive"
+    description: "Rebase the feature1 branch onto main"
+    allowedCommands:
+      - cmd: ":s/pick 0f/fixup e4/"
+        valid: "^:s/pick 0f/fixup e4/$"
+        hint: "This will replace the <code>pick</code> command with <code>fixup</code> for the commit with the hash <code>0fbc5cc</code>."
+        editor:
+          - text: |
+              pick a505ad5 # Changes part one
+              pick f19ce46 # Changes part two
+          - text: "fixup 0fbc5cc # Bugfix part one"            
+            hint: |
+              With <code>fixup</code> this <em>commit</em> will be fully incorporated in the previous <em>commit</em>
+              and the commit message will be dropped. But merging bugfix changes for part one into the <em>commit</em> for part two is not what we want.
+              We want to incorporate the bugfix changes for part one into the commit for part one. So we need to reorder the commits.
+          - text: ""
+            hint: ""
+          - text: |
+              # Rebase 27b7f2b..0fbc5cc onto 27b7f2b (3 commands)
+              #
+              # Commands:
+              # p, pick <commit> = use commit
+              # r, reword <commit> = use commit, but edit the commit message
+              # e, edit <commit> = use commit, but stop for amending
+              # s, squash <commit> = use commit, but meld into previous commit
+              # f, fixup [-C | -c] <commit> = like "squash" but keep only the previous
+              #                    commit's log message, unless -C is used, in which case
+              #                    keep only this commit's message; -c is same as -C but
+              #                    opens the editor
+              # b, break = stop here (continue rebase later with 'git rebase --continue')
+              # d, drop <commit> = remove commit
+              # ...
+            hint: ""
+
+  - id: 11
+    title: "Reorder commits"
+    description: "Reorder the commits in the feature/x branch"
+    allowedCommands:
+      - cmd: ":2m3"
+        valid: "^:2m3$"
+        hint: "This will move line 2 to line 3."
+        editor:
+          - text: "pick a505ad5 # Changes part one"
+          - text: "fixup 0fbc5cc # Bugfix part one"            
+            hint: |
+              This line was moved up.<br>
+              Meaning the bugfix for the first part will now be incorporated in the commit for the first part.
+              For people looking at the history it will look like the bug never existed.
+          - text: |
+              pick f19ce46 # Changes part two
+
+              # Rebase 27b7f2b..0fbc5cc onto 27b7f2b (3 commands)
+              #
+              # Commands:
+              # p, pick <commit> = use commit
+              # r, reword <commit> = use commit, but edit the commit message
+              # e, edit <commit> = use commit, but stop for amending
+              # s, squash <commit> = use commit, but meld into previous commit
+              # f, fixup [-C | -c] <commit> = like "squash" but keep only the previous
+              #                    commit's log message, unless -C is used, in which case
+              #                    keep only this commit's message; -c is same as -C but
+              #                    opens the editor
+              # b, break = stop here (continue rebase later with 'git rebase --continue')
+              # d, drop <commit> = remove commit
+              # ...
+            hint: ""
+  
+  - id: 11
+    title: "Save and quit"
+    description: "Save and finish the interactive rebase"
+    allowedCommands:
+      - cmd: ":wq"
+        valid: "^:wq$"
+        output:
+          - text: "Successfully rebased and updated refs/heads/feature/x."
+            hint: ""
+  
+  - id: 12
+    title: "Show the log"
+    description: "Show the log for the feature/x branch"
+    allowedCommands:
+      - cmd: "git log --oneline --graph"
+        valid: "^git\\s+log\\s+--oneline\\s+--graph$"
+        output:
+          - text: |
+              * 77e5e93 (HEAD -> feature/x) Changes part two
+              * b680dd1 Changes part one
+              ...
+            hint: "The bugfix <em>commit</em> is gone, but the changes are still there. You can check by using <code>git show</code>."
+
+  - id: 13
+    title: "Show the commit"
+    description: "Show detailed information for first commit"
+    allowedCommands:
+      - cmd: "git show b680dd1"
+        valid: "^git\\s+show\\s+b680dd1$"
+        output:
+          - text: |
+              swswdwcommit b680dd1b52387613c03bbe561b00469bf22da30d
+              Author: Sebastian Feldmann <sebastianfeldmann@users.noreply.github.com>
+              Date:   Sun Sep 28 15:10:12 2025 +0200
+
+                  Changes part one
+
+              diff --git a/part-one.code b/part-one.code
+              new file mode 100644
+              index 0000000..758f14d
+              --- /dev/null
+              +++ b/part-one.code
+              @@ -0,0 +1,2 @@
+            hint: ""
+          - text: |
+              +Changes part one
+              +Bugfix for part one
+            hint: |
+              As you can see, the bugfix for part one is now included in the <em>commit</em>.
+              This is a nice and clean way to deal with typos and other minor fixes to not clutter
+              the <em>history</em> with commits without any value by them selves.<br>
+              <br>
+              <h5>Hint:</h5>
+              If you create pull requests, cleaning up the <em>history</em> before opening
+              them is a good practice. Think of <em>commits</em> as focus points guiding the
+              reviewer. Do <strong>not</strong> treat them as crappy quick save points.

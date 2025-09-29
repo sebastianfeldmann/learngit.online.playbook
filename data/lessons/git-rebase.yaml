@@ -1,0 +1,100 @@
+title: "Git Rebase"
+description: "Learn how to use git rebase to maintain a clean, linear history. This lesson covers rebasing feature branches onto main, fast-forward merges, and the benefits of rebasing over merging."
+category: "branching"
+level: "intermediate"
+time: "12 minutes"
+order: 3
+previous: null
+next: null
+steps:
+  - id: 1
+    title: "Check current branch"
+    description: "Verify you're on the main branch"
+    allowedCommands:
+      - cmd: "git branch"
+        valid: "^git\\s+branch$"
+        output:
+          - text: "* main"
+            hint: "You're currently on the <code>main</code> branch. This is our base branch for the rebase operation."
+        next: 2
+  
+  - id: 2
+    title: "List all branches"
+    description: "See all available branches including feature1"
+    allowedCommands:
+      - cmd: "git branch -a"
+        valid: "^git\\s+branch\\s+-a$"
+        output:
+          - text: |
+              * main
+              feature1
+            hint: "You can see both the <em>main</em> branch (currently checked out) and the <em>feature1</em> branch that we'll rebase."
+        next: 3
+  
+  - id: 3
+    title: "Attempt fast-forward merge"
+    description: "Try to merge feature1 with fast-forward only"
+    allowedCommands:
+      - cmd: "git merge --ff-only feature1"
+        valid: "^git\\s+merge\\s+--ff-only\\s+feature1$"
+        output:
+          - text: "fatal: Not possible to fast-forward, aborting."
+            hint: "The <code>--ff-only</code> flag ensures that only fast-forward merges are allowed. Since <em>feature1</em> has diverged from <em>main</em>, a fast-forward merge is not possible."
+        next: 4
+  
+  - id: 4
+    title: "Switch to feature branch"
+    description: "Change to the feature1 branch to perform rebase"
+    allowedCommands:
+      - cmd: "git switch feature1"
+        valid: "^git\\s+switch\\s+feature1$"
+        output:
+          - text: "Switched to branch 'feature1'"
+            hint: "Now we're on the <em>feature1</em> branch. We'll rebase this branch onto <em>main</em> to create a linear history."
+      - cmd: "git checkout feature1"
+        valid: "^git\\s+checkout\\s+feature1$"
+        output:
+          - text: "Switched to branch 'feature1'"
+            hint: "Now we're on the <em>feature1</em> branch. We'll rebase this branch onto <em>main</em> to create a linear history."
+  
+  - id: 5
+    title: "Rebase onto main"
+    description: "Rebase the feature1 branch onto main"
+    allowedCommands:
+      - cmd: "git rebase main"
+        valid: "^git\\s+rebase\\s+main$"
+        output:
+          - text: |
+              First, rewinding head to replay your work on top of it...
+              Applying: Add new feature
+              Applying: Fix bug in feature
+            hint: "The rebase operation replays the commits from <em>feature1</em> on top of the latest <em>main</em> branch. Be aware, this will create new git objects with new hashes."
+        next: 6
+  
+  - id: 6
+    title: "Switch back to main"
+    description: "Return to the main branch for the merge"
+    allowedCommands:
+      - cmd: "git checkout main"
+        valid: "^git\\s+checkout\\s+main$"
+        output:
+          - text: "Switched to branch 'main'"
+            hint: "Now we're back on <em>main</em>."
+        next: 7
+  
+  - id: 7
+    title: "Fast-forward merge"
+    description: "Merge feature1 with fast-forward now that rebase is complete"
+    allowedCommands:
+      - cmd: "git merge --ff-only feature1"
+        valid: "^git\\s+merge\\s+--ff-only\\s+feature1$"
+        output:
+          - text: |
+              Updating a1b2c3d..e4f5g6h
+              Fast-forward
+              src/feature.js | 15 +++++++++++++++
+              tests/feature.test.js | 8 ++++++++
+              2 files changed, 23 insertions(+)
+              create mode 100644 src/feature.js
+              create mode 100644 tests/feature.test.js
+            hint: "Perfect! Now that <em>feature1</em> has been rebased onto <em>main</em>, the fast-forward merge works. This creates a clean, linear history without merge commits."

@@ -4,8 +4,8 @@ category: "changes"
 level: "beginner"
 time: "10 minutes"
 order: 2
-previous: "git-add"
-next: "git-clone"
+previous: null
+next: null
 steps:
   - id: 1
     title: "Create project files"
@@ -50,18 +50,22 @@ steps:
       - cmd: "git add ."
         valid: "^git\\s+add\\s+\\.$"
         output: []
-        hint: "<b>Adds</b> all new and changed files in the current directory and its subdirectories to the <i>staging area</i>.<br><b>Note:</b> <u>Does not include deleted files.</u>"
+        hint: "Adds all new and changed files in the current directory and its subdirectories to the <em>staging area</em>.<br><strong>Note:</strong> Does not include deleted files."
       - cmd: "git add -A"
         valid: "^git\\s+add\\s+-A$"
         output: []
-        hint: "<b>Adds</b> all changes in the entire <i>working directory</i> to the <i>staging area</i>.<br><b>Note:</b> <u>Includes deleted files.</u>"
-      - cmd: "git commit -A -m \"Initial commit\""
-        valid: "^git\\s+commit\\s+-A\\s+-m\\s*['\"][a-z -_]+['\"]$"
+        hint: "Adds all changes in the entire <em>working directory</em> to the <em>staging area</em>.<br><strong>Note:</strong> Includes deleted files."
+      - cmd: "git add -A && git commit -m \"Initial commit\""
+        valid: "^git\\s+add\\s+-A\\s+&&\\s+git\\s+commit\\s+-m\\s*['\"][a-z -_]+['\"]$"
         next: 6
         output:
-          - text: "[main (root-commit) a1b2c3d] First commit\n 2 files changed, 25 insertions(+)\n create mode 100644 README.md\n create mode 100644 .gitignore"
-            hint: "Shows the <i>commit hash</i> (a1b2c3d), files changed, and that this is the first commit (<i>root-commit</i>) on the <i>main branch</i>"
-        hint: "<b>Adds</b> all changes to the <i>staging area</i> <u>including</u> deleted files and creates a <i>commit</i> with the specified <i>commit message</i>"
+          - text: |
+              [main (root-commit) a1b2c3d] First commit
+               2 files changed, 25 insertions(+)\n
+               create mode 100644 README.md
+               create mode 100644 .gitignore
+            hint: "Shows the <i>commit hashes</i> (a1b2c3d), files changed, and that this is the first commit (<em>root-commit</em>) on the <em>main branch</em>"
+        hint: "Adds all changes to the <em>staging area</em> including deleted files and creates a <em>commit</em> with the specified <em>commit message</em>"
   
   - id: 4
     title: "Check status after adding"
@@ -98,7 +102,7 @@ steps:
       - cmd: "git commit -m \"Setup project\""
         valid: "^git\\s+commit\\s+-m\\s*['\"][a-z -_]+['\"]$"
         output:
-          - text: "[main (root-commit) a1b2c3d] Add initial files\n 2 files changed, 25 insertions(+)\n create mode 100644 README.md\n create mode 100644 .gitignore"
+          - text: "[main (root-commit) a1b2c3d] Setup project\n 2 files changed, 25 insertions(+)\n create mode 100644 README.md\n create mode 100644 .gitignore"
       - cmd: "git commit -m \"First commit\""
         valid: "^git\\s+commit\\s+-m\\s*['\"]first\\s+commit['\"]$"
         output:
@@ -113,12 +117,11 @@ steps:
         output:
           - text: |
               commit a1b2c3d4e5f6789012345678901234567890abcd (HEAD -> main)
-              Author: Student <student@example.com>
-              Date:   Mon Oct 23 10:30:00 2023 +0200
+              Author: Sebastian Feldmann <sebastianfeldmann@users.noreply.github.com>
+              Date:   Tue Sep 30 20:30:00 2025 +0200
 
                   Initial commit
       - cmd: "git log --oneline"
         valid: "^git\\s+log\\s+--oneline$"
         output:
           - text: "a1b2c3d (HEAD -> main) Initial commit"
-          - hint: "As soon as you have committed your changes, you can recover them at any time."

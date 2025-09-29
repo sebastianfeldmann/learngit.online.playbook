@@ -5,7 +5,7 @@ level: "beginner"
 time: "8 minutes"
 order: 1
 previous: null
-next: "git-commit"
+next: null
 steps:
   - id: 1
     title: "Check repository status"
@@ -13,24 +13,36 @@ steps:
     allowedCommands:
       - cmd: "git status"
         valid: "^git\\s+status$"
-        output: |
-          On branch main
-          Your branch is up to date with 'origin/main'.
+        output: 
+          - text: |
+              On branch main
+              Your branch is up to date with 'origin/main'.
+            hint: ""
+          - text: |
+              Changes not staged for commit:
+                (use "git add <file>..." to update what will be committed)
+                (use "git restore <file>..." to discard changes in working directory)
 
-          Changes not staged for commit:
-            (use "git add <file>..." to update what will be committed)
-            (use "git restore <file>..." to discard changes in working directory)
+                modified:   README.md
+                modified:   src/app.code
+            hint: "Files git knows about, that are <em>modified</em> but you have not added to the <em>staging area</em> yet."
+          - text: ""
+          - text: |
+              Untracked files:
+                (use "git add <file>..." to include in what will be committed)
 
-          	modified:   README.md
-          	modified:   src/app.code
-
-          Untracked files:
-            (use "git add <file>..." to include in what will be committed)
-
-          	newfile.txt
-
-          no changes added to commit (use "git add" and/or "git commit -a")
-        hint: "Git status shows you three types of files: <em>modified</em> (changed files), <em>untracked</em> (new files), and <em>staged</em> (ready to commit)."
+                newfile.txt
+            hint: "List of <em>untracked</em> files. Files that are not part of the repository yet."
+          - text: ""
+          - text: "no changes added to commit (use \"git add\" and/or \"git commit -a\")"
+            hint: "No <em>staged</em> files yet."
+        hint: |
+          Git status shows you three types of files:
+          <ul>
+            <li><em>modified</em> (changed files)</li>
+            <li><em>untracked</em> (new files)</li>
+            <li><em>staged</em> (ready to commit)</li>
+          </ul>
         next: 2
   
   - id: 2
@@ -49,28 +61,34 @@ steps:
     allowedCommands:
       - cmd: "git status"
         valid: "^git\\s+status$"
-        output: |
-          On branch main
-          Your branch is up to date with 'origin/main'.
+        output: 
+          - text: |
+              On branch main
+              Your branch is up to date with 'origin/main'.
+          - text: ""
+          - text: |
+              Changes to be committed:
+                (use "git rm --cached <file>..." to unstage)
 
-          Changes to be committed:
-            (use "git rm --cached <file>..." to unstage)
+                modified:   README.md
+            hint: "Notice that <code>README.md</code> is now in the <strong>Changes to be committed</strong> section, meaning it's <em>staged</em> and ready for <em>commit</em>."
+          - text: ""
+          - text: |
+              Changes not staged for commit:
+                (use "git add <file>..." to update what will be committed)
+                (use "git restore <file>..." to discard changes in working directory)
 
-          	modified:   README.md
+                modified:   src/app.code
+            hint: "Files still modified, not staged for commit."
+          - text: ""
+          - text: |
+              Untracked files:
+                (use "git add <file>..." to include in what will be committed)
 
-          Changes not staged for commit:
-            (use "git add <file>..." to update what will be committed)
-            (use "git restore <file>..." to discard changes in working directory)
-
-          	modified:   src/app.js
-
-          Untracked files:
-            (use "git add <file>..." to include in what will be committed)
-
-          	newfile.txt
-
-          no changes added to commit (use "git add" and/or "git commit -a")
-        hint: "Notice that <code>README.md</code> is now in the <em>Changes to be committed</em> section, meaning it's staged and ready for commit."
+                newfile.txt
+            hint: "List of still untracked files."
+          - text: ""
+        hint: ""
         next: 4
   
   - id: 4
@@ -103,16 +121,15 @@ steps:
     allowedCommands:
       - cmd: "git status"
         valid: "^git\\s+status$"
-        output: |
-          On branch main
-          Your branch is up to date with 'origin/main'.
+        output: 
+          - text: |
+              On branch main
+              Your branch is up to date with 'origin/main'.
 
-          Changes to be committed:
-            (use "git rm --cached <file>..." to unstage)
+              Changes to be committed:
+                (use "git restore --staged <file>..." to unstage)
 
-          	modified:   README.md
-          	modified:   src/app.js
-          	new file:   newfile.txt
-
-          no changes added to commit (use "git add" and/or "git commit -a")
+                modified:   README.md
+                modified:   src/app.js
+                new file:   newfile.txt
         hint: "Perfect! All your changes are now staged and ready for commit. The staging area acts as a checkpoint where you can review changes before committing them."

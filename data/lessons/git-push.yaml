@@ -4,8 +4,8 @@ category: "remote"
 level: "beginner"
 time: "8 minutes"
 order: 4
-previous: "git-remote"
-next: "git-branch"
+previous: null
+next: null
 steps:  
   - id: 1
     title: "Verify remote was added"

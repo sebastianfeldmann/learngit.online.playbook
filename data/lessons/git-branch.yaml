@@ -4,6 +4,8 @@ category: "branching"
 level: "beginner"
 time: "10 minutes"
 order: 2
+previous: null
+next: null
 steps:
   - id: 1
     title: "Check current branch"
