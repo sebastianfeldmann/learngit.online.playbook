@@ -1,11 +1,9 @@
 title: "Git Init"
-description: "Learn how to initialize a new Git repository. This lesson will guide you through creating a new directory and initializing a new Git repository."
-category: "basics"
+description: "Learn how to initialize a new Git repository. This lesson will guide you through creating a new directory, initializing a new Git repository, and configuring your Git identity."
+category: "changes"
 level: "beginner"
-time: "5 minutes"
+time: "8 minutes"
 order: 1
-next: null
-previous: null
 steps:
   - id: 1
     title: "Create a new Directory"
@@ -39,7 +37,6 @@ steps:
         output:
           - text: "Initialized empty Git repository in /Users/sf/git-basics/.git/"
             hint: "The path to your repository on your computer will naturally differ from the one displayed here."
-        next: 4
   
   - id: 4
     title: "Explore the .git directory"
@@ -61,7 +58,6 @@ steps:
               -rw-r--r--  1 sf  staff   73 Sep 25 15:30 description
               -rw-r--r--  1 sf  staff   21 Sep 25 15:30 HEAD
             hint: "This shows the internal structure of a Git repository. This is were all the version control data is stored. You can move your <em>git-basics</em> directory around as long as you keep the .git directory in place everything will still work."
-        next: 5
   
   - id: 5
     title: "Check repository status"

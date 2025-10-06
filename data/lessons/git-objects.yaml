@@ -2,7 +2,7 @@ title: "Git Objects"
 description: "Git stores everything in git objects. Lear about the different kind of objects and their responsibilities."
 category: "internals"
 level: "advanced"
-time: "15 minutes"
+time: "20 minutes"
 order: 2
 steps:
   - id: 1

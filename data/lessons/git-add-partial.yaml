@@ -3,7 +3,7 @@ description: "Learn how to interactively stage parts of a file. This lesson cove
 category: "changes"
 level: "intermediate"
 time: "15 minutes"
-order: 1
+order: 5
 steps:
   - id: 1
     title: "Check repository status"

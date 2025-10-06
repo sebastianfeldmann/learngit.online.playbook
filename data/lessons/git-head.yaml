@@ -2,7 +2,7 @@ title: "Git HEAD"
 description: "Learn how Git uses the HEAD pointer and head refs to track the current state of the repository."
 category: "internals"
 level: "advanced"
-time: "10 minutes"
+time: "15 minutes"
 order: 3
 steps:
   - id: 1

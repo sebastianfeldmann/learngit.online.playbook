@@ -1,5 +1,5 @@
-title: "Local vs. Global Config"
-description: "Learn the difference between local and global Git configuration. This lesson covers ~/.gitconfig vs .git/config, when to use each, and how to manage different configuration levels."
+title: "Git Config"
+description: "Learn the difference between local and global Git configuration and when to use which one. You will learn how to view and set configuration settings for your Git repositories."
 category: "config"
 level: "beginner"
 time: "12 minutes"
@@ -23,8 +23,7 @@ steps:
               ...
             hint: "Depening on were you call this command the output will be different. It will output all settings that git would use if you execute a command at your current directory."
           - text: |
-              alias.st=status
-              alias.co=checkout
+              alias.s=status
               core.repositoryformatversion=0
               core.filemode=true
               core.bare=false
@@ -45,8 +44,7 @@ steps:
               ...
               ...
               ...
-              alias.st=status
-              alias.co=checkout
+              alias.s=status
               core.editor=vim
   
   - id: 3

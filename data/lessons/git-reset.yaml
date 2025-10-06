@@ -3,7 +3,7 @@ description: "Learn how to undo changes in Git using different reset modes. This
 category: "changes"
 level: "intermediate"
 time: "15 minutes"
-order: 5
+order: 4
 steps:
   - id: 1
     title: "Make some changes"

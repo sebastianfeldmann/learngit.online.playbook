@@ -3,7 +3,7 @@ description: "Learn how to stage changes for commit using git add. This lesson c
 category: "changes"
 level: "beginner"
 time: "8 minutes"
-order: 1
+order: 2
 steps:
   - id: 1
     title: "Check repository status"
