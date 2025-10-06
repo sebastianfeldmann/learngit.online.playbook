@@ -1,0 +1,8 @@
+title: "Git Tips & Tricks"
+description: "Discover useful Git tips and tricks to improve your workflow and productivity. Learn practical techniques that will make you more efficient with Git."
+level: "intermediate"
+time: "40 minutes"
+order: 3
+lessons:
+  - git-alias-t10
+  - git-config-t10

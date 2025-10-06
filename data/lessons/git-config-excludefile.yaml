@@ -1,0 +1,125 @@
+title: "Global Exclude File"
+description: "Learn how to set up a global gitignore file to exclude common IDE directories and files across all your Git repositories. This lesson covers creating core.excludefile and taking responsibility managing you local environment settings."
+category: "config"
+story: |
+  <p>It’s a common mistake to clutter every project’s <code>.gitignore</code> with the same IDE, editor, and operating system artifacts. Not only does this make your project ignores noisy, it also mixes personal environment settings with rules that should really be project-specific.</p>
+  <p>A better approach is to configure a global exclude file. This keeps out all the usual “junk” — things like editor swap files, OS metadata, or local tool configs — without polluting each repository’s <code>.gitignore</code>. As a result, your project ignore files stay clean, minimal, and focused only on files that truly matter to that codebase.</p>
+  <p>In this lesson, you’ll learn how to set up and manage a global exclude file so you can keep your repositories lean, consistent, and professional.</p>
+level: "beginner"
+time: "10 minutes"
+order: 4
+steps:
+  - id: 1
+    title: "Check current exclude file"
+    description: "See if you already have a global exclude file configured"
+    allowedCommands:
+      - cmd: "git config --get core.excludesfile"
+        valid: "^git\\s+config\\s+--get\\s+core\\.excludesfile$"
+        output:
+          - text: ""
+            hint: "No global exclude file is currently configured"
+        hint: "The <code>core.excludesfile</code> setting tells Git where to find your global ignore patterns"
+
+  - id: 2
+    title: "Create the exclude file directory"
+    description: "Create the directory structure for the global exclude file"
+    allowedCommands:
+      - cmd: "mkdir -p ~/.config/git"
+        valid: "^mkdir\\s+-p\\s+~/.config/git$"
+        output: []
+        hint: "This creates the <code>~/.config/git</code> directory where we'll store our global exclude file"
+
+  - id: 3
+    title: "Create the global exclude file"
+    description: "Create the global exclude file with common IDE patterns"
+    allowedCommands:
+      - cmd: "vi ~/.config/git/excludefile"
+        valid: "^vi\\s+~/.config/git/excludefile$"
+        editor:
+          - text: |
+              # IDE directories
+              .IDEA/
+              .vscode/
+              *.swp
+              *.swo
+
+              # OS generated files
+              .DS_Store
+              .DS_Store?
+              .Spotlight-V100
+              .Trashes
+            hint: |
+              It’s good practice to add these patterns globally, so you don’t clutter each repository’s <code>.gitignore</code> with the same IDE and OS-specific files.<br>
+              If you manage them locally, you will end up with entries for every possible IDE and operating system in every single <code>.gitignore</code> file.<br>
+              By using a global <em>excludefile</em> and making sure not to commit things that don’t belong in the repo, you keep each project’s <code>.gitignore</code> cleaner and more focused.
+        hint: "Create the global exclude file and add your IDE/editor patterns and OS specific patterns"
+
+  - id: 4
+    title: "Save the exclude file"
+    description: "Save the exclude file"
+    allowedCommands:
+      - cmd: ":wq"
+        valid: "^\\:wq$"
+        output: []
+        hint: "Save the exclude file"
+
+  - id: 5
+    title: "Configure Git to use the exclude file"
+    description: "Tell Git to use our global exclude file"
+    allowedCommands:
+      - cmd: "git config --global core.excludesfile ~/.config/git/excludefile"
+        valid: "^git\\s+config\\s+--global\\s+core\\.excludesfile\\s+~/.config/git/excludefile$"
+        output: []
+        hint: "This sets the global configuration to use our exclude file for all repositories"
+
+  - id: 5
+    title: "Verify the configuration"
+    description: "Check that the exclude file is properly configured"
+    allowedCommands:
+      - cmd: "git config --get core.excludesfile"
+        valid: "^git\\s+config\\s+--get\\s+core\\.excludesfile$"
+        output:
+          - text: "/Users/sf/.config/git/excludefile"
+            hint: "Git is now configured to use our global exclude file"
+        hint: "This confirms that Git will use our exclude file for all repositories"
+
+  - id: 6
+    title: "Test the exclude file"
+    description: "Create some test files to see the exclude file in action"
+    allowedCommands:
+      - cmd: "touch .DS_Store"
+        valid: "^touch\\s+\\.DS_Store$"
+        output: []
+        hint: "Create some file that should be ignored now."
+
+  - id: 7
+    title: "Check Git status"
+    description: "See how Git handles the files we created"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output:
+          - text: |
+              On branch main
+              nothing to commit, working tree clean
+            hint: "Git doesn't complain about an <em>untracked</em> file because is's being ignored by our global exclude file!"
+        hint: ""
+
+  - id: 8
+    title: "Summary"
+    description: "You've successfully set up a global exclude file"
+    allowedCommands:
+      - cmd: "git config --global --list | grep excludesfile"
+        valid: "^git\\s+config\\s+--global\\s+--list\\s+\\|\\s+grep\\s+excludesfile$"
+        output:
+          - text: "core.excludesfile=/Users/sf/.config/git/excludefile"
+            hint: |
+              <h5>Summary:</h5>
+              <ul>
+                <li><b>Location:</b> <code>~/.config/git/excludefile</code></li>
+                <li><b>Purpose:</b> Ignore files specific to your setup globally</li>
+                <li><b>Configuration:</b> Set by the <code>core.excludesfile</code> setting</li>
+                <li><b>Benefit:</b> No need to pollute .gitignore files in each repository</li>
+              </ul>
+              <p><b>Note:</b> This works alongside repository-specific <code>.gitignore</code> files and provides global patterns that apply everywhere.</p>
+        hint: ""

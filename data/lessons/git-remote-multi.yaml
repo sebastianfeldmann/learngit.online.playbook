@@ -1,0 +1,158 @@
+title: "Multiple Git Remotes"
+description: "Learn how to work with multiple remotes to keep a fork synchronized with the upstream repository. This lesson covers adding upstream remotes, fetching changes, and keeping your fork up to date."
+category: "remote"
+level: "intermediate"
+time: "15 minutes"
+order: 4
+steps:
+  - id: 1
+    title: "Check current remotes"
+    description: "View the currently configured remotes in your forked repository"
+    allowedCommands:
+      - cmd: "git remote -v"
+        valid: "^git\\s+remote\\s+-v$"
+        output:
+          - text: |
+              origin	git@github.com:username/learngit.online.playbook.git (fetch)
+              origin	git@github.com:username/learngit.online.playbook.git (push)
+            hint: "Your fork typically has only the <em>origin</em> remote pointing to your forked repository. To keep it synchronized with the original project, you need to add the upstream remote."
+  
+  - id: 2
+    title: "Add upstream remote"
+    description: "Add the original repository as an upstream remote"
+    allowedCommands:
+      - cmd: "git remote add upstream git@github.com:sebastianfeldmann/learngit.online.playbook.git"
+        valid: "^git\\s+remote\\s+add\\s+upstream\\s+git\\@github\\.com:[a-zA-Z0-9_-]+/[a-zA-Z0-9_.-]+\\.git$"
+        output: []
+        hint: "The <code>git remote add upstream</code> command adds the original repository as a remote named <em>upstream</em>. You can choose any name you want for the remote."
+  
+  - id: 3
+    title: "Verify multiple remotes"
+    description: "Check that both origin and upstream remotes are now configured"
+    allowedCommands:
+      - cmd: "git remote -v"
+        valid: "^git\\s+remote\\s+-v$"
+        output:
+          - text: |
+              origin    git@github.com:username/learngit.online.playbook.git (fetch)
+              origin    git@github.com:username/learngit.online.playbook.git (push)
+              upstream  git@github.com:sebastianfeldmann/learngit.online.playbook.git (fetch)
+              upstream  git@github.com:sebastianfeldmann/learngit.online.playbook.git (push)
+            hint: "Now you have two remotes: <em>origin</em> (your fork) and <em>upstream</em> (the original repository). This setup allows you to pull changes from the original project and push to your fork."
+  
+  - id: 4
+    title: "Fetch from upstream"
+    description: "Download the latest changes from the upstream repository"
+    allowedCommands:
+      - cmd: "git fetch upstream"
+        valid: "^git\\s+fetch\\s+upstream$"
+        output:
+          - text: |
+              remote: Enumerating objects: 15, done.
+              remote: Counting objects: 100% (15/15), done.
+              remote: Compressing objects: 100% (8/8), done.
+              remote: Total 12 (delta 4), reused 8 (delta 2), pack-reused 0
+              Unpacking objects: 100% (12/12), 2.45 KiB | 419.00 KiB/s, done.
+              From github.com:sebastianfeldmann/learngit.online.playbook
+               * [new branch]      main       -> upstream/main
+               * [new branch]      add-lesson -> upstream/add-lesson
+            hint: "The <code>git fetch upstream</code> command downloads all branches and commits from the upstream repository without merging them into your local branches."
+  
+  - id: 5
+    title: "Check current branch"
+    description: "Ensure you're on your <code>main</code> branch before merging upstream changes"
+    allowedCommands:
+      - cmd: "git branch"
+        valid: "^git\\s+branch$"
+        output:
+          - text: |
+              * main
+                my-experiment
+            hint: "You're on the <code>main</code> branch. This is where you'll merge the upstream changes to keep your fork synchronized."
+  
+  - id: 6
+    title: "Merge upstream changes"
+    description: "Merge the latest changes from <code>upstream/main</code> into your local <code>main</code> branch"
+    allowedCommands:
+      - cmd: "git merge upstream/main"
+        valid: "^git\\s+merge\\s+upstream/main$"
+        output:
+          - text: |
+              Updating a1b2c3d..e4f5g6h
+              Fast-forward
+               README.md                     | 5 +++--
+               data/lessons/git-config.yaml  | 23 +++++++++++++++++++++++
+               2 files changed, 26 insertions(+), 2 deletions(-)
+               create mode 100644 data/lessons/git-config.yaml
+            hint: |
+              The <code>git merge upstream/main</code> command integrates the latest changes from the upstream repository
+              into your local main branch. A <em>fast-forward</em> merge means your branch was simply moved forward to
+              include the new commits. As long as you're working on other branches like <code>my-experiment</code> or <code>feature/x</code>,
+              you can merge the <code>upstream</code> changes into your local <code>main</code> branch without any problems.<br>
+              <br>
+              ⚠️<strong>To keep life simple</strong>⚠️<br>
+              Don't work on branches that you want to keep synchronized with the upstream repository. Sometimes there are more branches to keep in sync,
+              like version branches or long living feature branches (<code>6.0</code>, <code>7.0</code>, <code>8.0</code>, etc.).
+  
+  - id: 7
+    title: "Push updates to your fork"
+    description: "Push the synchronized main branch to your fork on GitHub"
+    allowedCommands:
+      - cmd: "git push origin main"
+        valid: "^git\\s+push\\s+origin\\s+main$"
+        output:
+          - text: |
+              Enumerating objects: 8, done.
+              Counting objects: 100% (8/8), done.
+              Delta compression using up to 8 threads
+              Compressing objects: 100% (4/4), done.
+              Writing objects: 100% (5/5), 1.23 KiB | 1.23 MiB/s, done.
+              Total 5 (delta 2), reused 0 (delta 0), pack-reused 0
+              To github.com:username/learngit.online.playbook.git
+                 a1b2c3d..e4f5g6h  main -> main
+            hint: "Now your fork's <code>main</code> branch on GitHub is synchronized with the upstream repository. Your fork contains all the latest changes from the original project."
+  
+  - id: 8
+    title: "View remote branch information"
+    description: "Check the relationship between your local and remote branches"
+    allowedCommands:
+      - cmd: "git branch -vv"
+        valid: "^git\\s+branch\\s+-vv$"
+        output:
+          - text: |
+              * main          e4f5g6h [origin/main] Add new feature and update docs
+                my-experiment a1b2c3d [origin/my-experiment: ahead 2] Working on feature
+            hint: "The <code>git branch -vv</code> command shows detailed information about your branches, including which remote branches they track and their synchronization status."
+  
+  - id: 9
+    title: "Create a workflow script"
+    description: "View a helpful script to automate the sync process"
+    allowedCommands:
+      - cmd: "git config alias.sync-fork '!git fetch upstream && git checkout main && git merge upstream/main && git push origin main'"
+        valid: "^git\\s+config\\s+alias\\.sync-fork\\s+['|\"]!git\\s+fetch\\s+upstream\\s+&&\\s+git\\s+checkout\\s+main\\s+&&\\s+git\\s+merge\\s+upstream/main\\s+&&\\s+git\\s+push\\s+origin\\s+main['|\"]$"
+        hint: "This alias automates the process of syncing your fork with the upstream repository."
+
+  - id: 10
+    title: "Use the alias"
+    description: ""
+    allowedCommands:
+      - cmd: "git sync-fork"
+        valid: "^git\\s+sync\\-fork$"
+        output:
+          - text: |
+              Already on 'main'
+              Your branch is up to date with 'upstream/main'.
+              Already up to date.
+              Everything up-to-date
+            hint: |
+              This <em>alias</em> combines all the steps to sync your fork with upstream:
+              <ol>
+                <li>1. <code>git fetch upstream</code> - Download latest changes</li>       
+                <li>2. <code>git checkout main</code> - Switch to main branch</li>
+                <li>3. <code>git merge upstream/main</code> - Merge upstream changes</li>
+                <li>4. <code>git push origin main</code> - Push to your fork</li>
+              </ol>
+              ⚠️<strong>To keep life simple</strong>⚠️<br>
+              Don't work on branches that you want to keep synchronized with the upstream repository. Sometimes there are more branches to keep in sync,
+              like version branches or long living feature branches (<code>6.0</code>, <code>7.0</code>, <code>8.0</code>, etc.).
+              
