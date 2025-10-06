@@ -1,15 +1,15 @@
 title: "Merge Strategies"
-description: "Understand the different Git merge strategies and when to use each one. Learn about fast-forward merges, no-fast-forward merges, and how to control merge behavior to maintain clean project history."
+description: "Understand the different Git merge modes and in which situation Git uses which one. Learn about different merge strategies and how to control merge behavior."
 category: "branching"
 level: "intermediate"
 time: "15 minutes"
-order: 4
-next: null
-previous: null
+order: 2
+related:
+  - git-rebase
 steps:
   - id: 1
-    title: "Create a new feature branch"
-    description: "Create and switch to a new branch called `feature1` from main."
+    title: "Create a new branch"
+    description: "Create and switch to a new branch called `feature1` from main"
     allowedCommands:
       - cmd: "git switch -c feature1"
         valid: "^git\\s+switch\\s+-c\\s+feature1$"
@@ -22,7 +22,7 @@ steps:
   
   - id: 2
     title: "Create a new file for feature1"
-    description: "Add a new file with changes for the feature1 branch."
+    description: "Add a new file with changes for the feature1 branch"
     allowedCommands:
       - cmd: "echo \"Feature1 work\" > feature1.md"
         valid: "^echo\\s+\"|'Feature1 work\"|'\\s*>\\s*feature1.md$"
@@ -31,7 +31,7 @@ steps:
   
   - id: 3
     title: "Stage the file"
-    description: "Add the new file to the staging area."
+    description: "Add the new file to the staging area"
     allowedCommands:
       - cmd: "git add feature1.md"
         valid: "^git\\s+add\\s+feature1.md$"
@@ -40,16 +40,19 @@ steps:
   
   - id: 4
     title: "Commit the change on feature1"
-    description: "Commit the staged file to the feature1 branch."
+    description: "Commit the staged file to the `feature1` branch"
     allowedCommands:
       - cmd: "git commit -m \"Add feature1\""
         valid: "^git\\s+commit\\s+-m\\s*'|\".*'|\"$"
         output:
-          - text: "[feature1 1435002] Add feature1\n 1 file changed, 1 insertion(+)\n create mode 100644 feature1.md"
+          - text: |
+              [feature1 1435002] Add feature1
+               1 file changed, 1 insertion(+)
+               create mode 100644 feature1.md
   
   - id: 5
     title: "Switch back to main"
-    description: "Return to the main branch to prepare for merging."
+    description: "Return to the main branch to prepare for merging"
     allowedCommands:
       - cmd: "git switch main"
         valid: "^git\\s+switch\\s+main$"
@@ -62,17 +65,27 @@ steps:
   
   - id: 6
     title: "Do a fast-forward merge"
-    description: "Merge feature1 into main. Since no new commits were made on main, Git performs a fast-forward merge."
+    description: "Merge `feature1` into main. Since no new commits were made on main, Git performs a fast-forward merge"
     allowedCommands:
       - cmd: "git merge feature1"
         valid: "^git\\s+merge\\s+feature1$"
         output:
-          - text: "Updating ad3c7ad..1435002\nFast-forward\n feature1.md | 1 +\n 1 file changed, 1 insertion(+)\n create mode 100644 feature1.md"
-            hint: "Git simply moved the main branch pointer forward (fast-forward).<br>A fast-forward <i>merge</i> is possible if Git can <b>reach</b> the source <i>commits</i> without going back (to the left)."
+          - text: |
+              Updating ad3c7ad..1435002
+              Fast-forward
+               feature1.md | 1 +
+               1 file changed, 1 insertion(+)
+               create mode 100644 feature1.md
+            hint: |
+              Git simply moved the main branch pointer forward (fast-forward).<br>
+              <img src="/assets/gfx/lessons/merge/ff-merge.gif" width="550" height="214"><br>
+              A fast-forward <i>merge</i> is possible if Git can <em>reach</em>
+              the source <em>head</em> without going back (to the left).
+              
   
   - id: 7
-    title: "Create a new feature2 branch"
-    description: "Now, create a second branch called `feature2`."
+    title: "Create a new branch"
+    description: "Now, create a second branch called `feature2`"
     allowedCommands:
       - cmd: "git switch -c feature2"
         valid: "^git\\s+switch\\s+-c\\s+feature2$"
@@ -84,8 +97,8 @@ steps:
           - text: "Switched to a new branch 'feature2'"
   
   - id: 8
-    title: "Create a new file for feature2"
-    description: "Add a new file with changes for the feature2 branch."
+    title: "Create a new file"
+    description: "Add a new file with changes for the `feature2` branch."
     allowedCommands:
       - cmd: "echo \"Feature2 work\" > feature2.md"
         valid: "^echo\\s+'|\"Feature2 work'|\"\\s*>\\s*feature2.md$"
@@ -108,7 +121,10 @@ steps:
       - cmd: "git commit -m \"Add feature2\""
         valid: "^git\\s+commit\\s+-m\\s*'|\".*'|\"$"
         output:
-          - text: "[feature2 5d5eac6] Add feature2\n 1 file changed, 1 insertion(+)\n create mode 100644 feature2.md"
+          - text: |
+              [feature2 5d5eac6] Add feature2
+               1 file changed, 1 insertion(+)
+               create mode 100644 feature2.md
   
   - id: 11
     title: "Switch back to main"
@@ -125,7 +141,7 @@ steps:
   
   - id: 12
     title: "Make a change on main"
-    description: "Add a change directly on the main branch, creating a divergent history."
+    description: "Add a change directly on the `main` branch, creating a divergent history."
     allowedCommands:
       - cmd: "echo \"Main branch update\" > main.md"
         valid: "^echo\\s+'|\"Main branch update'|\"\\s*>\\s*main.md"
@@ -148,14 +164,363 @@ steps:
       - cmd: "git commit -m \"Main branch update\""
         valid: "^git\\s+commit\\s+-m\\s*'|\".*'|\"$"
         output:
-          - text: "[main a9078bc] Main branch update\n 1 file changed, 1 insertion(+)\n create mode 100644 main.md"
+          - text: |
+              [main a9078bc] Main branch update
+               1 file changed, 1 insertion(+)
+               create mode 100644 main.md
   
   - id: 15
-    title: "Merge feature2 into main (no fast-forward)"
-    description: "Merge feature2 into main using the --no-ff option to preserve branch history."
+    title: "Merge `feature2` into main"
+    description: "Merge `feature2` into the `main` branch."
     allowedCommands:
-      - cmd: "git merge --no-ff feature2 -m 'Merge feature2 branch'"
-        valid: "^git\\s+merge\\s+--no-ff\\s+feature2\\s+-m\\s+'.*'$"
+      - cmd: "git merge feature2 -m 'Merge feature2 branch'"
+        valid: "^git\\s+merge\\s+feature2\\s+-m\\s+'.*'$"
+        editor:
+          - text: |
+              Merge branch 'feature2' into main
+              
+              # Please enter a commit message to explain why this merge is necessary,
+              # especially if it merges an updated upstream into a topic branch.
+              #
+              # Lines starting with '#' will be ignored, and an empty message aborts
+              # the commit.
+            hint: |
+              Git asks you for a merge commit message.
+              You can leave the message as is and just save the file and exit the editor.
+              
+  - id: 15
+    title: "Save & Quit"
+    description: "Save the merge commit message and exit the editor."
+    allowedCommands:
+      - cmd: ":wq"
+        valid: "^\\:wq$"
         output:
-          - text: "Merge made by the 'recursive' strategy.\n feature2.md | 1 +\n 1 file changed, 1 insertion(+)\n create mode 100644 feature2.md"
-            hint: "Git created a merge commit because the histories diverged and we forced --no-ff."
+          - text: |
+              Merge made by the 'recursive' strategy.
+               feature2.md | 1 +
+               1 file changed, 1 insertion(+)
+               create mode 100644 feature2.md"
+            hint: |
+              Git created a merge commit because the histories diverged.
+              Git could not <em>reach</em> the <em>head</em> of <code>feature2</code>
+              by only going forward (to the right), so no <em>fast forward</em> merge was possible.<br>
+              <img src="/assets/gfx/lessons/merge/no-ff-merge.gif" with="550" height="214"><br>
+              Git had to perform a <em>no fast forward</em> merge and create a <em>merge commit</em>
+              for safety reasons. Since Git is now creating a version of your code that you never
+              explicitly created it has to give you the opportunity to undo this step.
+              That's what the <em>merge commit</em> is for.
+
+  - id: 16
+    title: "Undo the merge"
+    description: "Let's reset the branch to the state before the merge"
+    allowedCommands:
+      - cmd: "git reset --hard HEAD^"
+        valid: "^git\\s+reset\\s+--hard\\s+HEAD\\^$"
+        output:
+          - text: "HEAD is now at 5e35aad Main branch update"
+            hint: |
+              If you reset the <em>merge commit</em> you will undo the whole <em>merge</em>
+              and remove all merged commits as well.<br>
+              Since it is not nice to put the burdon of merging and solving conflicts on
+              someone who potentially does not know the feature implementation details,
+              we can force <em>fast forward</em> merges by using the <code>--ff-only</code> option.
+              This way our <code>main</code> branch never gets into a state that Git just creates in that moment.
+              Instead we only move the <code>main</code> branch into states that existed before and at
+              least could have been tested before.
+
+  - id: 17
+    title: "Force a fast-forward merge"
+    description: "To make sure you move the branch to a state that existed before the merge."
+    allowedCommands:
+      - cmd: "git merge --ff-only feature2"
+        valid: "^git\\s+merge\\s+--ff-only\\s+feature2$"
+        output:
+          - text: "fatal: Not possible to fast-forward, aborting."
+            hint: |
+              Git will not allow a <em>fast-forward</em> merge because
+              the histories diverged. To be able to do that we have to
+              update <code>feature2</code> first.
+
+  - id: 18
+    title: "Switch branch"
+    description: "Switch back to the `feature2` branch"
+    allowedCommands:
+      - cmd: "git switch feature2"
+        valid: "^git\\s+switch\\s+feature2$"
+        output:
+          - text: "Switched to branch 'feature2'"
+
+  - id: 19
+    title: "Perform merge"
+    description: "Merge the `main` branch into the `feature2` branch"
+    allowedCommands:
+      - cmd: "git merge main"
+        valid: "^git\\s+merge\\s+main$"
+        editor: 
+          - text: |
+              Merge branch 'main' into f2
+              # Please enter a commit message to explain why this merge is necessary,
+              # especially if it merges an updated upstream into a topic branch.
+              #
+              # Lines starting with '#' will be ignored, and an empty message aborts
+              # the commit.
+            hint: |
+              Git again asks you for a merge commit message.
+              Just as before we can leave this as is and just save and exit.
+
+  - id: 20
+    title: "Save & Quit"
+    description: "Use the proposed commit message"
+    allowedCommands:
+      - cmd: ":wq"
+        valid: "^\\:wq$"
+        output:
+          - text: |
+              Merge made by the 'ort' strategy.
+               main.md | 1 +
+               1 file changed, 1 insertion(+)
+            hint: |
+              This way the person creating the <code>feature2</code> branch is responsible for the <em>merge</em>.
+              And not only the merge but also the solving of potential conflicts and making sure the
+              feature still works as expected with the latest changes from <code>main</code>.
+              As soon as the latest changes from <code>main</code> are merged into <code>feature2</code> we are
+              ready to merge the feature.
+
+  - id: 21
+    title: "Switch branch"
+    description: "Switch back to the `main` branch"
+    allowedCommands:
+      - cmd: "git switch main"
+        valid: "^git\\s+switch\\s+main$"
+        output:
+          - text: "Switched to branch 'main'"
+            
+  - id: 22
+    title: "Merge fast forward"
+    description: "Make sure you can merge `feature2` with a fast forward merge"
+    allowedCommands:
+      - cmd: "git merge --ff-only feature2"
+        valid: "^git\\s+merge\\s+--ff-only\\s+feature2$"
+        output:
+          - text: |
+              Updating ad3c7ad..5e35aad
+              Fast-forward
+              feature2.md | 1 +
+              1 file changed, 1 insertion(+)
+              create mode 100644 feature2.md
+            hint: |
+              The huge advantage by forcing the merge in the <code>feature2</code> branch
+              is the shift of responsibility. Now the person who is implementing the feature
+              is responsible for the merge and solving conflicts.<br>
+              Because we merged <em>fast forward</em> undoing this <em>merge</em> is now way more complicated than
+              just resetting a merge commit. Because the merge commit we see is from the merge before
+              and if you undo this we will potentially loose data.<br>
+              This can be quite confusing, so people wrongly decide to merge on the <em>main</em> side.
+              The better solution is to force merge commits with the <code>--no-ff</code> option.
+
+  - id: 23
+    title: "Undo the merge"
+    description: "Undo the merge using the reflog"
+    allowedCommands:
+      - cmd: "git reflog"
+        valid: "^git\\s+reflog$"
+        output:
+          - text: "baf1e80 (feature2) HEAD@{0}: merge feature2: Fast-forward"
+          - text: "cb58d81 (HEAD -> main) HEAD@{1}: checkout: moving from feature2 to main"
+            hint: "This the state before the merge. Let's go there!"
+          - text: |
+              baf1e80 (feature2) HEAD@{2}: merge main: Merge made by the 'ort' strategy.
+              ba39298 HEAD@{3}: checkout: moving from main to feature2
+              cb58d81 (HEAD -> main) HEAD@{4}: commit: Main branch update
+              49845f0 HEAD@{5}: checkout: moving from feature2 to main
+              ba39298 HEAD@{6}: commit: Add feature2
+              49845f0 HEAD@{7}: checkout: moving from main to feature2
+              49845f0 HEAD@{8}: commit: Add feature 1
+              ...
+
+  - id: 24
+    title: "Undo merge"
+    description: "Undo the merge using the reflog pointer"
+    allowedCommands:
+      - cmd: "git reset --hard HEAD@{1}"
+        valid: "^git\\s+reset\\s+--hard\\s+HEAD\\@\\{1\\}$"
+        output:
+          - text: "HEAD is now at cb58d81 Main branch update"
+            hint: "Now we're back on the <code>main</code> branch."
+
+  - id: 25
+    title: "Merge with no fast-forward"
+    description: "Merge the `feature2` branch into the `main` branch with a no fast-forward merge"
+    allowedCommands:
+      - cmd: "git merge --no-ff feature2"
+        valid: "^git\\s+merge\\s+--no-ff\\s+feature2$"
+        editor:
+          - text: |
+              Merge branch 'feature2'
+              # Please enter a commit message to explain why this merge is necessary,
+              # especially if it merges an updated upstream into a topic branch.
+              #
+              # Lines starting with '#' will be ignored, and an empty message aborts
+              # the commit.
+            hint: "Just save & exit"
+        hint: |
+          Use <code>--ff-only</code> to make sure you merge a state that existed somewhere before.<br>
+          Use <code>--no-ff</code> to force a merge commit to safely undo the merge if you made a mistake
+
+  - id: 26
+    title: "Save & Quit"
+    description: "Save the merge commit message and exit the editor."
+    allowedCommands:
+      - cmd: ":wq"
+        valid: "^\\:wq$"
+        output:
+          - text: |
+              Merge made by the 'ort' strategy.
+               feature2.md | 1 +
+               1 file changed, 1 insertion(+)
+               create mode 100644 feature2.md
+
+  - id: 27
+    title: "Check the log"
+    description: "Check the commit history of the repository"
+    allowedCommands:
+      - cmd: "git log --oneline --graph"
+        valid: "^git\\s+log\\s+--oneline\\s+--graph$"
+        output:
+          - text: |
+              *   5b8bd25 (HEAD -> main) Merge branch 'feature2'
+              |\
+              | *   8537202 (feature2) Merge branch 'main' into feature2
+              | |\
+              | |/
+              |/|
+              * | cb58d81 Main branch update
+              | * ba39298 Add feature2
+              |/
+              * 49845f0 Add feature1
+            hint: |
+              Great! Now we have two merge commits instead of one. But the <strong>huge advantage</strong> is
+              that we only merge states into <code>main</code> that existed before the merge.<br>
+              This approach is completly safe but pollutes your Git history with a lot
+              of unneccesary <em>merge commits</em>. There is a way to avoid those
+              messy <em>merge commits</em> and still have the responsibility shift
+              and the testable state advantage.<br>
+              So let's undo the merge one more time. Luckily this time it's easy because of
+              the forced merge commit we created with the <code>--no-ff</code> option.
+
+  - id: 28
+    title: "Undo the merge"
+    description: "Undo the merge using the merge commit, last time I swear!"
+    allowedCommands:
+      - cmd: "git reset --hard HEAD^"
+        valid: "^git\\s+reset\\s+--hard\\s+HEAD\\^$"
+        output:
+          - text: "HEAD is now at cb58d81 Main branch update"
+
+  - id: 29
+    title: "Switch to `feature2`"
+    description: "Switch back to cleanup the `feature2` branch"
+    allowedCommands:
+      - cmd: "git switch feature2"
+        valid: "^git\\s+switch\\s+feature2$"
+        output:
+          - text: "Switched to branch 'feature2'"
+            hint: "Now we're back on the <code>feature2</code> branch."
+
+  - id: 30
+    title: "Undo the merge"
+    description: "Undo the previous merge from `main` to `feature2`"
+    allowedCommands:
+      - cmd: "git reset --hard HEAD^"
+        valid: "^git\\s+reset\\s+--hard\\s+HEAD\\^$"
+        output:
+          - text: "HEAD is now at ba39298 Add feature2"
+
+  - id: 31
+    title: "Rebase `feature2` onto `main`"
+    description: "Rebase the `feature2` branch onto the `main` branch"
+    allowedCommands:
+      - cmd: "git rebase main"
+        valid: "^git\\s+rebase\\s+main$"
+        output:
+          - text: "Successfully rebased and updated refs/heads/feature2."
+            hint: |
+              Rebasing <code>feature2</code> onto <code>main</code> incorporates the changes
+              from <code>main</code> into <code>feature2</code> without creating a merge commit.
+              <img src="/assets/gfx/lessons/merge/rebase.gif" width="550" height="214"><br>
+              This is done by putting the commits in <code>feature2</code> on a shelve, getting
+              the latest changes from <code>main</code> and then re-applying the shelved commits
+              on top of the <code>main</code> branch.<br>
+              ⚠️<strong>Be careful with rebase</strong>⚠️<br>
+              Using <em>rebase</em> can be dangerous since you are rewriting the history of the branch.
+              Be sure you fully understand the consequences of rebasing.
+
+  - id: 32
+    title: "Switch to main"
+    description: "Switch back to `main` to finally merge `feature2`"
+    allowedCommands:
+      - cmd: "git switch main"
+        valid: "^git\\s+switch\\s+main$"
+        output:
+          - text: "Switched to branch 'main'"
+
+  - id: 33
+    title: "Merge `feature2`"
+    description: "Merge `feature2` into `main` with a explicit merge commit"
+    allowedCommands:
+      - cmd: "git merge --no-ff feature2"
+        valid: "^git\\s+merge\\s+--no-ff\\s+feature2$"
+        editor:
+          - text: |
+              Merge branch 'feature2'
+              # Please enter a commit message to explain why this merge is necessary,
+              # especially if it merges an updated upstream into a topic branch.
+              #
+              # Lines starting with '#' will be ignored, and an empty message aborts
+              # the commit.
+            hint: "Just save & exit"
+        hint: |
+          Sine we don't want to undo merges with the <em>reflog</em>, we force git to create a merge
+          commit even if it could merge <em>fast forward</em>.
+
+  - id: 34
+    title: "Save & Quit"
+    description: "Save the merge commit message and exit the editor."
+    allowedCommands:
+      - cmd: ":wq"
+        valid: "^\\:wq$"
+        output:
+          - text: |
+              Merge made by the 'ort' strategy.
+               feature2.md | 1 +
+               1 file changed, 1 insertion(+)
+               create mode 100644 feature2.md
+            hint: |
+              Applying this strategy leaves you with <em>merge commits</em> for every ferture
+              merge into <code>main</code> and gives you the option to undo a merge easily if
+              you made a mistake just by getting rid of the merge commit.
+
+  - id: 35
+    title: "Summary"
+    description: "You've learned the different merge modes and when to use them."
+    allowedCommands:
+      - cmd: "git log --oneline --graph"
+        valid: "^git\\s+log\\s+--oneline\\s+--graph$"
+        output:
+          - text: |
+              *   f12875a (HEAD -> main) Merge branch 'feature2'
+              |\
+              | * 32e8140 (feature2) Add feature2
+              |/
+              * cb58d81 Main branch update
+              * 49845f0 Add feature1
+            hint: |
+              With this approach your Git <em>graph</em> will never have more then two lines.
+              One line for the <code>main</code> branch und one line goint out to a <code>feature</code>
+              brach and coming back in.<br>
+              <h5>Advantages</h5>
+              <ul>
+                <li>Only merge <em>fast forward</em> mergable branches to make sure to only merge tested states.</li>
+                <li>By using <code>--no-ff</code> we can easily undo a merge.</li>
+                <li>Using <em>rebase</em> prevents a lot of messy <em>merge commits</em>.</li>
+              </ul>

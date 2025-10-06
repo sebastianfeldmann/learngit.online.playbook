@@ -4,8 +4,6 @@ category: "config"
 level: "intermediate"
 time: "10 minutes"
 order: 3
-previous: null
-next: null
 steps:
   - id: 1
     title: "Create a simple alias"

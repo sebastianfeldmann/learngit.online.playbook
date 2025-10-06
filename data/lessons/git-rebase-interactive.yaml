@@ -4,8 +4,6 @@ category: "branching"
 level: "intermediate"
 time: "20 minutes"
 order: 4
-previous: null
-next: null
 steps: 
   - id: 1
     title: "Create feature branch"

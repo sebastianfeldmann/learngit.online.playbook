@@ -1,35 +1,29 @@
-courses:
-  displayName: "Courses"
-  description: "Step-by-step guides to learn Git"
-  icon: "🎓"
-  order: 1
-
 changes:
   displayName: "Track & Undo Changes"
   description: "Essential Git commands every developer needs to know"
   icon: "📚"
-  order: 2
+  order: 1
 
 branching:
   displayName: "Branching & Merging"
   description: "Master Git's branching workflow and collaboration features"
   icon: "🌳"
-  order: 3
+  order: 2
 
 remote:
   displayName: "Remote Repositories"
   description: "Working with GitHub, pushing, pulling, and remote collaboration"
   icon: "🌐"
-  order: 4
+  order: 3
 
 config:
   displayName: "Git Config"
   description: "Customize Git behavior and create shortcuts for better productivity"
   icon: "⚙️"
-  order: 5
+  order: 4
 
 internals:
   displayName: "Git Internals"
   description: "Complex Git operations, rebasing, and workflow optimization"
   icon: "⚡"
-  order: 6
+  order: 5

@@ -4,8 +4,6 @@ category: "remote"
 level: "beginner"
 time: "6 minutes"
 order: 1
-previous: null
-next: null
 steps:
   - id: 1
     title: "Clone a repository"

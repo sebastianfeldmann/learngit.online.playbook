@@ -4,8 +4,6 @@ category: "changes"
 level: "intermediate"
 time: "15 minutes"
 order: 5
-previous: null
-next: null
 steps:
   - id: 1
     title: "Make some changes"
