@@ -1,0 +1,96 @@
+title: "10 Must Use Settings"
+description: "Essential Git configuration settings that every developer should know and use. This lesson covers the most important global Git settings for productivity and best practices."
+category: "config"
+level: "beginner"
+time: "15 minutes"
+order: 5
+steps:
+  - id: 1
+    title: "Set your name"
+    description: ""
+    allowedCommands:
+      - cmd: "git config --global user.name"
+        valid: null
+        output: []
+        hint: ""
+
+  - id: 2
+    title: "Set your email"
+    description: ""
+    allowedCommands:
+      - cmd: "git config --global user.email"
+        valid: null
+        output: []
+        hint: ""
+
+  - id: 3
+    title: "Set default editor"
+    description: ""
+    allowedCommands:
+      - cmd: "git config --global core.editor"
+        valid: null
+        output: []
+        hint: ""
+
+  - id: 4
+    title: "Set default branch name"
+    description: ""
+    allowedCommands:
+      - cmd: "git config --global init.defaultBranch"
+        valid: null
+        output: []
+        hint: ""
+
+  - id: 5
+    title: "Enable color output"
+    description: ""
+    allowedCommands:
+      - cmd: "git config --global color.ui"
+        valid: null
+        output: []
+        hint: ""
+
+  - id: 6
+    title: "Set push default"
+    description: ""
+    allowedCommands:
+      - cmd: "git config --global push.default"
+        valid: null
+        output: []
+        hint: ""
+
+  - id: 7
+    title: "Enable pull rebase"
+    description: ""
+    allowedCommands:
+      - cmd: "git config --global pull.rebase"
+        valid: null
+        output: []
+        hint: ""
+
+  - id: 8
+    title: "Set merge tool"
+    description: ""
+    allowedCommands:
+      - cmd: "git config --global merge.tool"
+        valid: null
+        output: []
+        hint: ""
+
+  - id: 9
+    title: "Enable autocrlf"
+    description: ""
+    allowedCommands:
+      - cmd: "git config --global core.autocrlf"
+        valid: null
+        output: []
+        hint: ""
+
+  - id: 10
+    title: "Set credential helper"
+    description: ""
+    allowedCommands:
+      - cmd: "git config --global credential.helper"
+        valid: null
+        output: []
+        hint: ""

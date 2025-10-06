@@ -1,0 +1,376 @@
+title: "Top 10 Aliases"
+description: "My essential Git aliases that may help you to speed up your workflow. This lesson covers my most useful Git aliases for productivity and workflow optimization."
+category: "config"
+level: "intermediate"
+time: "15 minutes"
+order: 6
+related:
+  - git-rebase
+  - git-rebase-interactive
+steps:
+  - id: 1
+    title: "Status alias"
+    description: "Add a very short alias for the status command"
+    allowedCommands:
+      - cmd: "git config --global alias.st status"
+        valid: "^git\\s+config\\s+--global\\s+alias\\.st\\s+status$"
+        output: []
+        hint: "Since <code>git status</code> is a very common command, we should create a very short alias for it (maybe even just <code>s</code>)."
+      - cmd: "git config --global alias.ss 'status -s'"
+        valid: "^git\\s+config\\s+--global\\s+alias\\.ss\\s+['|\"]status\\s+-s['|\"]$"
+        output: []
+        hint: "We can also use the short version <code>status -s</code> to show a condensed version of the status."
+  
+  - id: 2
+    title: "Run status alias"
+    description: "Test the newly created status aliases"
+    allowedCommands:
+      - cmd: "git ss"
+        valid: "^git\\s+ss$"
+        output:
+          - text: " M src/some-changed-file.code\n M src/some-other-changed-file.code\n?? docs/some-untracked-file.md"
+            hint: "The <code>git ss</code> command now shows the <code>--short</code> status of the repository."
+        hint: ""
+
+  - id: 3
+    title: "Config alias"
+    description: "Add a alias to edit the configuration"
+    allowedCommands:
+      - cmd: "git config --global alias.cfg 'config --edit --global'"
+        valid: "^git\\s+config\\s+--global\\s+alias\\.cfg\\s+['|\"]config\\s+--edit\\s+--global['|\"]$"
+        output: []
+        hint: "This alias allows you to quickly edit the global configuration file."
+      - cmd: "git config --global alias.cfl 'config --edit'"
+        valid: "^git\\s+config\\s+--global\\s+alias\\.cfl\\s+['|\"]config\\s+--edit['|\"]$"
+        output: []
+        hint: "This alias allows you to quickly edit the local configuration."
+
+  - id: 4
+    title: "Run config alias"
+    description: "Test the newly created config aliases"
+    allowedCommands:
+      - cmd: "git cfl"
+        valid: "^git\\s+cfl$"
+        editor:
+          - text: |
+              [core]
+                      repositoryformatversion = 0
+                      filemode = true
+                      bare = false
+                      logallrefupdates = true
+                      ignorecase = true
+                      precomposeunicode = true
+              [remote "origin"]
+                      url = git@github.com:sebastianfeldmann/learngit.online.git
+                      fetch = +refs/heads/*:refs/remotes/origin/*
+              [branch "main"]
+                      remote = origin
+                      merge = refs/heads/main
+                      vscode-merge-base = origin/main
+            hint: "The <code>git cfl</code> command now opens the local configuration file in your default editor."
+        hint: ""
+
+  - id: 5
+    title: "Close editor"
+    description: "Close the editor"
+    allowedCommands:
+      - cmd: ":q"
+        valid: "^\\:q$"
+        output: []
+        hint: "Close the editor"
+
+  - id: 6
+    title: "Log alias"
+    description: ""
+    allowedCommands:
+      - cmd: "git config --global alias.l 'log --oneline --graph --decorate --abbrev-commit'"
+        valid: "^git\\s+config\\s+--global\\s+alias\\.l\\s+['|\"]log\\s+--oneline\\s+--graph\\s+--decorate\\s+--abbrev-commit['|\"]$"
+        output: []
+        hint: "This alias allows you to quickly view the commit history with a compact view."
+      - cmd: "git config --global alias.ll 'log --oneline --graph --decorate --name-only'"
+        valid: "^git\\s+config\\s+--global\\s+alias\\.ll\\s+['|\"]log\\s+--oneline\\s+--graph\\s+--decorate\\s+--name-only['|\"]$"
+        output: []
+        hint: "Same thing and additionally shows the names of the changed files."
+      - cmd: "git config --global alias.lol \"log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'\""
+        valid: "^git\\s+config\\s+--global\\s+alias\\.lol\\s+\"log --color --graph --pretty=format:'%Cred%h%Creset -%C\\(yellow\\)%d%Creset %s %Cgreen\\(%cr\\) %C\\(bold blue\\)<%an>%Creset'\"$"
+        output: []
+        hint: "Optionally you can also define your own color scheme and further customize the output."
+
+  - id: 7
+    title: "Run log alias"
+    description: "Test the newly created log aliases"
+    allowedCommands:
+      - cmd: "git l"
+        valid: "^git\\s+l$"
+        output:
+          - text: |
+              * a1b2c3d (HEAD -> main) Latest commit
+              * e4f5g6h Previous commit
+              * f7g8h9i Initial commit
+            hint: "The <code>git l</code> alias shows a compact, visual representation of your commit history with branches and tags."
+        hint: ""
+
+  - id: 8
+    title: "Tag alias"
+    description: ""
+    allowedCommands:
+      - cmd: "git config --global alias.taga 'tag -a -m'"
+        valid: "^git\\s+config\\s+--global\\s+alias\\.taga\\s+['|\"]tag\\s+-a\\s+-m['|\"]$"
+        output: []
+        hint: "Since I personally only want <em>annotated</em> tags I use this alias."
+      - cmd: "git config --global alias.tagd 'push --delete origin'"
+        valid: "^git\\s+config\\s+--global\\s+alias\\.tagd\\s+['|\"]push\\s+--delete\\s+origin['|\"]$"
+        output: []
+        hint: "<strong>tag delete:</strong> I always forget the command to delete remote tags, so I created an alias for it."
+      - cmd: "git config --global alias.tagv 'tag --sort=-v:refname'"
+        valid: "^git\\s+config\\s+--global\\s+alias\\.tagv\\s+['|\"]tag\\s+--sort=-v\\:refname['|\"]$"
+        output: []
+        hint: "<strong>tag version:</strong> The default sorting for tags is not really helpful, especially when you are using <a href=\"https://semver.org/\">Semantic Versioning</a>."
+      - cmd: "git config --global alias.tagm 'tag --sort=-creatordate' -m"
+        valid: "^git\\s+config\\s+--global\\s+alias\\.tagm\\s+['|\"]tag\\s+--sort=-creatordate['|\"]\\s+-m$"
+        output: []
+        hint: "<strong>tag message:</strong> Sorting by <code>-creatordate</code> puts the latest <em>tag</em> first. With <code>-m</code> you can also display the corresponding <em>commit message</em>."
+
+  - id: 9
+    title: "Show default sorting"
+    description: "Show the default sorting for tags"
+    allowedCommands:
+      - cmd: "git tag --list"
+        valid: "^git\\s+tag\\s+--list$"
+        output:
+          - text: "1.1.0"
+          - text: "1.10.0"
+            hint: "The default sorting is messing up the order of <em>semver</em> tags."
+          - text: "1.2.0\n1.3.0"  
+        hint: "Show default sorting for tags."
+
+  - id: 10
+    title: "Run tagv alias"
+    description: "Use the v:refname sorting"
+    allowedCommands:
+      - cmd: "git tagv"
+        valid: "^git\\s+tagv$"
+        output:
+          - text: |
+              1.1.0
+              1.2.0
+              1.3.0
+              1.10.0
+            hint: "By using <code>v:refname</code> for <code>--sort</code> the tags are ordered properly by version number."
+        hint: "Use the <code>tagv</code> alias to sort tags by version number."
+
+  - id: 11
+    title: "Push alias"
+    description: "Make sure to not overwrite changes you do not know about"
+    allowedCommands:
+      - cmd: "git config --global alias.fpush 'push --force-with-lease'"
+        valid: "^git\\s+config\\s+--global\\s+alias\\.fpush\\s+['|\"]push\\s+--force-with-lease['|\"]$"
+        output: []
+        hint: "Make sure you are using <code>--force-with-lease</code> to avoid overwriting changes that have been pushed by someone else."
+
+  - id: 12
+    title: "Autosquash alias"
+    description: "Rebase interactively non-interactively"
+    allowedCommands:
+      - cmd: "git config --global alias.ar '-c sequence.editor=: rebase --autosquash --interactive'"
+        valid: "^git\\s+config\\s+--global\\s+alias\\.ar\\s+['|\"]-c sequence\\.editor=\\: rebase --autosquash --interactive['|\"]$"
+        output: []
+        hint: |
+          <strong>automatic-rebase:</strong> This alias allows you to rebase interactively in a non-interactive way.
+          Meaning that it will not open the editor but nevertheless automatically <em>--autosquash</em> the commits.
+          By setting the <code>sequence.editor</code> to null Git will just accept the rebase configuration
+          as is and since we are using the <code>--autosquash</code> flag it will automatically
+          re-order and <em>squash</em> the commits.<br>
+          <br>
+          This is useful to quickly incorporate fixes, that you set up with <code>--squash</code> or <code>--fixup</code>, for commits before the current commit.
+      - cmd: "git config --global alias.as '-c sequence.editor=: rebase --autosquash --interactive --keep-base'"
+        valid: "^git\\s+config\\s+--global\\s+alias\\.as\\s+['|\"]-c sequence\\.editor=\\: rebase --autosquash --interactive --keep-base['|\"]$"
+        output: []
+        hint: |
+          <strong>pure autosquash:</strong> This only incorporates <code>--fixup</code> and <code>--squash</code> commits but does not actually rebase.
+          Meaning this will not incorporate new commits from the base branch. Because of <code>--keep-base</code> it will only work on the commits that are already in the current <em>branch</em>.
+
+  - id: 13
+    title: "Automatic rebase"
+    description: "Show the current state of the repository"
+    allowedCommands:
+      - cmd: "git log --oneline --graph"
+        valid: "^git\\s+log\\s+--oneline\\s+--graph$"
+        output:
+          - text: |
+              * 05b9686 (HEAD -> feature/x) fixup! First step
+              * 308979a Second step
+              * f8108b9 First step
+            hint: "We have 3 commits in our <code>feature/x</code> <em>branch</em>. The first <em>commit</em> <code>f8108b9</code> needs a patch that was applied in the <code>!fixup</code> commit <code>05b9686</code>."
+          - text: |
+              | * 22b7d97 (main) New commit in main
+            hint: "There is a new commit in the <code>main</code> <em>branch</em>."
+          - text: |
+              |/
+              * 27b7f2b Last common commit in main
+              ...
+            hint: ""
+
+  - id: 14
+    title: "Automatic rebase"
+    description: "Do an automatic rebase of the feature/x branch"
+    allowedCommands:
+      - cmd: "git ar main"
+        valid: "^git\\s+ar\\s+main$"
+        output:
+          - text: "Successfully rebased and updated refs/heads/feature/x."
+
+  - id: 15
+    title: "Automatic rebase result"
+    description: "Show the result of the automatic rebase"
+    allowedCommands:
+      - cmd: "git log --oneline --graph"
+        valid: "^git\\s+log\\s+--oneline\\s+--graph$"
+        output:
+          - text: |
+              * 7a8b9c0 Second step
+              * 4567890 First step
+            hint: "The <code>--fixup</code> commit is now incorporated into the first <code>4567890</code> <em>commit</em>."
+          - text: |
+              * 22b7d97 (main) New commit in main
+            hint: "The new commit is now incorporated into the <code>feature/x</code> <em>branch</em>."
+          - text: |
+              * 27b7f2b Last common commit in main
+              ...
+            hint: ""
+
+  - id: 16
+    title: "Automatic autosquash"
+    description: "Show the current state of the repository"
+    allowedCommands:
+      - cmd: "git log --oneline --graph"
+        valid: "^git\\s+log\\s+--oneline\\s+--graph$"
+        output:
+          - text: |
+              * 05b9686 (HEAD -> feature/x) fixup! First step
+              * 308979a Second step
+              * f8108b9 First step
+            hint: "We have 3 commits in our <code>feature/x</code> <em>branch</em>. The first <em>commit</em> <code>f8108b9</code> needs a patch that was applied in the <code>!fixup</code> commit <code>05b9686</code>."
+          - text: |
+              | * 22b7d97 (main) New commit in main
+            hint: "There is a new commit in the <code>main</code> <em>branch</em>."
+          - text: |
+              |/
+              * 27b7f2b Last common commit in main
+              ...
+            hint: ""
+
+  - id: 17
+    title: "Use auto autosquash alias"
+    description: "Do an automatic autosquash while keeping the branch base"
+    allowedCommands:
+      - cmd: "git as main"
+        valid: "^git\\s+as\\s+main$"
+        output:
+          - text: "Successfully rebased and updated refs/heads/feature/x."
+
+  - id: 18
+    title: "Automatic autosquash result"
+    description: "Show the result of the automatic autosquash"
+    allowedCommands:
+      - cmd: "git log --oneline --graph"
+        valid: "^git\\s+log\\s+--oneline\\s+--graph$"
+        output:
+          - text: |
+              * 5b96c86 Second step
+              * d56f890 First step
+            hint: "The <code>--fixup</code> commit is now incorporated into the first <em>commit</em> <code>d56f890</code>. That's because we are using the <code>--autosquash</code> flag."
+          - text: |
+              | * 22b7d97 (main) New commit in main
+            hint: "The new commit <code>22b7d97</code> is still only in the <code>main</code> <em>branch</em>. That's because we are using the <code>--keep-base</code> flag."
+          - text: |
+              |/
+              * 27b7f2b Last common commit in main
+              ...
+            hint: ""
+
+  - id: 19
+    title: "Fuzzy switch alias"
+    description: "Create an alias to trigger a fuzzy search to switch branches"
+    allowedCommands:
+      - cmd: "git config --global alias.fswitch '!git switch $(git branch --sort=committerdate | fzf --tac)'"
+        valid: "^git\\s+config\\s+--global\\s+alias\\.fswitch\\s+['|\"]!git switch \\$\\(git branch --sort=committerdate \\| fzf --tac\\)['|\"]$"
+        output: []
+        hint: |
+          <strong>fuzzy switch:</strong> This is a convenient way to switch branches as soon as you have more then a few.
+          <br>
+          ⚠️ <strong>Beware:</strong> This only works if you have <code>fzf</code> installed. You can replace <code>fzf</code> with
+          <code>fd</code> or <code>fzy</code> or any other fuzzy search tool you prefer.
+
+  - id: 20
+    title: "Change Frequency statistics"
+    desciption: "Create an alias to show some change statistics"
+    allowedCommands:
+      - cmd: "git config --global alias.cc '!git log --format=format:\"%aN\" | sort | uniq -c | sort -nr'"
+        valid: "^git\\s+config\\s+--global\\s+alias\\.cc\\s+['|\"]!git log --format=format:\"%aN\" | sort | uniq -c | sort -nr['|\"]$"
+        output: []
+        hint: |
+          <strong>count commits:</strong> This <em>alias</em> counts the number of changes made to a file and shows the top 10 files with the most changes.
+
+  - id: 21
+    title: "Run change frequency alias"
+    description: "Show the change frequency statistics"
+    allowedCommands:
+      - cmd: "git cc"
+        valid: "^git\\s+cc$"
+        output:
+          - text: |
+              155 src/CH.php
+               79 composer.json
+               77 README.md
+               72 src/Runner/Hook.php
+               59 .github/workflows/integration.yml
+               56 src/Runner/Installer.php
+               45 src/Console/Command/Hook.php
+               45 src/Config.php
+               43 src/Console/Command/Install.php
+               42 src/Config/Factory.php
+            hint: "Change frequency can be a nice indicator of what files are most important to the project. The stat can also be useful to identify areas where we need to improve."
+
+  - id: 22
+    title: "List config section"
+    description: "List all settings in a git config section"
+    allowedCommands:
+      - cmd: "git config --global alias.cfs \"\\!sh -c 'section=\\${1:-user}; git --no-pager config --get-regexp \\\"^\\${section}\\\\.\\\"' -\""
+        valid: "^git\\s+config\\s+--global\\s+alias.*"
+        output:
+          - text: ""
+        hint: "Creates an <em>alias</em> that let you list all settings in a git <em>config</em> section."
+
+  - id: 23
+    title: "Run config section alias"
+    description: "List all settings in the user section"
+    allowedCommands:
+      - cmd: "git cfs alias"
+        valid: "^git\\s+cfs\\s+alias$"
+        output:
+          - text: |
+              alias.cfg config --global --edit
+              alias.cfl config --edit
+              alias.cfs !sh -c 'section=${1:-user}; git --no-pager config --get-regexp "^${section}\."' -
+              alias.s status
+              alias.ss status -s
+              alias.l log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+              alias.ll log --color --graph --pretty=format:'%Cred%h%Creset %C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)%an%Creset%n' --name-only
+              alias.lol log --oneline --graph --all
+              alias.logs log --show-signature
+              alias.taga tag -a -m
+              alias.tagd push --delete origin
+              alias.tagl tag --sort=-creatordate
+              alias.tagm tag --sort=-creatordate -m
+              alias.tagv tag --sort=-v:refname
+              alias.fixup commit --fixup
+              alias.squash commit --squash
+              alias.ar -c sequence.editor=: rebase --autosquash --interactive
+              alias.as -c sequence.editor=: rebase --autosquash --interactive --keep-base
+              alias.fpush push --force-with-lease
+              alias.fswitch !git switch $(git branch --sort=committerdate | fzf --tac)
+              alias.cc !git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -10
+            hint: |
+              <h5>Summary</h5>
+              <p>There you have it, a list of 10+ aliases that will make your life easier.</p>

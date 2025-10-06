@@ -1,0 +1,356 @@
+title: "Autosquashing"
+description: "Learn how to use git commit --fixup and --squash to create commits that can be automatically combined with previous commits during interactive rebase. This helps maintain a clean commit history."
+category: "branching"
+level: "advanced"
+time: "20 minutes"
+order: 5
+steps:
+  - id: 1
+    title: "Create a new branch"
+    description: "Create a new branch to work on"
+    allowedCommands:
+      - cmd: "git switch -c feature/calculator"
+        valid: "^git\\s+switch\\s+-c\\s+feature/calculator$"
+        output:
+          - text: "Switched to a new branch 'feature/calculator'"
+        hint: "Create a new branch to work on"
+
+  - id: 2
+    title: "Add new file"
+    description: "Let's start by creating a new file"
+    allowedCommands:
+      - cmd: "vim calculator.js"
+        valid: "^vim\\s+calculator\\.js$"
+        editor:
+          - text: |
+              function calculateSum(a, b) {
+                return a + b;
+              }
+        hint: "We're creating a JavaScript file with a simple function"
+
+  - id: 3
+    title: "Save the file"
+    description: "Save the file"
+    allowedCommands:
+      - cmd: ":wq"
+        valid: "^\\:wq$"
+        output: []
+        hint: "Save the file"
+
+  - id: 4
+    title: "Commit the changes"
+    description: "Add and commit the calculator function"
+    allowedCommands:
+      - cmd: "git add calculator.js && git commit -m \"Add calculateSum function\""
+        valid: "^git\\s+add\\s+calculator\\.js\\s+&&\\s+git\\s+commit\\s+-m\\s+'|\"Add calculateSum function'|\"$"
+        output:
+          - text: |
+              [feature/calculate 6a1b4c3] Add calculateSum function
+               1 file changed, 3 insertions(+)
+               create mode 100644 calculator.js
+            hint: "Great! We've created first commit with the calculator function."
+
+  - id: 5
+    title: "Add second function"
+    description: "Let's add a multiply function to our calculator"
+    allowedCommands:
+      - cmd: "vim calculator.js"
+        valid: "^vim\\s+calculator\\.js$"
+        editor:
+          - text: |
+              function calculateSum(a, b) {
+                return a + b;
+              }
+
+              function calculateProduct(a, b) {
+                return Number(a) * Number(b);
+              }
+        hint: "Second function"
+
+  - id: 6
+    title: "Save the file"
+    description: "Save the file"
+    allowedCommands:
+      - cmd: ":wq"
+        valid: "^\\:wq$"
+        output: []
+
+  - id: 7
+    title: "Commit new function"
+    description: "Add and commit the new function"
+    allowedCommands:
+      - cmd: "git commit -am \"Add calculateProduct function\""
+        valid: "^git\\s+commit\\s+-am\\s+'|\"Add calculateProduct function'|\"$"
+        output: 
+          - text: |
+              [feature/calculator de5f271] Add calculateProduct function
+               1 file changed, 4 insertions(+)
+            hint: "Perfect! Now we have two commits in our history."
+
+  - id: 8
+    title: "Fix potential bug"
+    description: "Oh no! We realize there's an issue with our calculateSum function. Let's fix it."
+    allowedCommands:
+      - cmd: "vim calculator.js"
+        valid: "^vim\\s+calculator\\.js$"
+        editor:
+          - text: "function calculateSum(a, b) {"
+          - text: "  return Number(a) + Number(b);"
+            hint: "We're optimizing the function to handle string inputs properly by converting to numbers"
+          - text: |
+              }
+
+              function calculateProduct(a, b) {
+                return Number(a) * Number(b);
+              }
+
+  - id: 9
+    title: "Save the file"
+    description: "Save the file"
+    allowedCommands:
+      - cmd: ":wq"
+        valid: "^\\:wq$"
+        output: []
+        hint: "Save the file"
+
+  - id: 10
+    title: "View the commit history"
+    description: "Let's see our current commit history before committing the fix"
+    allowedCommands:
+      - cmd: "git log --oneline"
+        valid: "^git\\s+log\\s+--oneline$"
+        output:
+          - text: |
+              de5f271 Add calculateProduct function
+              6a1b4c3 Add calculateSum function
+            hint: "We can see our two commits. We want to fix the first one <code>6a1b4c3</code> without creating a messy history."
+
+  - id: 11
+    title: "Stage changes"
+    description: "Stage our fixes to prepare the commit"
+    allowedCommands:
+      - cmd: "git add calculator.js"
+        valid: "^git\\s+add\\s+calculator\\.js$"
+        output: []
+        hint: "Stage the fix"
+        
+  - id: 12
+    title: "Create a fixup commit"
+    description: "Instead of creating a regular commit, let's create a fixup commit that targets the first commit"
+    allowedCommands:
+      - cmd: "git commit --fixup 6a1b4c3"
+        valid: "^git\\s+commit\\s+--fixup\\s+6a1b4c3$"
+        output:
+          - text: "[feature/calculator 7d99012] fixup! Add calculateSum function"
+            hint: "Notice the commit message starts with <code>fixup!</code>."
+          - text: "1 file changed, 1 insertion(+), 1 deletion(-)"            
+        hint: "For <code>--fixup</code> commits we don't have to specify a commit message. Git will use the commit message of the commit we are fixing."
+
+  - id: 13
+    title: "View commit history"
+    description: "Let's check how our history looks now"
+    allowedCommands:
+      - cmd: "git log --oneline"
+        valid: "^git\\s+log\\s+--oneline$"
+        output:
+          - text: "7d99012 fixup! Add calculateSum function"
+            hint: "Now we have a <code>--fixup</code> commit that references the original commit."
+          - text: |
+              de5f271 Add calculateProduct function
+              6a1b4c3 Add calculateSum function
+            
+  - id: 14
+    title: "Add a comment"
+    description: "Let's add a comment to our multiply function"
+    allowedCommands:
+      - cmd: "vim calculator.js"
+        valid: "^vim\\s+calculator\\.js$"
+        editor:
+          - text: |
+              function calculateSum(a, b) {
+                return Number(a) + Number(b);
+              }
+          - text: ""
+          - text: "// Multiplies two numbers"
+            hint: "We are adding this super helpful comment."
+          - text: |
+              function calculateProduct(a, b) {
+                return Number(a) * Number(b);
+              }
+        hint: "Adding a comment for the calculateProduct function"
+
+  - id: 15
+    title: "Save the file"
+    description: "Save the file"
+    allowedCommands:
+      - cmd: ":wq"
+        valid: "^\\:wq$"
+        output: []
+        hint: "Save the file"
+
+  - id: 16
+    title: "Stage the changes"
+    description: "Stage the changes"
+    allowedCommands:
+      - cmd: "git add calculator.js"
+        valid: "^git\\s+add\\s+calculator\\.js$"
+        output: []
+
+  - id: 17
+    title: "Create a squash commit"
+    description: "Use --squash to create a commit that will be combined with the multiply function commit"
+    allowedCommands:
+      - cmd: "git commit --squash def5678 -m \"Add helpful comment\""
+        valid: "^git\\s+commit\\s+--squash\\s+def5678\\s+-m\\s+'|\"Add helpful comment to multiply function'|\"$"
+        output:
+          - text: "[feature/calculator a3d4a12] squash! Add calculateProduct function"
+            hint: "The <code>--squash</code> option creates a commit that will be combined with the target commit, but allows you to edit the commit message during <em>rebase</em>."
+          - text: "1 file changed, 1 insertion(+)"
+        hint: "Contrary to the <code>--fixup</code> commit we have to provide a <em>commit message</em> for the <code>--squash</code> commit."
+
+  - id: 18
+    title: "View commit history"
+    description: "Let's look at our complete history before rebasing"
+    allowedCommands:
+      - cmd: "git log --oneline"
+        valid: "^git\\s+log\\s+--oneline$"
+        output:
+          - text: "a3d4a12 squash! Add calculateProduct function"
+            hint: "This is our <code>--squash</code> commit."
+          - text: "7d99012 fixup! Add calculateSum function"
+            hint: "This is our <code>--fixup</code> commit."
+          - text: |
+              de5f678 Add calculateProduct function
+              6a1b4c3 Add calculateSum function
+            hint: "Perfect! We now have both <code>--fixup</code> and <code>--squash</code> commits.<br><strong>Now let's make the magic happen! 🧙‍♂️</strong>"
+
+  - id: 19
+    title: "Perform autosquash rebase"
+    description: "Use interactive rebase with autosquash to automatically reorder and combine fixup and squash commits"
+    allowedCommands:
+      - cmd: "git rebase -i --autosquash --keep-base main"
+        valid: "^git\\s+rebase\\s+-i\\s+--autosquash\\s+--keep-base\\s+main$"
+        editor:
+          - text: |
+              pick 6a1b4c3 # Add calculateSum function
+              fixup 7d99012 # fixup! Add calculateProduct function
+              pick de5f678 # Add calculateProduct function
+              squash a3d4a12 # squash! Add calculateProduct function
+            hint: "The <code>--autosquash</code> option automatically reorders and marks fixup/squash commits for combination. You don't have to do anything here. Just save and quit."
+          - text: ""  
+          - text: | 
+              # Rebase 27b7f2b..a3d4a12 onto 27b7f2b (4 commands)
+              #
+              # Commands:
+              # p, pick <commit> = use commit
+              # r, reword <commit> = use commit, but edit the commit message
+              # e, edit <commit> = use commit, but stop for amending
+              # s, squash <commit> = use commit, but meld into previous commit
+              # f, fixup [-C | -c] <commit> = like "squash" but keep only the previous
+              #                    commit's log message, unless -C is used, in which case
+              #                    keep only this commit's message; -c is same as -C but
+              #                    opens the editor
+              ...
+            hint: ""
+        hint: "We are using the <code>--keep-base</code> options makes sure we do not incorporate new commits from the <em>base branch</em> we just reorder and squash out local <em>branch</em>."
+  
+  - id: 20
+    title: "Save and quit"
+    description: "Save and finish the interactive rebase"
+    allowedCommands:
+      - cmd: ":wq"
+        valid: "^:wq$"
+        editor:
+          - text: |
+              # This is a combination of 2 commits.
+              # This is the 1st commit message:
+
+              Add calculateProduct function
+
+              # This is the commit message #2:
+
+              # squash! Add calculateProduct function
+
+              Add helpful comment
+
+              # Please enter the commit message for your changes. Lines starting
+              # with '#' will be ignored, and an empty message aborts the commit.
+            hint: "Since we used <code>--squash</code> for the second fix Git presents us with both commit messages and lets us edit the final commit message."
+          - text: ""
+  
+  - id: 21
+    title: "Combine commit messages"
+    description: "Create a commit message for the squashed commit"
+    allowedCommands:
+      - cmd: ":4,9d"
+        valid: "^:4,9d$"
+        editor:
+          - text: |
+              # This is a combination of 2 commits.
+              # This is the 1st commit message:
+
+              Add helpful comment
+
+              # Please enter the commit message for your changes. Lines starting
+              # with '#' will be ignored, and an empty message aborts the commit.
+          - text: ""
+        hint: "Delete the lines 4 to 9."
+
+  - id: 22
+    title: "Combine commit messages"
+    description: "Create a commit message for the squashed commit"
+    allowedCommands:
+      - cmd: ":4s/.*/Add calculateProduct function with comment/"
+        valid: "^:4s\\/.*\\/Add calculateProduct function with comment\\/$"
+        editor:
+          - text: |
+              # This is a combination of 2 commits.
+              # This is the 1st commit message:
+
+              Add calculateProduct function with comment
+
+              # Please enter the commit message for your changes. Lines starting
+              # with '#' will be ignored, and an empty message aborts the commit.
+          - text: ""
+        hint: "Replace content of line 4"
+
+  - id: 23
+    title: "Save and quit"
+    description: "Save and finish the interactive rebase"
+    allowedCommands:
+      - cmd: ":wq"
+        valid: "^:wq$"
+        output:
+          - text: "Successfully rebased and updated refs/heads/feature/calculator."
+        hint: "Save and quit"
+
+  - id: 24
+    title: "View clean history"
+    description: "Let's look at our cleaned up commit history"
+    allowedCommands:
+      - cmd: "git log --oneline"
+        valid: "^git\\s+log\\s+--oneline$"
+        output:
+          - text: |
+              5ac7890 Add calculateProduct function with comment
+              90a4567 Add calculateSum function
+              ...
+            hint: |
+              <p><strong>Excellent!</strong> Our history is now clean with just two commits.
+              The <code>--fixup</code> commit was automatically merged into the
+              new calculateSum commit <code>90a4567</code>,
+              and the <code>--squash</code> commit was merged with the calculateProduct
+              commit <code>5ac7890</code> and got the new <em>commit message</em>.</p>
+              <p>This is extremely useful when you are working on a feature branch and want
+              to incorporate changes requested in a <em>Code Review</em>. You can address
+              requested changes in a seperate <em>commit</em> and incorporate them into the
+              correct <em>commit</em> by simply <code>--autosquash</code> the branch before merging.</p>
+              <h5>Things to considder</h5>
+              <p>Do not use <code>--fixup</code> or <code>--squash</code> for commits you already shared.
+              Generally the same rules apply as for <em>rebase</em>. So be mindful of what you are doing.
+              Otherwise you will be scorned by friends and family.</p>
+              <p>Do not merge <code>--fixup</code> or <code>--squash</code> commits into shared branches (main, dev, ...).
+              Always <em>rebase</em> before merging!
+                
+
+
