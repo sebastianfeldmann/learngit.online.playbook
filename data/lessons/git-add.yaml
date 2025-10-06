@@ -4,8 +4,6 @@ category: "changes"
 level: "beginner"
 time: "8 minutes"
 order: 1
-previous: null
-next: null
 steps:
   - id: 1
     title: "Check repository status"

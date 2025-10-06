@@ -1,6 +1,6 @@
 # LearnGit.online Playbook
 
-This repository contains the lessons for LearnGit.online, a platform teaching Git beyond the basics. Each lesson is stored in a **YAML format**, which makes it easy to read, edit, and contribute to. Lessons are structured as step-by-step scenarios with explanations, hints, and exercises, ready to be used at [leangit.online](http://learngit.online).
+This repository contains the lessons for LearnGit.online, a platform teaching Git beyond the basics. Each lesson is stored in a **YAML file**, which makes it easy to read, edit, and contribute to. Lessons are structured as step-by-step scenarios with detailed explanations. You can see them in action at [learngit.online](http://learngit.online).
 
 ⚠️ **Work in Progress**  
 This repository is still in early development. The lesson format, structure, and content may change at any time.
@@ -15,7 +15,6 @@ Each lesson contains metadata and a list of steps. Key fields include:
 - `level` – Difficulty level (e.g., "beginner", "intermediate").
 - `time` – Estimated duration of the lesson.
 - `order` – Order in the sequence of lessons.
-- `previous` / `next` – Links to the previous and next lesson.
 - `steps` – The detailed steps of the lesson.
 
 Each step can include:
@@ -39,8 +38,6 @@ category: "basics"
 level: "beginner"
 time: "10 minutes"
 order: 1
-previous: null
-next: "git-push"
 steps:
   - id: 1
     title: "Check repository status"
@@ -56,8 +53,12 @@ steps:
                 README.md
                 .gitignore
               nothing added to commit but untracked files present (use "git add" to track)
-            hint: "This output shows we're on the <b>main</b> <i>branch</i> with no <i>commits</i> yet, and have <b>2 untracked files</b> that need to be added to version control."
-        hint: "Shows the <strong>working tree status</strong> - which files are <i>tracked</i>, <i>untracked</i>, or <i>staged</i> for commit"
+            hint: |
+              This output shows we're on the <b>main</b> <i>branch</i> with no <i>commits</i> yet,
+              and have <b>2 untracked files</b> that need to be added to version control.
+        hint: |
+          Shows the <em>working tree</em> status - which files are <em>tracked</em>,
+          <em>untracked</em>, or <em>staged</em> for commit
 ```
 
 ## License

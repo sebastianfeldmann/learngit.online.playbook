@@ -4,8 +4,6 @@ category: "internals"
 level: "advanced"
 time: "10 minutes"
 order: 3
-next: null
-previous: null
 steps:
   - id: 1
     title: "Check HEAD status"

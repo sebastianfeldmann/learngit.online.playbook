@@ -4,8 +4,6 @@ category: "internals"
 level: "advanced"
 time: "15 minutes"
 order: 2
-next: null
-previous: null
 steps:
   - id: 1
     title: "Create a new file"

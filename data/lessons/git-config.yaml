@@ -4,8 +4,6 @@ category: "config"
 level: "beginner"
 time: "12 minutes"
 order: 1
-previous: null
-next: null
 steps:
   - id: 1
     title: "Check current configuration"

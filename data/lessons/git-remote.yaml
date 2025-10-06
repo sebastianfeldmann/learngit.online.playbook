@@ -4,8 +4,6 @@ category: "remote"
 level: "beginner"
 time: "8 minutes"
 order: 3
-previous: null
-next: null
 steps:
   - id: 1
     title: "Add a remote repository"

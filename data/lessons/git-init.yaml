@@ -1,8 +1,8 @@
-title: "Git Basics"
-description: "If you understand the basics and feel comfortable using Git for version control it is time to look into the core concepts and some advanced features. Use this guided course and follow along."
-category: "courses"
+title: "Git Init"
+description: "Learn how to initialize a new Git repository. This lesson will guide you through creating a new directory and initializing a new Git repository."
+category: "basics"
 level: "beginner"
-time: "45 minutes"
+time: "5 minutes"
 order: 1
 next: null
 previous: null
