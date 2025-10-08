@@ -1,96 +1,364 @@
-title: "10 Must Use Settings"
-description: "Essential Git configuration settings that every developer should know and use. This lesson covers the most important global Git settings for productivity and best practices."
+title: "Better default settings"
+description: "Essential Git configuration settings that every developer should know and use. This lesson covers config settings that should be the deault but sadly aren't yet."
 category: "config"
-level: "beginner"
+level: "intermediate"
 time: "15 minutes"
 order: 5
 steps:
   - id: 1
-    title: "Set your name"
+    title: "Push new branch"
     description: ""
     allowedCommands:
-      - cmd: "git config --global user.name"
-        valid: null
-        output: []
-        hint: ""
+      - cmd: "git push"
+        valid: "^git\\s+push$"
+        output:
+          - text: |
+              fatal: The current branch feature has no upstream branch.
+              To push the current branch and set the remote as upstream, use
+
+                  git push --set-upstream origin feature
+
+              To have this happen automatically for branches without a tracking
+          - text: "upstream, see 'push.autoSetupRemote' in 'git help config'."
+            hint: "Git is tellung to investigate the <code>push.autoSetupRemote</code> setting. Let's just set it."
+        hint: "Push a branch that has no tracking branch."
 
   - id: 2
-    title: "Set your email"
+    title: "Set autoSetupRemote"
     description: ""
     allowedCommands:
-      - cmd: "git config --global user.email"
-        valid: null
+      - cmd: "git config --global push.autoSetupRemote true"
+        valid: "^git\\s+config\\s+--global\\s+push\\.autoSetupRemote\\s+true$"
         output: []
         hint: ""
 
   - id: 3
-    title: "Set default editor"
-    description: ""
+    title: "Push new branch"
+    description: "Push the new tag to the remote repository"
     allowedCommands:
-      - cmd: "git config --global core.editor"
-        valid: null
-        output: []
-        hint: ""
-
+      - cmd: "git push"
+        valid: "^git\\s+push$"
+        output:
+          - text: |
+              Enumerating objects: 4, done.
+              Counting objects: 100% (4/4), done.
+              Delta compression using up to 16 threads
+              Compressing objects: 100% (2/2), done.
+              Writing objects: 100% (3/3), 717 bytes | 717.00 KiB/s, done.
+              Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+              To github.com:sebastianfeldmann/learngit.online.lesson.config.git
+              * [new branch]      feature -> feature
+              branch 'feature' set up to track 'origin/feature'.
+            hint: "Git now sets up the tracking branch automaticly and pushes the new branch to the remote repository."
+  
   - id: 4
-    title: "Set default branch name"
-    description: ""
+    title: "Set new tag"
+    description: "Setup a new tag on the latest commit"
     allowedCommands:
-      - cmd: "git config --global init.defaultBranch"
-        valid: null
+      - cmd: "git tag -a 1.11.0 -m \"Release version 1.11.0\""
+        valid: "^git\\s+tag\\s+-a\\s+1\\.11\\.0\\s+-m\\s+\"Release\\s+version\\s+1\\.11\\.0\"$"
         output: []
         hint: ""
 
   - id: 5
-    title: "Enable color output"
-    description: ""
+    title: "Push new tag"
+    description: "Push the new tag to the remote repository"
     allowedCommands:
-      - cmd: "git config --global color.ui"
-        valid: null
-        output: []
-        hint: ""
+      - cmd: "git push"
+        valid: "^git\\s+push$"
+        output:
+          - text: |
+              Everything up-to-date
+            hint: "Git does not push the tag by default, you have to add the <code>--follow-tags</code> flag. Or... :)"
 
   - id: 6
-    title: "Set push default"
-    description: ""
+    title: "Set followTags config"
+    description: "Make sure Git pushes new tags to the remote repository"
     allowedCommands:
-      - cmd: "git config --global push.default"
-        valid: null
+      - cmd: "git config --global push.followTags true"
+        valid: "^git\\s+config\\s+--global\\s+push\\.followTags\\s+true$"
         output: []
         hint: ""
 
   - id: 7
-    title: "Enable pull rebase"
-    description: ""
+    title: "Push new tag"
+    description: "Push the new tag to the remote repository"
     allowedCommands:
-      - cmd: "git config --global pull.rebase"
-        valid: null
-        output: []
-        hint: ""
+      - cmd: "git push"
+        valid: "^git\\s+push$"
+        output:
+          - text: |
+              Enumerating objects: 1, done.
+              Counting objects: 100% (1/1), done.
+              Delta compression using up to 4 threads
+              Compressing objects: 100% (1/1), done.
+              Writing objects: 100% (1/1), 125 bytes | 125.00 KiB/s, done.
+              Total 1 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+              To github.com:sebastianfeldmann/learngit.online.lesson.config.git
+              * [new tag]         1.11.0 -> 1.11.0
+            hint: "Git now automatically pushes the new tag to the remote repository."
 
   - id: 8
-    title: "Set merge tool"
-    description: ""
+    title: "Disable paging"
+    description: "Disable paging for git tag and branch commands"
     allowedCommands:
-      - cmd: "git config --global merge.tool"
-        valid: null
+      - cmd: "git config --global pager.branch false"
+        valid: "^git\\s+config\\s+--global\\s+pager\\.branch\\s+false$"
         output: []
-        hint: ""
+        hint: "This just saves you the annoying <code>q</code> press to quit the pager."
+      - cmd: "git config --global pager.tag false"
+        valid: "^git\\s+config\\s+--global\\s+pager\\.branch\\s+false$"
+        output: []
+        hint: "This just saves you the annoying <code>q</code> press to quit the pager."
 
   - id: 9
-    title: "Enable autocrlf"
-    description: ""
+    title: "List tags"
+    description: "List all existing tags"
     allowedCommands:
-      - cmd: "git config --global core.autocrlf"
-        valid: null
-        output: []
+      - cmd: "git tag"
+        valid: "^git\\s+tag$"
+        output:
+          - text: |
+              0.9.0
+              0.9.1
+              1.0.0
+              1.10.0
+              1.11.0
+          - text: "1.4.0"
+            hint: "Git lists everything aphabetically by default. For version numbers this ends up being a mess. Lets fix this."
         hint: ""
 
   - id: 10
-    title: "Set credential helper"
-    description: ""
+    title: "Set Tag Sort"
+    description: "Set the default sorting for tags"
     allowedCommands:
-      - cmd: "git config --global credential.helper"
-        valid: null
+      - cmd: "git config --global tag.sort version:refname"
+        valid: "^git\\s+config\\s+--global\\s+tag\\.sort\\s+version\\:refname$"
         output: []
         hint: ""
+
+  - id: 11
+    title: "List tags"
+    description: "List all existing tags"
+    allowedCommands:
+      - cmd: "git tag"
+        valid: "^git\\s+tag$"
+        output:
+          - text: |
+              0.9.0
+              0.9.1
+              1.0.0
+          - text: |
+              1.4.0
+              1.10.0
+              1.11.0
+            hint: "Git now lists the tags in the expcted order. But we can improve this even further."
+        hint: ""
+
+  - id: 12
+    title: "Setup columns"
+    description: "Set the columns behaviour for tags and branches"
+    allowedCommands:
+      - cmd: "git config --global column.ui auto"
+        valid: "^git\\s+config\\s+--global\\s+column\\.ui\\s+auto$"
+        output: []
+        hint: ""
+
+  - id: 13
+    title: "List tags"
+    description: "List all existing tags with columns"
+    allowedCommands:
+      - cmd: "git tag"
+        valid: "^git\\s+tag$"
+        output:
+          - text: |
+              0.9.0   1.0.1   1.4.0   1.10.2
+              0.9.1   1.1.2   1.4.7   1.10.9
+              1.0.0   1.3.1   1.10.0  1.11.0
+            hint: "Git now lists the tags in a nice column format."
+        hint: ""
+
+  - id: 14
+    title: "List branches"
+    description: "List all existing branches"
+    allowedCommands:
+      - cmd: "git branch"
+        valid: "^git\\s+branch$"
+        output:
+          - text: |
+              * main
+                feature1
+                feature2
+                feature3
+                feature4
+            hint: "By default Git lists branches aphabetically as well. That means if you number your branches with ticket numbers your most recent feature is at the end of the list."
+        hint: ""
+
+  - id: 15
+    title: "Set branch sort"
+    description: "Set the default sorting for branches"
+    allowedCommands:
+      - cmd: "git config --global branch.sort -committerdate"
+        valid: "^git\\s+config\\s+--global\\s+branch\\.sort\\s+-committerdate$"
+        output: []
+        hint: ""
+
+  - id: 16
+    title: "List branches"
+    description: "List all existing branches by last commit date"
+    allowedCommands:
+      - cmd: "git branch"
+        valid: "^git\\s+branch$"
+        output:
+          - text: |
+              * main
+                feature4
+                feature3
+                feature2
+                feature1
+            hint: "Now the most recent branches are listed on top. 🥳"
+        hint: ""
+
+  - id: 17
+    title: "List branches in columns"
+    description: "List all existing branches in columns"
+    allowedCommands:
+      - cmd: "git branch"
+        valid: "^git\\s+branch$"
+        output:
+          - text: |
+              * main            feature249      feature155
+                feature341      feature246      feature152
+                feature299      feature212      feature128
+                feature268      feature189      feature115
+                feature251      feature167      feature102
+            hint: "Is you use the previous <code>column.ui auto</code> setting your branches are listed like this."
+        hint: ""
+
+  - id: 18
+    title: "Use autosquash"
+    description: "Make rebase use autosquash by default"
+    allowedCommands:
+      - cmd: "git config --global rebase.autosquash true"
+        valid: "^git\\s+config\\s+--global\\s+rebase\\.autosquash\\s+true$"
+        output: []
+        hint: "Since I'm always using the <code>rebase --autosquash</code> I turn this on by default. If you wonder what <code>--autosquash</code> does, check out the <a href=\"/lessons/git-rebase-autosquash\">Autosquashing</a> lesson."
+
+  - id: 19
+    title: "Typing errors"
+    description: "Define the handling for miss typed commands"
+    allowedCommands:
+      - cmd: "git psuh"
+        valid: "^git\\s+psuh$"
+        output:
+          - text: |
+              git: 'psuh' is not a git command. See 'git --help'.
+
+              The most similar command is
+                push
+            hint: "Git recognices that you probably meant <code>push</code> and tells you about it. Helpful, but we can do better."
+
+  - id: 20
+    title: "Set autocorrect"
+    description: "Set the autocorrect handling for miss typed commands"
+    allowedCommands:
+      - cmd: "git config --global help.autocorrect prompt"
+        valid: "^git\\s+config\\s+--global\\s+help\\.autocorrect\\s+prompt$"
+        output: []
+        hint: ""
+      
+  - id: 21
+    title: "Typing errors"
+    description: "Showcase the autocorrect prompt behaviour"
+    allowedCommands:
+      - cmd: "git psuh"
+        valid: "^git\\s+psuh$"
+        output:
+          - text: |
+              WARNING: You called a Git command named 'psuh', which does not exist.
+              Run 'push' instead [y/N]? y
+              Everything up-to-date
+            hint: |
+              Git recognices that you probably meant <code>push</code> and now asks
+              you if you want to run the identified command.<br>
+              Just hit <code>y</code> or <code>n</code> to run the command, or abort.<br>
+              <br>
+              You can set <code>help.autocorrect</code> to <code>immediate</code>
+              to run the command without asking.
+
+  - id: 22
+    title: "Better diffs"
+    description: "Set some diff options for a better diff experience"
+    allowedCommands:
+      - cmd: "git config --global diff.algorithm histogram"
+        valid: "^git\\s+config\\s+--global\\s+diff\\.algorithm\\s+histogram$"
+        output: []
+        hint: "This will make the diffs more readable."
+      - cmd: "git config --global diff.colorMoved plain"
+        valid: "^git\\s+config\\s+--global\\s+diff\\.colorMoved\\s+plain$"
+        output: []
+        hint: "This will color lines that were moved differently."
+      - cmd: "git config --global diff.mnemonicPrefix true"
+        valid: "^git\\s+config\\s+--global\\s+diff\\.mnemonicPrefix\\s+true$"
+        output: []
+        hint: "This will prefix diff header lines not with <code>a</code> or <code>b</code> but with <code>w</code> for <em>working directory</em> or <code>i</code> for <em>index</em>."
+
+  - id: 23
+    title: "Git Diff"
+    description: "Showcase the diff options"
+    allowedCommands:
+      - cmd: "git diff HEAD^"
+        valid: "^git\\s+diff\\s+HEAD\\^$"
+        output:
+          - text: |
+              diff --git c/README.md w/README.md
+              index 10f0f53..2b87fa5 100644
+          - text: |
+              --- c/README.md
+              +++ w/README.md
+            hint: "Here you can see the <code>mnemonicPrefix</code> setting in action. The <code>c</code> is a <em>commit</em> and the <code>w</code> is the <em>working directory</em>."
+          - text: |
+              @@ -3,3 +3,8 @@
+              This repo is used to demo useful Git config settings.
+
+              You can check the lesson at [learngit.online](http://learngit.online/lesson/git-config-t10).
+              +
+              +```
+              +[tag]
+              +  sort = versio:refname
+              +```
+        hint: "This will show you the diff compared to the previous commit."
+
+  - id: 24
+    title: "Git Satus Colors"
+    description: "Set some recognizable colors for the status command"
+    allowedCommands:
+      - cmd: "git config --global color.status.added green"
+        valid: "^git\\s+config\\s+--global\\s+status\\.color\\.added\\s+green$"
+        output: []
+        hint: "You can customize the colors to your liking."
+      - cmd: "git config --global color.status.changed yellow"
+        valid: "^git\\s+config\\s+--global\\s+status\\.color\\.changed\\s+yellow$"
+        output: []
+        hint: "You can customize <code>added</code> and <code>changed</code> colors."
+      - cmd: "git config --global color.status.untracked cyan"
+        valid: "^git\\s+config\\s+--global\\s+status\\.color\\.untracked\\s+cyan$"
+        output: []
+        hint: "And you can customize the <code>untracked</code> color."
+      - cmd: "git config --global color.status auto"
+        valid: "^git\\s+config\\s+--global\\s+color\\.status\\s+auto$"
+        output: []
+        hint: "Or you can just use the <code>auto</code> setting to let Git decide."
+
+  - id: 25
+    title: "Git Colors"
+    description: "Activating all the colors"
+    allowedCommands:
+      - cmd: "git config --global color.diff auto"
+        valid: "^git\\s+config\\s+--global\\s+color\\.diff\\s+auto$"
+        output: []
+        hint: "Activate colored <code>diff</code> output."
+      - cmd: "git config --global color.branch auto"
+        valid: "^git\\s+config\\s+--global\\s+color\\.branch\\s+auto$"
+        output: []
+        hint: "Activate colored <code>branch</code> output."
