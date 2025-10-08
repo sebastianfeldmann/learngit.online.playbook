@@ -4,5 +4,5 @@ level: "intermediate"
 time: "30 minutes"
 order: 3
 lessons:
-  - git-alias-t10
   - git-config-t10
+  - git-alias-t10

@@ -4,5 +4,6 @@ level: "advanced"
 time: "1 hour"
 order: 2
 lessons:
+  - git-internals
   - git-objects
   - git-head
