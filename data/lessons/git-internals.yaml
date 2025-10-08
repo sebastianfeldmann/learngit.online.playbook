@@ -1,32 +1,30 @@
-title: "Git Internals"
-description: "If you understand the basics and feel comfortable using Git for version control it is time to look into the core concepts and some advanced features. Use this guided course and follow along."
-category: "courses"
+title: "Course Setup"
+description: "This lesson will guide you through setting up a new repository for the course."
+category: ""
 level: "advanced"
-time: "1 hour"
+time: "4 minutes"
 order: 2
-next: null
-previous: null
 steps:
   - id: 1
     title: "Create a new Directory"
     description: "To start our journey we need a fresh start"
     allowedCommands:
-      - cmd: "mkdir git-advanced"
-        valid: "^mkdir\\s+git-advanced$"
+      - cmd: "mkdir git-internals"
+        valid: "^mkdir\\s+git-internals$"
         output: []
-        hint: "Make sure not to create this directory within another <i>repository</i>"
-      - cmd: "mkdir git-advanced && cd git-advanced"
-        valid: "^mkdir\\s+git-advanced\\s*&&\\s*cd\\s+git-advanced$"
+        hint: "Make sure not to create this directory within another <em>repository</em>"
+      - cmd: "mkdir git-internals && cd git-internals"
+        valid: "^mkdir\\s+git-internals\\s*&&\\s*cd\\s+git-internals$"
         next: 3
         output: []
-        hint: "Create the directory and change into it"
+        hint: "Create the directory and directly change into it"
   
   - id: 2
     title: "Open new directory"
     description: "Change your CWD to the newly created directory"
     allowedCommands:
-      - cmd: "cd git-advanced"
-        valid: "^cd\\s+git-advanced$"
+      - cmd: "cd git-internals"
+        valid: "^cd\\s+git-internals$"
         output: []
   
   - id: 3
@@ -36,5 +34,5 @@ steps:
       - cmd: "git init"
         valid: "^git\\s+init$"
         output:
-          - text: "Initialized empty Git repository in /Users/sf/git-advanced/.git/"
+          - text: "Initialized empty Git repository in /Users/sf/git-internals/.git/"
             hint: "The path to your repository on your computer will naturally differ from the one displayed here."
