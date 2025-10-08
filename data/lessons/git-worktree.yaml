@@ -1,0 +1,193 @@
+title: "Git Worktree"
+description: "Learn how to work with multiple branches at the same time using git worktree. This powerful feature allows you to have multiple working directories for the same repository, making it easy to switch between branches, even if you have local changes."
+category: "branching"
+level: "intermediate"
+time: "12 minutes"
+order: 6
+related:
+  - git-branch
+  - git-stash
+steps:
+  - id: 1
+    title: "Switch branch"
+    description: "Switch to another branch for a quick fix"
+    allowedCommands:
+      - cmd: "git switch -c quick-fix-branch"
+        valid: "^git\\s+switch\\s+\\-c\\s+[^\\s]+$"
+        output:
+          - text: |
+              error: Your local changes to the following files would be overwritten by checkout:
+                README.md
+              Please commit your changes or stash them before you switch branches.
+              Aborting
+            hint: |
+              Git does not allow you to <em>switch</em> to a different <em>branch</em> if you have local changes
+              that would be overwritten. You would need to <em>commit</em> or <em>stash</em> them first.<br>
+              Not a big deal but there is another convenient solution.
+
+  - id: 2
+    title: "Check worktree status"
+    description: "Start by understanding your current worktree setup"
+    allowedCommands:
+      - cmd: "git worktree list"
+        valid: "^git\\s+worktree\\s+list$"
+        output:
+          - text: "/Users/sf/learngit.online/demo.lesson  616f1b9 [main]"
+            hint: |
+              Shows the <code>main</code> <em>worktree</em> (your current directory)
+              and any additional worktrees (currently none).<br>
+              The format is:<br>
+              <em>path</em> &nbsp; <em>commit-hash</em> &nbsp; <em>branch-name</em>
+        hint: "Lists all <em>worktrees</em> associated with this <em>repository</em>"
+
+  - id: 3
+    title: "Create a new worktree"
+    description: "Start working in another directory without cloning the repository again"
+    allowedCommands:
+      - cmd: "git worktree add ../demo.lesson.bugfix -b quick-fix-branch"
+        valid: "^git\\s+worktree\\s+add\\s+[^\\s]+\\s+-b\\s+[^\\s]+$"
+        output:
+          - text: |
+              Preparing worktree (new branch 'quick-fix-branch')
+              HEAD is now at 616f1b9 Last commit"
+            hint: "Git just created a new directory <code>demo.lesson.bugfix</code> and checked out the new branch <code>quick-fix-branch</code> in it."
+        hint: |
+          Create a new <em>worktree</em> (directory) and a new branch <code>-b</code>
+          (<code>quick-fix-branch</code>) and check it out.
+      - cmd: "git worktree add ../demo.lesson.bugfix quick-fix-branch"
+        valid: "^git\\s+worktree\\s+add\\s+[^\\s]+\\s+[^\\s]+$"
+        output:
+          - text: |
+              Preparing worktree ('quick-fix-branch')
+              HEAD is now at 616f1b9 Last commit"
+            hint: "Git just created a new directory <code>demo.lesson.bugfix</code> and checked out the existing <code>quick-fix-branch</code> branch in it."
+        hint: |
+          Create a new <em>worktree</em> (directory) and check out
+          the existing <code>quick-fix-branch</code> branch.
+          
+
+  - id: 4
+    title: "Verify the new worktree"
+    description: "Check that your new worktree was created successfully"
+    allowedCommands:
+      - cmd: "git worktree list"
+        valid: "^git\\s+worktree\\s+list$"
+        output:
+          - text: |
+              /Users/sf/learngit.online/demo.lesson          616f1b9 [main]
+              /Users/sf/learngit.online/demo.lesson.bugfix   616f1b9 [quick-fix-branch]
+            hint: "Now you can see both worktrees. You can work in either directory independently!"
+
+  - id: 5
+    title: "Work in the new worktree"
+    description: "Switch to the new worktree directory and make changes"
+    allowedCommands:
+      - cmd: "cd ../demo.lesson.bugfix"
+        valid: "^cd\\s+[^\\s]+$"
+        output:
+          - text: ""
+        hint: "Change to the new worktree directory"
+
+  - id: 6
+    title: "Check status"
+    description: "Check the status of the new worktree"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output:
+          - text: |
+              On branch quick-fix-branch
+              nothing to commit, working tree clean
+            hint: "You're now working in the <code>demo.lesson.bugfix</code> <em>worktree</em>. Any changes here won't affect your other worktrees!"
+
+  - id: 7
+    title: "Make changes"
+    description: "Change a file in the demo.lesson.bugfix worktree"
+    allowedCommands:
+      - cmd: "echo '## New Headline' >> README.md"
+        valid: "^echo\\s+.*\\s*>>\\s*[^\\s]+$"
+        output: []
+        hint: "Make changes to the README.md file"
+        
+  - id: 8
+    title: "Commit the changes"
+    description: "Commit the changes in the demo.lesson.bugfix worktree"
+    allowedCommands:
+      - cmd: "git commit -am \"Add new headline\""
+        valid: "^git\\s+commit\\s+-am\\s+['\"].*['\"]$"
+        output:
+          - text: |
+              [quick-fix-branch def5678] Add new headline
+               1 file changed, 1 insertion(+)
+            hint: |
+              You can <em>commit</em>, <em>push</em>, <em>pull</em>, <em>switch</em> to other branches, or do whatever.
+              An additional <em>worktree</em> is not much different from your regular <em>working directory</em>.<br>
+              The only difference is that <code>.git</code> is not a directory but a file
+              linking the original <code>.git</code> directory.
+        hint: "Commit the changes in the <code>demo.lesson.bugfix</code> <em>worktree</em>"
+
+  - id: 9
+    title: "Inspect .git"
+    description: "Check the .git file of the new worktree"
+    allowedCommands:
+      - cmd: "cat .git"
+        valid: "^cat\\s+\\.git$"
+        output:
+          - text: "gitdir: /Users/sf/learngit.online/demo.lesson/.git/worktrees/demo.lesson.bugfix"
+            hint: "The <em>worktree</em> <code>.git</code> file is linking to the <em>worktree</em> settings of the original <code>.git</code> directory."
+
+  - id: 10
+    title: "Switch worktree"
+    description: "Return to the main worktree and see the difference"
+    allowedCommands:
+      - cmd: "cd ../demo.lesson"
+        valid: "^cd\\s+[^\\s]+$"
+        output: []
+        hint: "Return to the main <em>worktree</em>"
+
+  - id: 11
+    title: "Check worktree status"
+    description: "Return to the main worktree and see the difference"
+    allowedCommands:
+      - cmd: "git worktree list"
+        valid: "^git\\s+worktree\\s+list$"
+        output:
+          - text: "/Users/sf/learngit.online/demo.lesson          616f1b9 [main]"
+          - text: "/Users/sf/learngit.online/demo.lesson.bugfix   def5678 [quick-fix-branch]"
+            hint: "Notice how the <code>demo.lesson.bugfix</code> <em>worktree</em> now shows a different commit hash (<code>def5678</code>) because we made changes there"
+
+  - id: 12
+    title: "Remove a worktree"
+    description: "Clean up by removing the worktree when you're done"
+    allowedCommands:
+      - cmd: "git worktree remove ../demo.lesson.bugfix"
+        valid: "^git\\s+worktree\\s+remove\\s+[^\\s]+$"
+        output: []
+        hint: "Removes the <em>worktree</em> directory and the reference to it"
+
+  - id: 13
+    title: "List worktrees"
+    description: "List the worktrees"
+    allowedCommands:
+      - cmd: "git worktree list"
+        valid: "^git\\s+worktree\\s+list$"
+        output:
+          - text: "/Users/sf/learngit.online/demo.lesson  616f1b9 [main]"
+            hint: |
+              <p>The <code>demo.lesson.bugfix</code> <em>worktree</em> has been removed
+              and we're back to just the main worktree.</p>
+              <h5>Summary:</h5>
+              <p>With worktrees you can work on multiple branches at the same time
+              without cloning the repository again or bother with stashing or committing
+              your local changes.</p>
+              <ul>
+                <li><code>git worktree list</code> shows all <em>worktrees</em></li>
+                <li><code>git worktree add ../directory</code> adds a new <em>worktree</em></li>
+                <li><code>git worktree remove ../directory</code> removes a <em>worktree</em></li>
+                <li><code>git worktree move ../old-directory ../new-directory</code> moves a <em>worktree</em></li>
+              </ul>
+              ⚠️ <strong>Notice</strong> ⚠️<br>
+              The <code>git worktree remove</code> command deletes the directory as well.
+              Good thing, it will not remove the <em>worktree</em> if you have changes in it.
+
+
