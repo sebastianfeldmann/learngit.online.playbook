@@ -68,6 +68,40 @@ steps:
               branch.main.merge=refs/heads/main
   
   - id: 4
+    title: "View config origin"
+    description: "Check the origin of the config settings"
+    allowedCommands:
+      - cmd: "git config --list --show-origin"
+        valid: "^git\\s+config\\s+--list\\s+--show-origin$"
+        hint: ""
+        output:
+          - text: |
+              file:/opt/homebrew/etc/gitconfig        credential.helper=osxkeychain
+              file:/Users/sf/.gitconfig       diff.mnemonicprefix=true
+              file:/Users/sf/.gitconfig       push.default=simple
+              file:/Users/sf/.gitconfig       push.autosetupremote=true
+              file:/Users/sf/.gitconfig       push.followtags=true
+              file:/Users/sf/.gitconfig       fetch.all=true
+              file:/Users/sf/.gitconfig       help.autocorrect=prompt
+              file:.git/config        core.repositoryformatversion=0
+              file:.git/config        core.filemode=true
+              file:.git/config        core.bare=false
+              file:.git/config        core.logallrefupdates=true
+              ...
+            hint: |
+              With the <code>--show-origin</code> flag you can see the config file that is responsible for the setting.<br>
+              <br>
+              This also shows that there is another origin, the system level.
+              You can inspect it by running <code>git config --system --list</code>.<br>
+              <br>
+              The final ranking of the origins is:
+              <ol>
+                <li>Local overwrites global</li>
+                <li>Global overwrites system</li>
+                <li>System</li>
+              </ol>
+
+  - id: 5
     title: "Set a global configuration"
     description: "Configure Git globally for all repositories"
     allowedCommands:
@@ -76,7 +110,7 @@ steps:
         hint: "Global settings are stored in <code>~/.gitconfig</code> and will be used as defaults for all repositories."
         output: []
   
-  - id: 5
+  - id: 6
     title: "Set a local configuration"
     description: "Configure Git specifically for this repository"
     allowedCommands:
@@ -86,7 +120,7 @@ steps:
         output: []
         
   
-  - id: 6
+  - id: 7
     title: "Verify configuration precedence"
     description: "See how local settings override global ones"
     allowedCommands:
@@ -96,7 +130,7 @@ steps:
           - text: "sebastianfeldmann@users.noreply.github.com"
             hint: "The local email setting overrides the global one for this repository."
   
-  - id: 7
+  - id: 8
     title: "View global configuration"
     description: "Examine the global configuration files"
     allowedCommands:
@@ -106,7 +140,7 @@ steps:
         output:
           - text: "    email = sf@sebastian-feldmann.info"        
 
-  - id: 8
+  - id: 9
     title: "View local configuration"
     description: "Examine the local configuration file"
     allowedCommands:
