@@ -1,0 +1,172 @@
+title: "Git Blame"
+description: "Check who is responsible for a change in your code. Learn how to use git blame to track the origin of lines in your code. This lesson covers basic blame usage, the powerful -C -C -C options for tracking moved code, and advanced blame techniques."
+category: "changes"
+level: "intermediate"
+time: "12 minutes"
+order: 8
+steps:
+  - id: 1
+    title: "Check repository status"
+    description: "Start by viewing the current state of your repository"
+    allowedCommands:
+      - cmd: "ls -la"
+        valid: "^ls\\s+-la$"
+        output:
+          - text: |
+              .
+              ..
+              .git
+              original.md
+              target.md
+            hint: "You have a repository with two files in it <em>original.md</em> and <em>target.md</em>. Let's use <code>git blame</code> to understand who is responsoble for which lines of code in <em>target.md</em>."
+  
+  - id: 2
+    title: "Run git blame"
+    description: "Use git blame to see who wrote each line of a file"
+    allowedCommands:
+      - cmd: "git blame target.md"
+        valid: "^git\\s+blame\\s+target\\.md$"
+        output:
+          - text: |
+              152ca97f (Hook  2025-10-10 16:10:09 +0200 1) # Hook's header added by Hook
+              2fe456f2 (Wendy 2025-10-09 12:45:33 +0200 2)
+              2fe456f2 (Wendy 2025-10-09 12:45:33 +0200 3) This was originally written by Peter.
+            hint: "The <code>git blame</code> command shows the commit <em>hash</em>, <em>author</em>, <em>date</em>, and content for each line to understand who wrote what and when."
+  
+  - id: 3
+    title: "Blame with line numbers"
+    description: "Use git blame with line number display"
+    allowedCommands:
+      - cmd: "git blame -n target.md"
+        valid: "^git\\s+blame\\s+-n\\s+target\\.md$"
+        output:
+          - text: |
+              152ca97f 1 (Hook  2025-10-10 16:10:09 +0200 1) # Hook's header added by Hook
+              2fe456f2 2 (Wendy 2025-10-09 12:45:33 +0200 2)
+              2fe456f2 3 (Wendy 2025-10-09 12:45:33 +0200 3) This was originally written by Peter.
+            hint: "The <code>-n</code> option shows line numbers, making it easier to reference specific lines."
+  
+  - id: 4
+    title: "Settig the date format"
+    description: "Learn how to change the date format"
+    allowedCommands:
+      - cmd: "git blame --date=human target.md"
+        valid: "^git\\s+blame\\s+--date=human\\s+target\\.md$"
+        output:
+          - text: |
+              152ca97f 1 (Hook  4 hours ago 1) # Hook's header added by Hook
+              2fe456f2 2 (Wendy 1 day ago   2)
+              2fe456f2 3 (Wendy 1 day ago   3) This was originally written by Peter.
+            hint: |
+              The <code>--date=human</code> is IMHO the most readable format. 
+              You can also set it as the default date format in your <em>git config</em>
+              with <code>git config --global blame.date human</code>.<br>
+              <strong>Other options are:</strong>
+              <ul>
+                <li><code>--date=short</code> - 2025-10-10</li>
+                <li><code>--date=long</code> - Friday, October 10, 2025</li>
+                <li><code>--date=relative</code> - 4 hours ago</li>
+                <li><code>--date=iso</code> - 2025-10-10T16:10:09+02:00</li>
+              </ul>
+
+  - id: 5
+    title: "Set the date format"
+    description: "Learn how to set the date format"
+    allowedCommands:
+      - cmd: "git config --global blame.date human"
+        valid: "^git\\s+config\\s+--global\\s+blame\\.date\\s+human$"
+        output: []
+
+  - id: 6
+    title: "Blame a specific range"
+    description: "Use git blame to examine only specific lines"
+    allowedCommands:
+      - cmd: "git blame -L 1,2 target.md"
+        valid: "^git\\s+blame\\s+-L\\s+1,2\\s+target\\.md$"
+        output:
+          - text: |
+              152ca97f (Hook  4 hours ago 1) # Hook's header added by Hook
+              2fe456f2 (Wendy 1 day ago   2)
+            hint: "The <code>-L start,end</code> option lets you focus on specific line ranges. This is useful when you only care about certain parts of a file."
+  
+  - id: 7
+    title: "Default blame"
+    description: "See what default blame shows for moved and copied code"
+    allowedCommands:
+      - cmd: "git blame target.md"
+        valid: "^git\\s+blame\\s+target\\.md$"
+        output:
+          - text: |
+              152ca97f (Hook  4 hours ago 1) # Hook's header added by Hook
+              2fe456f2 (Wendy 1 day ago   2)
+          - text: |
+              2fe456f2 (Wendy 2025-10-09 12:45:33 +0200 3) This was originally written by Peter.
+            hint: "By default, <code>git blame</code> only shows when the code was touched the last time (commit <code>2fe456f2</code> by <strong>Wendy</strong>), not when it was originally written. This can be misleading when tracking the true origin of code."
+  
+  - id: 8
+    title: "Using -C (first level)"
+    description: "Use -C to detect code copied or moved within the same commit"
+    allowedCommands:
+      - cmd: "git blame -C target.md"
+        valid: "^git\\s+blame\\s+-C\\s+target\\.md$"
+        output:
+          - text: |
+              152ca97f (Hook  4 hours ago 1) # Hook's header added by Hook
+              2fe456f2 (Wendy 1 day ago   2)
+          - text: |
+              2fe456f2 (Wendy 1 day ago   3) This was originally written by Peter.
+            hint: "The <code>-C</code> option detects when code was copied from another file in the same commit. In our example this still shows <strong>Wendy</strong> as the author."
+  
+  - id: 9
+    title: "Using -C (second level)"
+    description: "Use -C -C to detect code copied from previous commits"
+    allowedCommands:
+      - cmd: "git blame -C -C target.md"
+        valid: "^git\\s+blame\\s+-C\\s+-C\\s+target\\.md$"
+        output:
+          - text: |
+              152ca97f target.md   (Hook  4 hours ago 1) # Hook's header added by Hook
+              2fe456f2 target.md   (Wendy 1 day ago   2)
+          - text: |              
+              ^bb94786 original.md (Peter 2 days ago  3) This was originally written by Peter.
+            hint: "The <code>-C -C</code> option goes deeper and detects when code was copied from previous commits. Now we see that the text was originally written in the commit <code>bb94786</code> made by <strong>Peter</strong>."
+  
+  - id: 10
+    title: "Using -C (third level)"
+    description: "Use -C -C -C for maximum detection of copied and moved code"
+    allowedCommands:
+      - cmd: "git blame -C -C -C target.md"
+        valid: "^git\\s+blame\\s+-C\\s+-C\\s+-C\\s+target\\.md$"
+        output:
+          - text: |
+              152ca97f target.md   (Hook  4 hours ago 1) # Hook's header added by Hook
+              2fe456f2 target.md   (Wendy 1 day ago   2)
+              ^bb94786 original.md (Peter 2 days ago  3) This was originally written by Peter.
+            hint: "The <code>-C -C -C</code> option provides the most comprehensive detection of moved code. It can detect code that was copied multiple times across different commits and files. This is the most thorough way to track the true origin of code."
+ 
+  - id: 11
+    title: "Summary and best practices"
+    description: "Review what you've learned about git blame"
+    allowedCommands:
+      - cmd: "git blame -n -C -C -C --date=short target.md"
+        valid: "^git\\s+blame\\s+-n\\s+-C\\s+-C\\s+-C\\s+--date=short\\s+target\\.md$"
+        output:
+          - text: |
+              152ca97f target.md   1 (Hook  2025-10-10 1) # Hook's header added by Hook
+              2fe456f2 target.md   2 (Wendy 2025-10-09 2)
+              ^bb94786 original.md 6 (Peter 2025-10-08 3) This was originally written by Peter.
+            hint: |
+              <h5>Git Blame Summary:</h5>
+              <ul>
+                <li><strong>Standard blame:</strong><br><code>git blame file</code> - shows who touched each line last</li>
+                <li><strong>Line numbers:</strong><br><code>git blame -n file</code> - includes line numbers</li>
+                <li><strong>Line ranges:</strong><br><code>git blame -L start,end file</code> - focus on specific lines</li>
+                <li><strong>Move detection:</strong><br><code>git blame -C -C -C file</code> - tracks moved code across commits</li>
+                <li><strong>Ignore whitespace:</strong><br><code>git blame -w file</code> - ignores formatting changes</li>
+                <li><strong>Date formats:</strong><br><code>git blame --date=short file</code> - customize date display</li>
+              </ul>
+              <br>
+              <strong>💡 Pro Tips:</strong><br>
+              Use <code>-C -C -C</code> when tracking code that has been moved extensively.<br>
+              Combine <code>-w</code> with other options to ignore whitespace changes.<br>
+              Use <code>-L</code> to focus on specific problematic areas.<br>
