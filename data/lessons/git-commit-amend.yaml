@@ -1,0 +1,154 @@
+title: "Git Amend"
+description: "Learn how to modify the most recent commit using git commit --amend. This lesson covers changing commit messages, adding forgotten files, and understanding when it's safe to amend commits."
+category: "changes"
+level: "intermediate"
+time: "10 minutes"
+order: 6
+steps:
+  - id: 1
+    title: "Check the commit history"
+    description: "View the recent commits in your repository"
+    allowedCommands:
+      - cmd: "git log --oneline -3"
+        valid: "^git\\s+log\\s+--oneline\\s+-3$"
+        output:
+          - text: |
+              81c7f43 Add user authentiaction
+            hint: "You have a few commits in your repository. Let's say you just made the commit <code>a1b2c3d</code> but realized you made a typo (authenti<u>ac</u>tion) in the commit message."
+          - text: |
+              47d2a9a Add feature
+              d342782 Setup application
+  
+  - id: 2
+    title: "Fix commit message"
+    description: "Fix the typo in the most recent commit message"
+    allowedCommands:
+      - cmd: "git commit --amend -m 'Add user authentication'"
+        valid: "^git\\s+commit\\s+--amend\\s+-m\\s+['\"].*['\"]$"
+        output:
+          - text: |
+              [main 0bfed5c] Add user authentication
+               Date: Tue Oct 7 14:53:55 2025 +0200
+               1 file changed, 1 insertion(+),
+            hint: |
+              <p>The <code>git commit --amend -m</code> command replaces the most recent commit with a new one that has the updated message.
+              Notice the commit hash changed from <code>81c7f43</code> to <code>0bfed5c</code> - this is a new commit!</p>
+              <p>If you have already pushed the previous <em>commit</em> you would have to <code>force push</code> to update the <em>remote</em> repository.</p>
+  
+  - id: 3
+    title: "Verify the updated commit"
+    description: "Check that the commit message was updated"
+    allowedCommands:
+      - cmd: "git log --oneline -3"
+        valid: "^git\\s+log\\s+--oneline\\s+-3$"
+        output:
+          - text: |
+              0bfed5c Add user authentication
+            hint: |
+              <p>
+              The commit message has been updated!
+              The commit hash also changed because amending creates a new commit object.
+              The old commit <code>81c7f43</code> is now replaced by <code>0bfed5c</code>.
+              </p>
+              <p>
+              <code>git commit -amend -m"..."</code> is a convenient shorthand for<br><code>git reset --soft HEAD~1 && git commit -m"..."</code>.
+              </p>
+          - text: |
+              47d2a9a Add feature
+              d342782 Setup application
+  
+  - id: 4
+    title: "Create a new file"
+    description: "Oops! You forgot to include a file in the last commit"
+    allowedCommands:
+      - cmd: "echo \"missing stuff\" > missing.code"
+        valid: "^echo\\s+['\"].*['\"]\\s+>\\s+missing\\.code$"
+        output: []
+        hint: "Create file that we forgot to include in the previous commit."
+
+  - id: 5
+    title: "Stage the file"
+    description: "Add the missing file to the staging area"
+    allowedCommands:
+      - cmd: "git add missing.code"
+        valid: "^git\\s+add missing\\.code$"
+        output:
+          - text: |
+              Changes to be committed:
+                (use "git restore --staged <file>..." to unstage)
+              	    missing.code
+            hint: "The file is now staged, and we can include it in the previous commit by ammending the commit again."
+    
+  - id: 6
+    title: "Amend the second"
+    description: "Add the staged file to the previous commit without changing the message"
+    allowedCommands:
+      - cmd: "git commit --amend --no-edit"
+        valid: "^git\\s+commit\\s+--amend\\s+--no-edit$"
+        output:
+          - text: |
+              [main d433e37] Add user authentication
+                Date: Sun Oct 12 22:48:25 2025 +0200
+                2 files changed, 2 insertions(+)
+                create mode 100644 auth.code
+                create mode 100644 missing.code
+            hint: |
+              The <code>--no-edit</code> flag tells Git to keep the existing commit message.
+              The staged file is now part of the amended <em>commit</em>. Notice the <em>hash</em> changed again to <code>d433e37</code>.
+  
+  - id: 7
+    title: "Check commit"
+    description: "Verify that both files are included in the commit"
+    allowedCommands:
+      - cmd: "git show --name-only --oneline"
+        valid: "^git\\s+show\\s+--name-only\\s+--oneline$"
+        output:
+          - text: |
+              d433e37 Add user authentication
+              auth.code
+              missing.code
+            hint: "Perfect! The <code>missing.code</code> file is now part of the commit. Using <code>git commit --amend</code> is a great way to fix small mistakes before pushing to a remote repository."
+  
+  - id: 8
+    title: "Full commit details"
+    description: "See the complete commit information"
+    allowedCommands:
+      - cmd: "git log -1 --stat"
+        valid: "^git\\s+log\\s+-1\\s+--stat$"
+        output:
+          - text: |
+              commit d433e37e427a16aa0e2e78b0ecfded34b363e5b3
+              Author: Sebastian Feldmann <sebastianfeldmann@users.noreply.github.com>
+              Date:   Sun Oct 12 22:48:25 2025 +0200
+
+                  Add user authentication
+
+               auth.code    | 1 +
+               missing.code | 1 +
+               2 files changed, 2 insertions(+)
+            hint: "The <code>git log -1 --stat</code> command shows the last commit with file statistics. Both files are now properly included in the commit."
+  
+  - id: 9
+    title: "Successfully amended"
+    description: "Learn when it's safe to use amend"
+    allowedCommands:
+      - cmd: "git log --oneline -3"
+        valid: "^git\\s+log\\s+--oneline\\s+-3$"
+        output:
+          - text: |
+              d433e37 Add user authentication
+              47d2a9a Add feature
+              d342782 Setup application
+            hint: |
+              <h5>⚠️ Important Safety Rule:</h5>
+              <p>
+              <strong>DON'T</strong> amend commits that have been pushed to shared branches unless you really understand the implications.
+              Just as <em>rebase</em> and <em>reset</em>, <em>amend</em> rewrites <em>history</em>.
+              </p>
+              <strong>💡 Pro Tip:</strong><br>
+              You can also change all meta data of a commit, including the author or date.
+              <ul>
+                <li>Use <code>--author="Peter &lt;peter@pan.com&gt;"</code> to change the commit author</li>
+                <li>Use <code>--date="2025-10-10 12:00:00"</code> to change the commit date</li>
+              </ul>
+        next: null
