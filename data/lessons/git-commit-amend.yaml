@@ -30,6 +30,7 @@ steps:
               [main 0bfed5c] Add user authentication
                Date: Tue Oct 7 14:53:55 2025 +0200
                1 file changed, 1 insertion(+),
+               create mode 100644 auth.code
             hint: |
               <p>The <code>git commit --amend -m</code> command replaces the most recent commit with a new one that has the updated message.
               Notice the commit hash changed from <code>81c7f43</code> to <code>0bfed5c</code> - this is a new commit!</p>
@@ -73,14 +74,24 @@ steps:
       - cmd: "git add missing.code"
         valid: "^git\\s+add missing\\.code$"
         output:
+          - text: []
+
+  - id: 6
+    title: "Repository status"
+    description: "Check the staging area"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output:
           - text: |
+              On branch git-commit-amend-exec
               Changes to be committed:
                 (use "git restore --staged <file>..." to unstage)
-              	    missing.code
+                    new file:   missing.code
             hint: "The file is now staged, and we can include it in the previous commit by ammending the commit again."
-    
-  - id: 6
-    title: "Amend the second"
+
+  - id: 7
+    title: "Amend again"
     description: "Add the staged file to the previous commit without changing the message"
     allowedCommands:
       - cmd: "git commit --amend --no-edit"
@@ -96,7 +107,7 @@ steps:
               The <code>--no-edit</code> flag tells Git to keep the existing commit message.
               The staged file is now part of the amended <em>commit</em>. Notice the <em>hash</em> changed again to <code>d433e37</code>.
   
-  - id: 7
+  - id: 8
     title: "Check commit"
     description: "Verify that both files are included in the commit"
     allowedCommands:
@@ -109,7 +120,7 @@ steps:
               missing.code
             hint: "Perfect! The <code>missing.code</code> file is now part of the commit. Using <code>git commit --amend</code> is a great way to fix small mistakes before pushing to a remote repository."
   
-  - id: 8
+  - id: 9
     title: "Full commit details"
     description: "See the complete commit information"
     allowedCommands:
@@ -128,7 +139,7 @@ steps:
                2 files changed, 2 insertions(+)
             hint: "The <code>git log -1 --stat</code> command shows the last commit with file statistics. Both files are now properly included in the commit."
   
-  - id: 9
+  - id: 10
     title: "Successfully amended"
     description: "Learn when it's safe to use amend"
     allowedCommands:
