@@ -1,0 +1,354 @@
+title: "Git Stash"
+description: "Learn how to temporarily save your work using git stash. This essential feature allows you to quickly switch branches or pull changes without committing your current work."
+category: "changes"
+level: "beginner"
+time: "15 minutes"
+order: 5
+steps:
+  - id: 1
+    title: "Repository status"
+    description: "See what changes you have in your working directory"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output:
+          - text: |
+              On branch git-stash
+              nothing to commit, working tree clean
+            hint: ""
+        hint: "Check the current state of your working directory"
+
+  - id: 2
+    title: "Make some changes"
+    description: "Make some changes to the README.md file"
+    allowedCommands:
+      - cmd: "echo \"additional information\" >> README.md"
+        valid: "^echo\\s+['\"].*['\"]\\s+>>\\s+README\\.md$"
+        output: []
+
+  - id: 3
+    title: "Check status again"
+    description: "See what changes you have in your working directory"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output:
+          - text: |
+              On branch git-stash
+              Changes not staged for commit:
+                (use "git add <file>..." to update what will be committed)
+                (use "git restore <file>..." to discard changes in working directory)
+                    modified:   README.md
+            hint: ""
+        hint: "Check the current state of your working directory"
+
+  - id: 4
+    title: "Switch branch"
+    description: "try to switch to a different branch"
+    allowedCommands:
+      - cmd: "git switch main"
+        valid: "^git\\s+switch\\s+main$"
+        output:
+          - text: |
+              error: Your local changes to the following files would be overwritten by checkout:
+                README.md
+            hint: "You cannot switch to the <code>main</code> <em>branch</em> because you have local changes that would be overwritten."
+          - text: "Please commit your changes or stash them before you switch branches."
+            hint: "Git suggests to <em>stash</em> the changes to solve the issue."
+          - text: "Aborting"
+
+  - id: 5
+    title: "Stash your changes"
+    description: "Temporarily save your work so you can switch branches or pull changes"
+    allowedCommands:
+      - cmd: "git stash"
+        valid: "^git\\s+stash$"
+        output:
+          - text: "Saved working directory and index state WIP on git-stash: 2f7866a Lesson setup"
+            hint: "Git has saved your <em>staged</em> and <em>unstaged</em> changes to a <em>stash</em>. Your working directory is now clean!"
+
+  - id: 6
+    title: "Repository status"
+    description: "Verify that the repository is in a clean state"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output:
+          - text: |
+              On branch git-stash
+              nothing to commit, working tree clean
+            hint: ""
+        hint: "Check the current state of your working directory"
+
+  - id: 7
+    title: "List stashes"
+    description: "List all your current stashes"
+    allowedCommands:
+      - cmd: "git stash list"
+        valid: "^git\\s+stash\\s+list$"
+        output:
+          - text: "stash@{0}: WIP on git-stash: 2f7866a Lesson setup"
+            hint: "You changes are now stored in a <em>stash</em>. As you can see you have one change stashed away. The most recent one is always <code>stash@{0}</code>."
+        hint: "Shows a list of all your stashes."
+
+  - id: 8
+    title: "Switch branch"
+    description: "Now you can safely switch branches or pull changes"
+    allowedCommands:
+      - cmd: "git switch main"
+        valid: "^git\\s+switch\\s+[^\\s]+$"
+        output:
+          - text: "Switched to branch 'main'"
+            hint: "You can now switch branches without any issues since your work is safely stashed away."
+
+  - id: 9
+    title: "Switch back"
+    description: "Let's switch back to the git-stash branch"
+    allowedCommands:
+      - cmd: "git switch -"
+        valid: "^git\\s+switch\\s+-$"
+        output:
+          - text: "Switched to branch 'git-stash'"
+            hint: "After getting some imaginary work done in the main branch we switched back to the original branch. Now we need to restore our changes."
+        hint: "Switch to the previous <em>branch</em>."
+
+  - id: 10
+    title: "Restore a stash"
+    description: "Get your stashed changes back to the working directory"
+    allowedCommands:
+      - cmd: "git stash pop"
+        valid: "^git\\s+stash\\s+pop$"
+        output:
+          - text: |
+              On branch new-branch
+              Changes not staged for commit:
+                (use "git add <file>..." to update what will be committed)
+                (use "git restore <file>..." to discard changes in working directory)
+                    modified:   README.md
+
+              no changes added to commit (use "git add" and/or "git commit -a")
+              Dropped refs/stash@{0} (923a00d26972b29a29f3c82a7457a6ca4bdcb6a7)
+            hint: |
+              Your changes are back! <code>git stash pop</code> applies the latest <em>stash</em> and removes it from the stash list.<br>
+              If you want to keep the stash in the stash list you can use <code>git stash apply</code> instead.
+
+  - id: 10
+    title: "Check status"
+    description: "Verify that your changes are back in your working directory"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output:
+          - text: |
+              On branch git-stash
+              Changes not staged for commit:
+                (use "git add <file>..." to update what will be committed)
+                (use "git restore <file>..." to discard changes in working directory)
+                    modified:   README.md
+            hint: ""
+        hint: "Check the current state of your working directory"
+
+  - id: 11
+    title: "Make more changes"
+    description: "Make some changes to put the application into debug mode"
+    allowedCommands:
+      - cmd: "vi app.config"
+        valid: "^vi\\s+app\\.config$"
+        editor:
+          - text: |
+              debug off
+            hint: "Let's tun on the debug mode by setting debug to on"
+          - text: |
+              foo bar
+              fiz baz
+  
+  - id: 12
+    title: "Turn debug on"
+    description: "Turn the debug mode on by setting debug to on"
+    allowedCommands:
+      - cmd: ":s/off/on/g"
+        valid: "^:s/off/on/g$"
+        editor:
+          - text: |
+              debug on
+            hint: "Debug is now on"
+          - text: |
+              foo bar
+              fiz baz
+
+  - id: 13
+    title: "Save the changes"
+    description: "Save the changes to the file"
+    allowedCommands:
+      - cmd: ":wq"
+        valid: "^\\:wq$"
+        output: []
+        hint: "Save the file"
+
+  - id: 14
+    title: "Even more changes"
+    description: "Activate debug mode for the lagace part of the application as well"
+    allowedCommands:
+      - cmd: "vi legacy.code"
+        valid: "^vi\\s+legacy\\.code$"
+        editor:
+          - text: |
+              mode normal
+            hint: "This has to be turned to debug to activate the debug mode"
+          - text: |
+              setting on
+
+  - id: 15
+    title: "Turn debug on"
+    description: "Turn the debug mode on for the legacy part of the application"
+    allowedCommands:
+      - cmd: ":s/normal/debug/g"
+        valid: "^:s/normal/debug/g$"
+        editor:
+          - text: |
+              mode debug
+            hint: "Now all the parts of the application are in debug mode"
+          - text: |
+              setting on
+
+  - id: 16
+    title: "Save the changes"
+    description: "Save the changes to the legacy.code file"
+    allowedCommands:
+      - cmd: ":wq"
+        valid: "^\\:wq$"
+        output: []
+        hint: "Save the file"
+
+  - id: 17
+    title: "Stash specific files"
+    description: "Stash only some of the changes and give the stash a name"
+    allowedCommands:
+      - cmd: "git stash push -m \"DEBUG\" app.config legacy.code"
+        valid: "^git\\s+stash\\s+push\\s+-m\\s+['\"].*['\"]\\s+[^\\s]+\\s+[^\\s]+$"
+        output:
+          - text: "Saved working directory and index state On git-stash: DEBUG"
+        hint: "You can <em>stash</em> only specific files by listing them. You can also add a message to a <em>stash</em>."
+      
+  - id: 18
+    title: "List stashes"
+    description: "List all your current stashes"
+    allowedCommands:
+      - cmd: "git stash list"
+        valid: "^git\\s+stash\\s+list$"
+        output:
+          - text: "stash@{0}: On git-stash: DEBUG"
+            hint: "Shows the new stash with the name DEBUG"
+
+  - id: 19
+    title: "Check the status"
+    description: "Verify that there are some changes staged and some are still in the working directory"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output:
+          - text: |
+              On branch git-stash
+
+              Changes not staged for commit:
+                (use "git add <file>..." to update what will be committed)
+                (use "git restore <file>..." to discard changes in working directory)
+          - text: "       modified:   README.md"
+            hint: "The changes in our <code>README.md</code> file are still in the working directory."
+          - text: ""
+          - text: "no changes added to commit (use \"git add\" and/or \"git commit -a\")"
+
+  - id: 20
+    title: "Stash all changes"
+    description: "Stash the remaining changes as well"
+    allowedCommands:
+      - cmd: "git stash"
+        valid: "^git\\s+stash$"
+        output:
+          - text: "Saved working directory and index state WIP on git-stash: 2f7866a Lesson setup"
+            hint: "Stashes all changes at once"
+
+  - id: 21
+    title: "List stashes"
+    description: "List all your current stashes"
+    allowedCommands:
+      - cmd: "git stash list"
+        valid: "^git\\s+stash\\s+list$"
+        output:
+          - text: "stash@{0}: WIP on git-stash: 2f7866a Lesson setup"
+            hint: "Shows the latest <em>stash</em> containing our <code>README.md</code> changes."
+          - text: "stash@{1}: On git-stash: DEBUG"
+            hint: "Shows the <em>stash</em> with the our <code>DEBUG</code> changes."
+
+  - id: 22
+    title: "Apply specific stash"
+    description: "Apply the DEBUG stash to move the app into debug mode quickly"
+    allowedCommands:
+      - cmd: "git stash apply stash@{1}"
+        valid: "^git\\s+stash\\s+apply\\s+stash@\\{[0-9]+\\}$"
+        output:
+          - text: |
+              On branch git-stash
+              Your branch is up to date with 'origin/git-stash'.
+
+              Changes not staged for commit:
+                (use "git add <file>..." to update what will be committed)
+                (use "git restore <file>..." to discard changes in working directory)
+          - text: |
+                modified:   app.config
+                modified:   legacy.code
+            hint: "The <code>app.config</code> and <code>legacy.code</code> files now contain the changes necessary to activate the debug mode."
+          - text: ""
+          - text: "no changes added to commit (use \"git add\" and/or \"git commit -a\")"
+        hint: "Apply the second stash (index 1) to get back the DEBUG changes"
+
+  - id: 23
+    title: "Drop a stash"
+    description: "Remove a stash without applying it"
+    allowedCommands:
+      - cmd: "git stash drop stash@{0}"
+        valid: "^git\\s+stash\\s+drop\\s+stash@\\{[0-9]+\\}$"
+        output:
+          - text: "Dropped stash@{0} (5e3e2357df281562e3b6e627756efc6362f412cc)"
+        hint: "Remove a specific stash without applying it"
+
+  - id: 24
+    title: "Check stash list"
+    description: "Now only our DEBUG stash is left"
+    allowedCommands:
+      - cmd: "git stash list"
+        valid: "^git\\s+stash\\s+list$"
+        output:
+          - text: "stash@{0}: On git-stash: DEBUG"
+            hint: "Be abware the <em>stash</em> list is renumbered after adding and dropping stashes."
+
+  - id: 25
+    title: "Clear all stashes"
+    description: "Remove all stashes at once"
+    allowedCommands:
+      - cmd: "git stash clear"
+        valid: "^git\\s+stash\\s+clear$"
+        output: []
+        hint: "Remove all stashes from the list"
+
+  - id: 26
+    title: "Check stash list"
+    description: "Verify that all stashes have been removed"
+    allowedCommands:
+      - cmd: "git stash list"
+        valid: "^git\\s+stash\\s+list$"
+        output: 
+          - text: ""
+            hint: |
+              <h5>Summary:</h5>
+              <p>With <code>git stash</code> you can temporarily save your changes
+              and <em>switch</em> branches or <em>pull</em> changes without
+              committing your current work.</p>
+              <ul>
+                <li><code>git stash</code> saves all changes to a <em>stash</em></li>
+                <li><code>git stash list</code> lists all <em>stashes</em></li>
+                <li><code>git stash apply</code> applies a <em>stash</em> to the working directory</li>
+                <li><code>git stash drop</code> removes a <em>stash</em> from the list</li>
+                <li><code>git stash clear</code> removes all <em>stashes</em> from the list</li>
+              </ul>
+        hint: "Verify that all <em>stashes</em> have been removed."
