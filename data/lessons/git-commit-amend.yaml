@@ -3,7 +3,7 @@ description: "Learn how to modify the most recent commit using git commit --amen
 category: "changes"
 level: "intermediate"
 time: "10 minutes"
-order: 6
+order: 7
 steps:
   - id: 1
     title: "Check the commit history"
