@@ -13,8 +13,16 @@ steps:
         valid: "^cat\\s+\\.git/HEAD$"
         output:
           - text: "ref: refs/heads/main"
-            hint: "The HEAD pointer is a pointer to the current branch. It is stored in the <i>.git/HEAD</i> file and it points to the <i>head</i> file of the current branch <i>main</i>."
-  
+            hint: |
+              The <code>HEAD</code> pointer represents your repositories current position in time (commit history).
+              It is stored in the <code>.git/HEAD</code> file.
+              Normally it points to a branch, or more precisely, it points to the <i>head file</i> of a branch.
+              Currently it points to the <i>head file</i> of the main branch.<br>
+              <br>
+              ⚠️ <strong>Important:</strong><br>
+              Many Git commands require hashes for a starting point as an argument. Most commands doing so fall
+              back to <code>HEAD</code> if no argument is specified.
+
   - id: 2
     title: "Check the branch HEAD"
     description: "Read the ref HEAD linked in the HEAD pointer"
@@ -23,8 +31,8 @@ steps:
         valid: "^cat\\s+\\.git/refs/heads/main$"
         output:
           - text: "ad3c7ad65a6c49b5c492bbde9e6f21d783bbf280"
-            hint: "The HEAD pointer of the main branch points to the <i>commit</i> object with the hash <i>ad3c7ad</i>.<br><br> This is how git keeps track of the current state of your working directory and all branches.<br><br>Now we could implement our own <code>git log</code> command.<br><ol><li>Get the ref of the HEAD pointer.</li><li>Read the <i>commit</i> hash from the branch HEAD ref.</li><li>Use <code>git cat-file</code> to read the <i>commit</i> object data.</li><li>Output the information we want to display</li><li>Continue with the <i>parent</i> of the <i>commit</i> object.</li></ol>Voila, we implemented a Git log command!"
-  
+            hint: "The <code>HEAD</code> pointer of the main branch points to the <i>commit</i> object with the hash <i>ad3c7ad</i>.<br><br> This is how Git keeps track of the current state of your working directory and all branches.<br><br>Understanding this, we could implement our own <code>git log</code> command.<br><ol><li>Get the ref of the HEAD pointer.</li><li>Read the <i>commit</i> hash from the branch HEAD ref.</li><li>Use <code>git cat-file</code> to read the <i>commit</i> object data.</li><li>Output the information we want to display</li><li>Continue with the <i>parent</i> of the <i>commit</i> object.</li></ol>Voila, we implemented the <code>git log</code> command!"
+
   - id: 3
     title: "Create a new branch"
     description: "Create a new branch to check the HEAD pointer"
@@ -34,7 +42,7 @@ steps:
         output:
           - text: ""
             hint: ""
-  
+
   - id: 4
     title: "Check the refs"
     description: "Show all refs to see the new branch"
@@ -45,8 +53,8 @@ steps:
           - text: |
               .git/refs/heads/dummy-branch
               .git/refs/heads/main
-            hint: "As you can see, git created a new branch ref for the <i>dummy-branch</i>."
-  
+            hint: "As you can see, git created a new branch <i>ref</i> for the <b>dummy-branch</b>."
+
   - id: 5
     title: "Check the HEAD pointer"
     description: "This should not have changed since we are still on the main branch"
@@ -55,8 +63,8 @@ steps:
         valid: "^cat\\s+\\.git/HEAD$"
         output:
           - text: "ref: refs/heads/main"
-            hint: "As expected, the HEAD pointer is still pointing to the <i>main</i> branch."
-  
+            hint: "The <code>HEAD</code> pointer is still pointing to the <b>main</b> branch. While creating new branches Git does not change your <i>working directory</i> by default."
+
   - id: 6
     title: "Switch to the new branch"
     description: "Switch to the new branch to update the HEAD pointer"
@@ -70,7 +78,7 @@ steps:
         valid: "^git\\s+checkout\\s+dummy-branch$"
         output:
           - text: "Switched to branch 'dummy-branch'"
-  
+
   - id: 7
     title: "Check the HEAD pointer"
     description: "Now the HEAD pointer should have changed since we are on the dummy-branch"
@@ -79,8 +87,8 @@ steps:
         valid: "^cat\\s+\\.git/HEAD$"
         output:
           - text: "ref: refs/heads/dummy-branch"
-            hint: "After switching to the <i>dummy-branch</i>, the HEAD pointer is now pointing to the <i>dummy-branch</i> ref."
-  
+            hint: "After switching to the <b>dummy-branch</b>, the <code>HEAD</code> pointer is now pointing to the <b>dummy-branch</b> <i>ref</i>."
+
   - id: 8
     title: "Showing the log"
     description: "Showing the log to see all commits on the current branch"
@@ -94,7 +102,7 @@ steps:
         hint: "Compared to the <code>--oneline</code> flag, the output is more verbose."
         output:
           - text: "ad3c7ad65a6c49b5c492bbde9e6f21d783bbf280 (HEAD -> main, tag: v1.0, dummy-branch) Second Commit\n5b5dcc4dae8ef228b2a6141bf9d89953447cb97e First Commit"
-  
+
   - id: 9
     title: "Detach HEAD"
     description: "Checkout a previous commit to see the state of the repository at that time"
@@ -124,7 +132,7 @@ steps:
         output:
           - text: "HEAD is now at 5b5dcc4 First Commit"
             hint: ""
-  
+
   - id: 10
     title: "Check the HEAD pointer"
     description: "Now the HEAD pointer should not poing to a branch ref, but directly to a commit"
@@ -133,8 +141,8 @@ steps:
         valid: "^cat\\s+\\.git/HEAD$"
         output:
           - text: "5b5dcc4dae8ef228b2a6141bf9d89953447cb97e"
-            hint: "After switching to the <b>5b5dcc4</b> <i>commit</i>, you are in a <i>detached HEAD</i> state.<br><br>A <i>detached HEAD</i> happens when HEAD is not pointing to a <i>branch</i>, but directly to a specific <i>commit</i>.<br><br><b>Normal:</b><br>HEAD → main → commit ad3c7ad<br><b>Detached:</b><br>HEAD → commit 5b5dcc4<br><br>If you create a <i>commit</i> in this state, you cerate a <i>dangling commit</i> which is not linked to any branch. If you switch back to another branch, the <i>dangling commit</i> will be lost."
-  
+            hint: "After switching to the <b>5b5dcc4</b> <i>commit</i>, you are in a <i>detached HEAD</i> state.<br><br>A <i>detached HEAD</i> happens when <code>HEAD</code> is not pointing to a <i>branch</i>, but directly to a specific <i>commit</i>.<br><br><b>Normal:</b><br>HEAD → main → commit ad3c7ad<br><b>Detached:</b><br>HEAD → commit 5b5dcc4<br><br>If you create a <i>commit</i> in this state, you cerate a <i>dangling commit</i> which is not linked to any branch. If you switch back to another branch, the <i>dangling commit</i> will be \"lost\"."
+
   - id: 11
     title: "Switch back to main"
     description: "Move back to the latest commit on the main branch"

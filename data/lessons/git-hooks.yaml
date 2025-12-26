@@ -1,0 +1,209 @@
+title: "Git Hooks"
+description: "Git hooks let you run custom scripts when certain Git events occur. They provide a way to automate tasks around common actions."
+category: "internals"
+level: "advanced"
+time: "15 minutes"
+order: 4
+steps:
+  - id: 1
+    title: "Check Hooks"
+    description: "Check the status of your git hooks"
+    allowedCommands:
+      - cmd: "ls .git/hooks/*"
+        valid: "^ls\\s+\\.git/hooks/\\*"
+        output:
+          - text: |
+              .git/hooks/applypatch-msg.sample  .git/hooks/pre-merge-commit.sample
+              .git/hooks/commit-msg.sample      .git/hooks/pre-push.sample
+              .git/hooks/post-update.sample     .git/hooks/pre-rebase.sample
+              .git/hooks/pre-applypatch.sample  .git/hooks/prepare-commit-msg.sample
+              .git/hooks/pre-commit.sample
+            hint: |
+              Depending on your system Git configuration, you might see different hooks or no hooks at all.<br>
+              Hooks are scripts that get executed by Git during certain events. In our case Git created some
+              <b>example</b> hooks to get started. Since all of them end with <code>.sample</code> they are not
+              active and don't get executed.
+
+  - id: 2
+    title: "List available hooks"
+    description: "Show a list of all locally available hooks"
+    allowedCommands:
+      - cmd: "ls .git/hooks/*.sample | xargs -n1 basename | sed 's/\\.sample$//'"
+        valid: "^."
+        output:
+          - text: |
+              applypatch-msg
+              commit-msg
+              post-update
+              pre-applypatch
+              pre-commit
+              pre-merge-commit
+              pre-push
+              pre-rebase
+              prepare-commit-msg
+            hint: |
+              This is the list of all available hooks.<br>
+              If you want to make use of them you have to create a shell script in your <code>.git/hooks</code> directory
+              with the same name as the <i>hook</i>.<br>
+              <br>
+              Let's create a simple <b>pre-commit</b> <i>hook</i>.
+
+  - id: 3
+    title: "Create a pre-commit hook"
+    description: "Create a simple pre-commit hook that prints a message"
+    allowedCommands:
+      - cmd: "vi .git/hooks/pre-commit"
+        valid: "^vi\\s+\\.git/hooks/pre-commit$"
+        editor:
+          - text: |
+              #!/bin/sh
+              echo "Hello from pre-commit hook!"
+            hint: "Just some simple echo command."
+
+  - id: 4
+    title: "Save the hook"
+    description: "Save and close the file"
+    allowedCommands:
+      - cmd: ":wq"
+        valid: "^:wq$"
+        output:
+          - text: ""
+
+  - id: 5
+    title: "Make the hook executable"
+    description: "Set the executable file permissions to allow execution"
+    allowedCommands:
+      - cmd: "chmod +x .git/hooks/pre-commit"
+        valid: "^chmod\\s+\\+x\\s+\\.git/hooks/pre-commit$"
+        output:
+          - text: ""
+
+  - id: 6
+    title: "Test the hook"
+    description: "Make a change and prepare to commit it"
+    allowedCommands:
+      - cmd: "echo test > test.md"
+        valid: "^echo\\stest\\s?>\\s?test\\.md$"
+        output:
+          - text: ""
+
+  - id: 7
+    title: "Stage the new file"
+    description: "Add the new file to the Git index"
+    allowedCommands:
+      - cmd: "git add test.md"
+        valid: "^git\\s+add\\s+test\\.md$"
+        output:
+          - text: ""
+
+  - id: 8
+    title: "Commit the change"
+    description: "Commit the change to the Git repository"
+    allowedCommands:
+      - cmd: "git commit -m 'Add test file'"
+        valid: "^git\\s+commit\\s+-m\\s*'.*'$"
+        output:
+          - text: "Hello from pre-commit hook!"
+            hint: |
+              This is the output of our <b>pre-commit</b> <i>hook</i>.<br>
+              <br>
+              Because the file exists, Git will execute it before it actually commits our changes.
+              If you return a non-zero exit code, the commit will be aborted.<br>
+              The <b>pre-commit</b> hook is a great place to run tests, linting, or formatting tools.
+
+          - text: |
+              [main 459bd3b] Test commit
+              1 file changed, 1 insertion(+)
+              create mode 100644 test.md
+
+  - id: 9
+    title: "Add hook script"
+    description: "Add the hook script to the repository"
+    allowedCommands:
+      - cmd: "git add .git/hooks/pre-commit"
+        valid: "^git\\s+add\\s+\\.git/hooks/pre-commit$"
+        output:
+          - text: ""
+            hint: "This will not work since git will not allow to add files inside the <code>.git</code> directory."
+
+
+  - id: 10
+    title: "Check status"
+    description: "Check the status of your repository"
+    allowedCommands:
+      - cmd: "git status"
+        valid: "^git\\s+status$"
+        output:
+          - text: |
+              On branch main
+              nothing to commit, working tree clean
+            hint: |
+              By default you can't commit files in the <code>.git</code> directory to the repository.<br>
+              If you want to store <em>hooks</em> in the repository you have to add them in a different location in the
+              repository and copy them to the <code>.git/hooks</code> directory manually after cloning.<br>
+              <br>
+              This is mostly for security reasons. Imagine cloning a repository containing a malicious hook script
+              and immediately executing it with your local user permissions when running an innocent command
+              like <code>git commit</code>.<br>
+              <br>
+              If you really want to commit your hooks the to repository you can either symlink files from the
+              repository to the <code>.git/hooks</code> directory or use the <code>core.hooksPath</code> configuration
+              option to specify a different directory for hooks.
+
+  - id: 11
+    title: "Change hooks directory"
+    description: "Create new hooks directory"
+    allowedCommands:
+      - cmd: "mkdir .githooks"
+        valid: "^mkdir\\s+\\.githooks$"
+        output:
+          - text: ""
+        hint: "Create a <code>.githooks</code> directory in your project root."
+
+  - id: 12
+    title: "Move hook script"
+    description: "Move the hook script to the new directory"
+    allowedCommands:
+      - cmd: "mv .git/hooks/pre-commit .githooks/pre-commit"
+        valid: "^mv\\s+\\.git/hooks/pre-commit\\s+\\.githooks/pre-commit$"
+        output:
+          - text: ""
+
+  - id: 13
+    title: "Update hooks config"
+    description: "Customize the your hooks directory"
+    allowedCommands:
+      - cmd: "git config core.hooksPath .githooks"
+        valid: "^git\\s+config\\s+core\\.hooksPath\\s+\\.githooks$"
+        output:
+          - text: ""
+            hint: |
+              You should only do this on a per-repository basis and only for repositories that you really trust.<br>
+              <br>
+              ⚠️ Remember ⚠️<br>
+              Doing this carries the risk of executing arbitrary scripts from untrusted sources.
+              The same security considerations apply when symlinking hook files into the .git/hooks directory instead
+              of changing the configuration.
+              <br>
+              If you want to learn more about this topic, check out the <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">Git book</a>.
+
+        hint: "Set the <code>core.hooksPath</code> for the current repository."
+
+  - id: 14
+    title: "Check config"
+    description: "Check the current hooks configuration"
+    allowedCommands:
+      - cmd: "git config --local --list | grep hooksPath"
+        valid: "^git\\s+config\\s+--local\\s+--list\\s+\\|\\s+grep\\s+hooksPath$"
+        output:
+          - text: "core.hooksPath=.githooks"
+            hint: |
+              Now Git looks for executable scripts in the <code>.githooks</code> directory
+              instead of the <code>.git/hooks</code> directory.<br>
+              <br>
+              You can now commit your hook scripts to the repository and share them with others.<br>
+              <br>
+              All you team members have to do is to run <code>git config core.hooksPath .githooks</code>
+              in their local repositories or symlink the hook scripts into the <code>.git/hooks</code> directory.
+
+

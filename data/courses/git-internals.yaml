@@ -1,5 +1,5 @@
 title: "Git Internals"
-description: "If you understand the basics and feel comfortable using Git for version control it is time to look into the core concepts and some advanced features. Use this guided course and follow along."
+description: "If you understand the basics and feel comfortable using Git for version control it is time to look under the hood into the core concepts and the implementation of Git itself. As soon as you understand some of these core concepts the more advanced features like rebase or bisect will not feel like dark magic anymore."
 level: "advanced"
 time: "1 hour"
 order: 2
@@ -7,3 +7,4 @@ lessons:
   - git-internals
   - git-objects
   - git-head
+  - git-hooks

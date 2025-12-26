@@ -12,8 +12,7 @@ steps:
       - cmd: "echo demo > demo.md"
         valid: "^echo\\s+demo\\s*>\\s*demo.md$"
         output:
-          - hint: "This created a simple file with 'demo' as its content."
-  
+
   - id: 2
     title: "Stage the file"
     description: "Add the new file to the staging area"
@@ -21,7 +20,7 @@ steps:
       - cmd: "git add demo.md"
         valid: "^git\\s+add\\s+demo.md$"
         output: []
-  
+
   - id: 3
     title: "List Git objects"
     description: "Show all git object"
@@ -32,17 +31,16 @@ steps:
           - text: |
               .git/objects/15:
                49b67ca5936e6893c89221d508697e7e97d42b
-              
-              .git/objects/info:
-              
+
             hint: "Git uses a <i>hash</i> as a unique identifier for all objects, similar to a primary key in a database. To store objects on disk, Git uses the first two characters of the <i>hash</i> for the directory and the rest of the <i>hash</i> is used for the filename."
           - text: |
+              
               .git/objects/info:
               
               .git/objects/pack
             hint: "We can ignore the two directories <i>info</i> and <i>pack</i> for now."
         hint: "List all files in the <i>objects</i> directory."
-  
+
   - id: 4
     title: "Check object type"
     description: "Inspect the newly created Git object"
@@ -53,7 +51,7 @@ steps:
           - text: "blob"
             hint: "This object is a <i>blob</i>. Blobs are used to store the actual data of your files. When you used <i>add</i>, Git created a snapshot of your file and copied its contents into the <i>blob</b> object."
         hint: "It is important to use the directory name <b>15</b> and the filename <b>1549b67ca5936e6893c89221d508697e7e97d42b</b>."
-  
+
   - id: 5
     title: "Check object content"
     description: "Inspect the newly created Git objects"
@@ -62,13 +60,15 @@ steps:
         valid: "^git\\s+cat-file\\s+-p\\s+1549b67ca5936e6893c89221d508697e7e97d42b$"
         output:
           - text: "demo"
+            hint: "This is the content of our <i>demo.md</i> file at the time of the snapshot done by <code>git add</code>."
         hint: "While <code>-t</code> gives you the type of an object <code>-p</code> prints its content."
       - cmd: "^-t^-p"
         valid: "^\\^-t\\^-p$"
         output:
           - text: "demo"
+            hint: "This is the content of our <i>demo.md</i> file at the time of the snapshot done by <code>git add</code>."
         hint: "Execute the previous command just replace <code>-t</code> with <code>-p</code>."
-  
+
   - id: 5
     title: "Perform first commit"
     description: "Commit the staged file to the repository"
@@ -80,7 +80,11 @@ steps:
               [main (root-commit) 5b5dcc4] First Commit
                1 file changed, 1 insertion(+)
                create mode 100644 demo.md
-  
+            hint: |
+              This committed the <i>snapshot</i> of the file, not the actual file to the repository.
+              If you change the file before the commit without running <code>git add</code> again
+              we would still see only the <code>demo</code> content in the commit.
+
   - id: 6
     title: "List Git objects"
     description: "Show the newly created git objects"
@@ -97,12 +101,13 @@ steps:
               
               .git/objects/bb:
                64e88bad7d8cdc57a0deb5e1325484fd5fb41f
+            hint: "As you can see, Git created <b>two</b> new <i>objects</i>. Let's check them out!"
+          - text: |
               
               .git/objects/info:
               
               .git/objects/pack:
-            hint: "As you can see, Git created <b>two</b> new <i>objects</i>. Lets check them out!"
-  
+
   - id: 7
     title: "Inspect Commit object"
     description: "Inspect the newly created Git commit object"
@@ -112,8 +117,8 @@ steps:
         output:
           - text: "commit"
             hint: "This object is a <i>commit</i>. Commit objects store the <i>commit</i> meta data like author, date, message and signature. They also act as linker, linking multiple objects together. More about that in a second. First lets look at the content of the <i>commit</i> object."
-        hint: "It is important to use the directory name <b>5b</b> and the filename <b>5dcc4dae8ef228b2a6141bf9d89953447cb97e</b>."
-  
+        hint: "Remember to use the directory name <b>5b</b> and the filename <b>5dcc4dae8ef228b2a6141bf9d89953447cb97e</b> as <i>hash</i>."
+
   - id: 8
     title: "Inspect Commit object"
     description: "Inspect the newly created Git commit object"
@@ -126,9 +131,11 @@ steps:
               author Sebastian Feldmann <sebastianfeldmann@users.noreply.github.com> 1757503219 +0200
               committer Sebastian Feldmann <sebastianfeldmann@users.noreply.github.com> 1757503219 +0200
               First Commit
-            hint: "Besides the meta data mentioned in the step before the <i>commit</i> also links to a <i>tree</i> object."
-        hint: "It is important to use the directory name <b>5b</b> and the filename <b>5dcc4dae8ef228b2a6141bf9d89953447cb97e</b>."
-  
+            hint: |
+              Besides the meta data mentioned in the step before the <i>commit</i> also links to a <i>tree</i> object.
+              This is the second new object we saw in our <code>ls</code> command before.
+        hint: "Remember to use the directory name <b>5b</b> and the filename <b>5dcc4dae8ef228b2a6141bf9d89953447cb97e</b> as <i>hash</i>."
+
   - id: 9
     title: "Inspect Tree object"
     description: "Inspect the newly created Git tree object"
@@ -139,7 +146,7 @@ steps:
           - text: "tree"
             hint: "This object is a <i>tree</i>. No surprise there. Let's check its contents."
         hint: "Use the tree <i>hash</i> linked in the <i>commit</i> object data."
-  
+
   - id: 10
     title: "Inspect Tree object"
     description: "Inspect the newly created Git tree object"
@@ -148,9 +155,14 @@ steps:
         valid: "^git\\s+cat-file\\s+-p\\s+bb64e88bad7d8cdc57a0deb5e1325484fd5fb41f$"
         output:
           - text: "100644 blob 1549b67ca5936e6893c89221d508697e7e97d42b	demo.md"
-            hint: "In Git, <i>tree</i> objects are used to link <i>blob</i> objects. This is done be linking a single, or multiple <i>blob</i> objects, or by linking other <i>tree</i> objects (sub-trees)."
+            hint: |
+              In Git, <i>tree</i> objects are used to link <i>blob</i> objects.
+              This is done be linking a single, or multiple <i>blob</i> objects,
+              or by linking other <i>tree</i> objects (sub-trees).<br>
+              In our case the <i>tree</i> links a single <i>blob</i>,
+              containing the data of out <code>demo.md</code> file.
         hint: "Use the tree <i>hash</i> linked in the <i>commit</i> object data."
-  
+
   - id: 11
     title: "Create a new file"
     description: "Create a second file to store in the repository"
@@ -158,7 +170,7 @@ steps:
       - cmd: "echo info > info.md"
         valid: "^echo\\s+info\\s*>\\s*info.md$"
         output: []
-  
+
   - id: 12
     title: "Stage the file"
     description: "Add the new file to the staging area"
@@ -166,7 +178,7 @@ steps:
       - cmd: "git add info.md"
         valid: "^git\\s+add\\s+info.md$"
         output: []
-  
+
   - id: 13
     title: "List Git objects"
     description: "Show all git objects"
@@ -177,9 +189,12 @@ steps:
           - text: |
               .git/objects/15:
                49b67ca5936e6893c89221d508697e7e97d42b
+          - text: |
               
               .git/objects/55:
                02124538724e58ea0b3bdff3460501f9a8379d
+            hint: "You should see the new <i>blob</i> object listed. Feel free to inspect it with <code>git cat-file</code>. But we will continue with committing our changes."
+          - text: |    
               
               .git/objects/5b:
                5dcc4dae8ef228b2a6141bf9d89953447cb97e
@@ -190,9 +205,8 @@ steps:
               .git/objects/info:
               
               .git/objects/pack:
-            hint: "You should see the new <i>blob</i> object listed. Feel free to inspect it with <code>git cat-file</code>. But will continue with commiting our changes."
         hint: "List all files in the <i>objects</i> directory."
-  
+
   - id: 14
     title: "Perform second commit"
     description: "Commit the staged file to the repository"
@@ -204,8 +218,8 @@ steps:
               [main ad3c7ad] Second commit
                1 file changed, 1 insertion(+)
                create mode 100644 info.md
-            hint: "We created our second <i>commit</i>. You can use the <i>short hash</i> to inspect its Git <i>object</i>."
-  
+            hint: "We created our second <i>commit</i>. You can use the <i>short hash</i> <code>ad3c7ad</code> to inspect its Git <i>object</i>."
+
   - id: 15
     title: "Inspect Commit object"
     description: "Inspect the newly created Git commit object"
@@ -220,9 +234,20 @@ steps:
               committer Sebastian Feldmann <sebastianfeldmann@users.noreply.github.com> 1757505667 +0200
               
               Second commit
-            hint: "Compared to the previous <i>commit</i> object this one also has a property <i>parent</i> which references the previous commit.<br><br>The only <i>object</i> missing is the <i>tag</i> object.<br>Let's create on!"
-        hint: "It is important to use the directory name <b>5b</b> and the filename <b>5dcc4dae8ef228b2a6141bf9d89953447cb97e</b>."
-  
+            hint: |
+              Compared to the previous <i>commit</i> object this one also has a property <i>parent</i>
+              which references the previous commit. The root commit is the only commit without this <i>parent</i>
+              property. This makes the root commit somewhat spacial.<br>
+              <br>
+              ⚠️ <strong>Important:</strong><br>
+              Git hashes are build on the content itself and on top of each other. This makes sure you can't change
+              anything without Git noticing. So you can be sure that what you put into Git is what you are getting out.
+              This is one of Git’s most powerful, yet rarely discussed features.<br>
+              <br>
+              The only remaining type of <i>git object</i> missing is the <i>tag</i> object.<br>
+              Let's create on!"
+        hint: "If Git displays shortened hashes, you can safely use them to reference objects."
+
   - id: 16
     title: "Create tag"
     description: "Create an annotated tag"
@@ -230,5 +255,18 @@ steps:
       - cmd: "git tag -a -m\"Version 1.0\" v1.0"
         valid: "^git\\s+tag\\s+-a\\s+-m\\s*\"Version 1\\.0\"\\s+v1\\.0$"
         output:
-          - hint: "If you create <i>tags</i> without the <code>-a</code> flag you will create a <b>lightweight tag</b>. Lightweight tags are no git objects and are not part of the <i>hash</i> on top of <i>hash</i> chain. They can be changed without noticing!"
+          - text: ""
+            hint: |
+              That's it! Easy as that you can create tags in Git.<br>
+              In our example we created an annotated <i>tag</i>. If you create <i>tags</i> without the <code>-a</code>
+              flag you will create a <b>lightweight tag</b>.<br>
+              <br>
+              ⚠️Important:<br>
+              No git objects are created for lightweight tags, so they are not part of the hash security chain and
+              cannot be verified for authenticity. If you are using <i>tags</i> for versioning in public repositories
+              make sure you use annotated tags only.<br>
+              <br>
+              You’ve now explored Git’s internal object model (blobs, trees, commits, and tags), and seen how Git links
+              them together to form a secure history.
+
         hint: "It is important to use <code>-a</code> otherwise no git object is created."
